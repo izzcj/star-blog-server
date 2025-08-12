@@ -1,0 +1,28 @@
+package com.ale.starblog.framework.common.exception.config;
+
+import com.ale.starblog.framework.common.exception.handler.GlobalExceptionCatchFilter;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
+import org.springframework.context.annotation.Bean;
+
+/**
+ * 异常拓展自动配置
+ *
+ * @author Ale
+ * @version 1.0.0
+ * @since 2024/6/24
+ **/
+@AutoConfiguration
+@ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
+public class ExceptionExtensionAutoConfiguration {
+
+    /**
+     * 全局异常捕获过滤器
+     *
+     * @return 过滤器Bean
+     */
+    @Bean
+    public GlobalExceptionCatchFilter globalExceptionCatchFilter() {
+        return new GlobalExceptionCatchFilter();
+    }
+}

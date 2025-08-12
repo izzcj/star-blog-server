@@ -1,0 +1,92 @@
+package com.ale.starblog.admin.system.controller;
+
+import com.ale.starblog.admin.system.domain.entity.DictData;
+import com.ale.starblog.admin.system.domain.pojo.dict.data.*;
+import com.ale.starblog.admin.system.service.IDictDataService;
+import com.ale.starblog.framework.common.domain.JsonPageResult;
+import com.ale.starblog.framework.common.domain.JsonResult;
+import com.ale.starblog.framework.core.controller.BaseController;
+import org.springframework.data.domain.Pageable;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+/**
+ * 字典数据接口
+ *
+ * @author Ale
+ * @version 1.0.0 2025/5/30 14:45
+ */
+@RestController
+@RequestMapping("/system/dict/data")
+public class DictDataController extends BaseController<DictData, IDictDataService, DictDataVO, DictDataBO, CreateDictDataDTO, ModifyDictDataDTO> {
+
+    /**
+     * 通过id获取字典数据
+     *
+     * @param id 字典数据id
+     * @return 字典数据VO
+     */
+    @GetMapping("/{id}")
+    public JsonResult<DictDataVO> get(@PathVariable("id") Long id) {
+        return this.queryById(id);
+    }
+
+    /**
+     * 分页获取字典数据
+     *
+     * @param pageable 分页参数
+     * @param query    查询条件
+     * @return 字典数据分页数据
+     */
+    @GetMapping("/page")
+    public JsonResult<JsonPageResult.PageData<DictDataVO>> page(Pageable pageable, DictDataQuery query) {
+        return this.queryPage(pageable, query);
+    }
+
+    /**
+     * 获取字典数据列表
+     *
+     * @param query 查询条件
+     * @return 字典数据列表
+     */
+    @GetMapping("/list")
+    public JsonResult<List<DictDataVO>> list(DictDataQuery query) {
+        return this.queryList(query);
+    }
+
+    /**
+     * 新增字典数据
+     *
+     * @param createDictDataDTO 创建字典数据dto
+     * @return Void
+     */
+    @PostMapping
+    public JsonResult<Void> add(@RequestBody @Validated CreateDictDataDTO createDictDataDTO) {
+        return this.createEntity(createDictDataDTO);
+    }
+
+    /**
+     * 修改字典数据
+     *
+     * @param modifyDictDataDTO 修改字典数据dto
+     * @return Void
+     */
+    @PutMapping
+    public JsonResult<Void> edit(@RequestBody @Validated ModifyDictDataDTO modifyDictDataDTO) {
+        return this.modifyEntity(modifyDictDataDTO);
+    }
+
+    /**
+     * 删除系统字典数据
+     *
+     * @param ids 系统字典数据id集合
+     * @return Void
+     */
+    @DeleteMapping("/{ids}")
+    public JsonResult<Void> delete(@PathVariable("ids") List<Long> ids) {
+        return this.deleteEntity(ids);
+    }
+
+}

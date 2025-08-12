@@ -1,0 +1,53 @@
+spring:
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      database: 1
+  liquibase:
+    enabled: false
+
+venus:
+  # 数据库配置（未配置url、host、port时使用默认配置）
+  db:
+    type: postgresql
+    database: star_blog_dev
+    schema: star_blog_dev
+    username: postgres
+    password: 720428
+#    type: mysql
+#    database: star_blog_dev
+#    username: root
+#    password: 720428
+    pool:
+      pool-type: druid
+  # 鉴权配置
+  security:
+    token-type: redis
+    token-expiration: 24h
+    refresh-token-expiration-per-request: true
+    permitted-uris:
+      - uri: /auth/*
+        methods:
+          - all
+  # 日志配置
+  logging:
+    enabled: true
+    level:
+      com.ale.starblog.admin: debug
+      com.ale.starblog.framework: debug
+    log-file:
+      info:
+        file-path: star-blog-admin/logs/info.log
+      error:
+        file-path: star-blog-admin/logs/error.log
+  # 共享数据配置
+  shared-data-context:
+    clear-on-lifecycle: true
+  # 工作流配置
+  workflow:
+    generate-logic-task: false
+    generate-database-table: true
+  # 代理配置
+  proxy:
+    enabled: true

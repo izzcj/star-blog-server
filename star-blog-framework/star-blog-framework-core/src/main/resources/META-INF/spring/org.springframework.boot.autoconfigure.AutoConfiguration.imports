@@ -1,0 +1,8 @@
+com.ale.starblog.framework.core.db.DataBaseAutoConfiguration
+com.ale.starblog.framework.core.spring.SpringExtensionAutoConfiguration
+com.ale.starblog.framework.core.query.QueryAutoConfiguration
+com.ale.starblog.framework.core.mybatis.MybatisPlusExtensionAutoConfiguration
+com.ale.starblog.framework.core.controller.ControllerExtensionAutoConfiguration
+com.ale.starblog.framework.core.share.SharedDataContextAutoConfiguration
+com.ale.starblog.framework.core.service.ServiceAutoConfiguration
+com.ale.starblog.framework.core.translation.GenericTranslationAutoConfiguration

@@ -1,0 +1,7 @@
+com.ale.starblog.framework.common.redis.RedisCommonAutoConfiguration
+com.ale.starblog.framework.common.utils.init.UtilsInitializationAutoConfiguration
+com.ale.starblog.framework.common.json.JsonCodecExtensionAutoConfiguration
+com.ale.starblog.framework.common.exception.config.ExceptionExtensionAutoConfiguration
+com.ale.starblog.framework.common.logging.LogExtensionAutoConfiguration
+com.ale.starblog.framework.common.porxy.config.VenusProxyAutoConfiguration
+com.ale.starblog.framework.common.transaction.VenusTransactionAutoConfiguration

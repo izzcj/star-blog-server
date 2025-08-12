@@ -1,0 +1,60 @@
+package com.ale.starblog.framework.common.security;
+
+import org.springframework.security.core.CredentialsContainer;
+import org.springframework.security.core.userdetails.UserDetails;
+
+/**
+ * 认证用户
+ *
+ * @author Ale
+ * @version 1.0.0
+ * @since 2024/6/25
+ **/
+public interface AuthenticatedUser extends UserDetails, CredentialsContainer {
+
+    @Override
+    default String getUsername() {
+        return this.getAccount();
+    }
+
+    @Override
+    default boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    default boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    default boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    default boolean isEnabled() {
+        return true;
+    }
+
+    /**
+     * 获取用户账号
+     *
+     * @return 用户账号
+     */
+    String getAccount();
+
+    /**
+     * 获取用户ID
+     *
+     * @return 用户ID
+     */
+    Long getId();
+
+    /**
+     * 获取用户姓名
+     *
+     * @return 用户姓名
+     */
+    String getName();
+}
