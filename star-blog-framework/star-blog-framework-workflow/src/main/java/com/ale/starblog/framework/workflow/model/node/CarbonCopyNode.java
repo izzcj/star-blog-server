@@ -1,5 +1,6 @@
 package com.ale.starblog.framework.workflow.model.node;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.ale.starblog.framework.workflow.entity.FlowExecution;
 import com.ale.starblog.framework.workflow.entity.FlowInstance;
 import com.ale.starblog.framework.workflow.entity.FlowTask;
@@ -37,7 +38,10 @@ public class CarbonCopyNode extends UserNode {
 
     @Override
     protected boolean doExecute(FlowInstance instance, FlowExecution execution, List<TaskAssignee> taskAssignees, List<FlowTask> tasks, List<FlowTaskActor> taskActors) {
-        FlowContext.getTaskService().addTask(tasks, taskActors, false);
+        if (CollectionUtil.isNotEmpty(tasks)) {
+            FlowContext.getTaskService().addTask(tasks, taskActors, true);
+            FlowContext.getTaskService().forceFinishTask(execution.getId(), null);
+        }
         return FlowContext.getExecutionService().completeExecution(execution);
     }
 }

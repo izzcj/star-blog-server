@@ -83,10 +83,6 @@ public class ApprovalNode extends UserNode {
 
     @Override
     protected boolean doExecute(FlowInstance instance, FlowExecution execution, List<TaskAssignee> taskAssignees, List<FlowTask> tasks, List<FlowTaskActor> taskActors) {
-        boolean addResult = FlowContext.getTaskService().addTask(tasks, taskActors, true);
-        if (!addResult) {
-            throw new FlowException("执行审批节点失败！无法添加审批任务！");
-        }
         // 未找到审批人处理
         if (CollectionUtil.isEmpty(tasks)) {
             // 自动通过完成当前执行记录
@@ -94,6 +90,10 @@ public class ApprovalNode extends UserNode {
                 return FlowContext.getExecutionService().completeExecution(execution);
             }
             return FlowContext.getInstanceService().reject(instance.getId(), true);
+        }
+        boolean addResult = FlowContext.getTaskService().addTask(tasks, taskActors, true);
+        if (!addResult) {
+            throw new FlowException("执行审批节点失败！无法添加审批任务！");
         }
         // 顺签设置审批人信息
         if (MultiApprovalStrategy.SEQUENTIAL.match(this.multipleApprovalStrategy)) {

@@ -76,11 +76,7 @@ public class DefaultTaskService implements TaskService {
             for (FlowTask flowTask : flowTasks) {
                 List<FlowTaskActor> flowTaskActors = taskActorMapping.get(flowTask.getId());
                 TaskEventPublisher.publishTaskEvent(TaskEventType.BEFORE_CREATE, flowTask, flowTaskActors);
-                Boolean executeResult = TransactionSupport.execute(() -> {
-                    boolean insertTaskResult = this.taskDao.insert(flowTask);
-                    boolean insertTaskActorResult = this.taskActorDao.batchInsert(flowTaskActors);
-                    return insertTaskResult && insertTaskActorResult;
-                });
+                boolean executeResult = this.taskDao.insert(flowTask) && this.taskActorDao.batchInsert(flowTaskActors);
                 if (!executeResult) {
                     result = false;
                     break;
@@ -94,11 +90,14 @@ public class DefaultTaskService implements TaskService {
                 .map(FlowHistoryTask::of)
                 .collect(Collectors.toList())
             );
-            boolean insertTaskActorResult = this.historyTaskActorDao.batchInsert(taskActors.stream()
-                .map(FlowHistoryTaskActor::of)
-                .collect(Collectors.toList())
-            );
-            return insertTaskResult && insertTaskActorResult;
+            if (CollectionUtil.isNotEmpty(taskActors)) {
+                boolean insertTaskActorResult = this.historyTaskActorDao.batchInsert(taskActors.stream()
+                    .map(FlowHistoryTaskActor::of)
+                    .collect(Collectors.toList())
+                );
+                return insertTaskResult && insertTaskActorResult;
+            }
+            return insertTaskResult;
         });
     }
 
@@ -150,7 +149,7 @@ public class DefaultTaskService implements TaskService {
         if (activeTasks.isEmpty()) {
             return true;
         }
-        String comment = switch (instanceState) {
+        String comment = (instanceState == null) ? null : switch (instanceState) {
             case COMPLETE -> "其他人完成任务，自动结束";
             case REJECT -> "其他人驳回审批，自动结束";
             case REVOKE -> "发起人撤回审批，自动结束";
