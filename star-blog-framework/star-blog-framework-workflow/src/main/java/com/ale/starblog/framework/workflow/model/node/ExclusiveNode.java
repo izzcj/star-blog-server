@@ -1,6 +1,8 @@
 package com.ale.starblog.framework.workflow.model.node;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.BooleanUtil;
+import com.ale.starblog.framework.workflow.constants.FlowVariableConstants;
 import com.ale.starblog.framework.workflow.entity.FlowExecution;
 import com.ale.starblog.framework.workflow.entity.FlowInstance;
 import com.ale.starblog.framework.workflow.entity.FlowTask;
@@ -10,6 +12,7 @@ import com.ale.starblog.framework.workflow.model.InstanceModel;
 import com.ale.starblog.framework.workflow.model.InstanceModelSupport;
 import com.ale.starblog.framework.workflow.support.FlowContext;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.google.common.collect.Maps;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -35,6 +38,10 @@ public class ExclusiveNode extends BranchNode {
 
     @Override
     public boolean doExecute(FlowInstance instance, FlowExecution lastExecution, Map<String, Object> variable, FlowTask task) {
+        if (CollectionUtil.isEmpty(variable)) {
+            variable = Maps.newHashMap();
+            variable.put(FlowVariableConstants.PASS_BRANCH_COUNT, 1);
+        }
         FlowExecution exclusiveExecution = FlowContext.getExecutionService().createExecution(instance, this.id, lastExecution, variable);
         if (task != null) {
             task.setExecutionId(exclusiveExecution.getId());
