@@ -38,15 +38,6 @@ public interface FlowDefinitionDao {
     FlowDefinition selectByKey(String key, String tenantId);
 
     /**
-     * 通过KEY查询流程定义列表
-     *
-     * @param key      流程定义key
-     * @param tenantId 租户id
-     * @return 流程定义列表
-     */
-    List<FlowDefinition> selectListByKey(String key, String tenantId);
-
-    /**
      * 通过类型查询流程定义列表
      *
      * @param type     流程定义id

@@ -51,7 +51,7 @@ public class MybatisPlusFlowExecutionDao implements FlowExecutionDao {
             .eq(FlowExecution::getDeleted, false)
             .eq(FlowExecution::getInstanceId, instanceId)
             .orderByAsc(FlowExecution::getCreatedAt);
-        if (state != null) {
+        if (state != null && state.length > 0) {
             List<FlowExecutionState> states = Lists.newArrayList(state);
             queryWrapper.in(FlowExecution::getState, states);
         }

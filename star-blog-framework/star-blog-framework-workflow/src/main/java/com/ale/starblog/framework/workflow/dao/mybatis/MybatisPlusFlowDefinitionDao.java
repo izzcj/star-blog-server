@@ -43,17 +43,8 @@ public class MybatisPlusFlowDefinitionDao implements FlowDefinitionDao {
             Wrappers.<FlowDefinition>lambdaQuery()
                 .eq(FlowDefinition::getDeleted, false)
                 .eq(StrUtil.isNotBlank(tenantId), FlowDefinition::getTenantId, tenantId)
-                .eq(FlowDefinition::getDefinitionKey, key)
-        );
-    }
-
-    @Override
-    public List<FlowDefinition> selectListByKey(String key, String tenantId) {
-        return this.definitionMapper.selectList(
-            Wrappers.<FlowDefinition>lambdaQuery()
-                .eq(FlowDefinition::getDeleted, false)
-                .eq(StrUtil.isNotBlank(tenantId), FlowDefinition::getTenantId, tenantId)
-                .eq(FlowDefinition::getDefinitionKey, key)
+                .eq(FlowDefinition::getDefinitionKey, key),
+            false
         );
     }
 
