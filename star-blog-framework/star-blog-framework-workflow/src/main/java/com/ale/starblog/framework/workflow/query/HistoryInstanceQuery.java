@@ -1,10 +1,10 @@
 package com.ale.starblog.framework.workflow.query;
 
-
 import com.ale.starblog.framework.workflow.entity.FlowHistoryInstance;
 import com.ale.starblog.framework.workflow.enumeration.FlowInstanceState;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 
 /**
  * 历史流程实例查询构建器
@@ -12,23 +12,7 @@ import java.time.LocalDateTime;
  * @author Ale
  * @version 1.0.0 2025/7/15 14:39
  */
-public interface HistoryInstanceQuery extends SortableQuery<FlowHistoryInstance> {
-
-    /**
-     * 流程实例ID
-     *
-     * @param id 流程实例ID
-     * @return this
-     */
-    HistoryInstanceQuery id(String id);
-
-    /**
-     * 机构ID
-     *
-     * @param tenantId 机构ID
-     * @return this
-     */
-    HistoryInstanceQuery tenantId(String tenantId);
+public interface HistoryInstanceQuery extends BaseQuery<FlowHistoryInstance> {
 
     /**
      * 发起人
@@ -45,6 +29,14 @@ public interface HistoryInstanceQuery extends SortableQuery<FlowHistoryInstance>
      * @return this
      */
     HistoryInstanceQuery assigneeId(String assigneeId);
+
+    /**
+     * 是否为抄送
+     * 需要同时设置assigneeId条件才生效
+     *
+     * @return this
+     */
+    HistoryInstanceQuery isCarbonCopy();
 
     /**
      * 创建时间大于等于
@@ -77,6 +69,14 @@ public interface HistoryInstanceQuery extends SortableQuery<FlowHistoryInstance>
      * @return this
      */
     HistoryInstanceQuery businessId(String businessId);
+
+    /**
+     * 业务ID集合
+     *
+     * @param businessIds 业务ID集合
+     * @return this
+     */
+    HistoryInstanceQuery businessIds(Collection<String> businessIds);
 
     /**
      * 流程实例状态

@@ -1,5 +1,6 @@
 package com.ale.starblog.framework.workflow.query;
 
+import com.ale.starblog.framework.workflow.entity.FlowEntity;
 
 /**
  * 可排序的查询
@@ -8,7 +9,7 @@ package com.ale.starblog.framework.workflow.query;
  * @author Ale
  * @version 1.0.0 2025/7/17 9:26
  */
-public interface SortableQuery<T> extends Query<T> {
+public interface SortableQuery<T extends FlowEntity> extends Query<T> {
 
     /**
      * 排序

@@ -1,19 +1,15 @@
 package com.ale.starblog.framework.workflow.query.mybatis;
 
 import cn.hutool.core.util.StrUtil;
+import com.ale.starblog.framework.workflow.dao.mybatis.mapper.FlowTaskMapper;
 import com.ale.starblog.framework.workflow.entity.FlowEntity;
 import com.ale.starblog.framework.workflow.entity.FlowTask;
-import com.ale.starblog.framework.workflow.enumeration.FlowTaskState;
 import com.ale.starblog.framework.workflow.enumeration.FlowTaskType;
-import com.ale.starblog.framework.workflow.dao.mybatis.mapper.FlowTaskMapper;
 import com.ale.starblog.framework.workflow.query.ActiveTaskQuery;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
-import com.google.common.collect.Maps;
 
 import java.time.LocalDateTime;
-import java.util.Map;
 
 /**
  * 基于MyBatisPlus的流程任务查询构建器
@@ -21,19 +17,7 @@ import java.util.Map;
  * @author Ale
  * @version 1.0.0 2025/7/18 10:31
  */
-public class MybatisPlusActiveTaskQuery extends AbstractMybatisPlusSortableQuery<FlowTask> implements ActiveTaskQuery {
-
-    /**
-     * 可排序的字段函数映射
-     */
-    private static final Map<String, SFunction<FlowTask, ?>> SORTABLE_FIELD_FUNCTION_MAPPING = Maps.newHashMap();
-
-    static {
-        SORTABLE_FIELD_FUNCTION_MAPPING.put(FlowEntity.Fields.id, FlowTask::getId);
-        SORTABLE_FIELD_FUNCTION_MAPPING.put(FlowEntity.Fields.tenantId, FlowTask::getTenantId);
-        SORTABLE_FIELD_FUNCTION_MAPPING.put(FlowEntity.Fields.createdAt, FlowTask::getCreatedAt);
-        SORTABLE_FIELD_FUNCTION_MAPPING.put(FlowTask.Fields.instanceId, FlowTask::getInstanceId);
-    }
+public class MybatisPlusActiveTaskQuery extends AbstractMybatisPlusBaseQuery<FlowTask> implements ActiveTaskQuery {
 
     /**
      * 映射字段与函数的映射关系
@@ -43,16 +27,6 @@ public class MybatisPlusActiveTaskQuery extends AbstractMybatisPlusSortableQuery
     public MybatisPlusActiveTaskQuery(FlowTaskMapper taskMapper) {
         this.taskMapper = taskMapper;
     }
-
-    /**
-     * 任务id
-     */
-    private String id;
-
-    /**
-     * 机构ID
-     */
-    private String tenantId;
 
     /**
      * 实例id
@@ -80,11 +54,6 @@ public class MybatisPlusActiveTaskQuery extends AbstractMybatisPlusSortableQuery
     private String nameLike;
 
     /**
-     * 任务状态
-     */
-    private FlowTaskState state;
-
-    /**
      * 任务受理人
      */
     private String assigneeId;
@@ -93,18 +62,6 @@ public class MybatisPlusActiveTaskQuery extends AbstractMybatisPlusSortableQuery
      * 任务类型
      */
     private FlowTaskType type;
-
-    @Override
-    public ActiveTaskQuery id(String id) {
-        this.id = id;
-        return this;
-    }
-
-    @Override
-    public ActiveTaskQuery tenantId(String tenantId) {
-        this.tenantId = tenantId;
-        return this;
-    }
 
     @Override
     public ActiveTaskQuery instanceId(String instanceId) {
@@ -137,12 +94,6 @@ public class MybatisPlusActiveTaskQuery extends AbstractMybatisPlusSortableQuery
     }
 
     @Override
-    public ActiveTaskQuery state(FlowTaskState state) {
-        this.state = state;
-        return this;
-    }
-
-    @Override
     public ActiveTaskQuery assigneeId(String assigneeId) {
         this.assigneeId = assigneeId;
         return this;
@@ -155,28 +106,18 @@ public class MybatisPlusActiveTaskQuery extends AbstractMybatisPlusSortableQuery
     }
 
     @Override
-    protected SFunction<FlowTask, ?> provideSortFieldFunction(String field) {
-        return SORTABLE_FIELD_FUNCTION_MAPPING.get(field);
-    }
-
-    @Override
-    protected void executeBuildWrapper(LambdaQueryWrapper<FlowTask> queryWrapper) {
-        queryWrapper.eq(StrUtil.isNotBlank(this.id), FlowTask::getId, this.id)
-            .eq(StrUtil.isNotBlank(this.tenantId), FlowTask::getTenantId, this.tenantId)
-            .eq(StrUtil.isNotBlank(this.instanceId), FlowTask::getInstanceId, this.instanceId)
-            .ge(createdAtGe != null, FlowTask::getCreatedAt, createdAtGe)
-            .le(createdAtLe != null, FlowTask::getCreatedAt, createdAtLe)
-            .eq(StrUtil.isNotBlank(this.nameLike), FlowTask::getName, this.nameLike)
-            .eq(StrUtil.isNotBlank(this.assigneeId), FlowTask::getAssigneeId, this.assigneeId)
-            .eq(this.type != null, FlowTask::getType, this.type);
-        if (this.state == null) {
-            this.state = FlowTaskState.ACTIVE;
-        }
-        queryWrapper.eq(FlowTask::getState, this.state.getValue());
+    protected void executeBuildWrapper(QueryWrapper<FlowTask> queryWrapper) {
+        super.executeBuildWrapper(queryWrapper);
+        queryWrapper.eq(StrUtil.isNotBlank(this.instanceId), StrUtil.toUnderlineCase(FlowTask.Fields.instanceId), this.instanceId)
+            .ge(createdAtGe != null, StrUtil.toUnderlineCase(FlowEntity.Fields.createdAt), createdAtGe)
+            .le(createdAtLe != null, StrUtil.toUnderlineCase(FlowEntity.Fields.createdAt), createdAtLe)
+            .eq(StrUtil.isNotBlank(this.nameLike), StrUtil.toUnderlineCase(FlowTask.Fields.name), this.nameLike)
+            .eq(StrUtil.isNotBlank(this.assigneeId), StrUtil.toUnderlineCase(FlowTask.Fields.assigneeId), this.assigneeId)
+            .eq(this.type != null, StrUtil.toUnderlineCase(FlowTask.Fields.type), this.type);
         if (StrUtil.isNotBlank(this.instanceNameLike)) {
-            queryWrapper.inSql(
-                FlowTask::getInstanceId,
-                "select i.id from flow_instance i where i.name like " + "'%" + this.instanceNameLike + "%'"
+            queryWrapper.exists(
+                "select 1 from flow_instance i where i.id = flow_task.instance_id = i.id and i.name like '{0}%'",
+                this.instanceNameLike
             );
         }
     }

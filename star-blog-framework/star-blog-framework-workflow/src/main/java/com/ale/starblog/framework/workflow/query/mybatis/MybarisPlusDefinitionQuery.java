@@ -1,17 +1,13 @@
 package com.ale.starblog.framework.workflow.query.mybatis;
 
 import cn.hutool.core.util.StrUtil;
-import com.ale.starblog.framework.workflow.entity.FlowDefinition;
-import com.ale.starblog.framework.workflow.entity.FlowEntity;
-import com.ale.starblog.framework.workflow.enumeration.FlowDefinitionState;
 import com.ale.starblog.framework.workflow.dao.mybatis.mapper.FlowDefinitionMapper;
+import com.ale.starblog.framework.workflow.entity.FlowDefinition;
+import com.ale.starblog.framework.workflow.enumeration.FlowDefinitionState;
 import com.ale.starblog.framework.workflow.query.DefinitionQuery;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
-import com.google.common.collect.Maps;
 
-import java.util.Map;
 
 /**
  * 基于MybatisPlus的流程定义查询构建器
@@ -19,20 +15,7 @@ import java.util.Map;
  * @author Ale
  * @version 1.0.0 2025/7/18 10:09
  */
-public class MybarisPlusDefinitionQuery extends AbstractMybatisPlusSortableQuery<FlowDefinition> implements DefinitionQuery {
-
-    /**
-     * 可排序的字段函数映射
-     */
-    private static final Map<String, SFunction<FlowDefinition, ?>> SORTABLE_FIELD_FUNCTION_MAPPING = Maps.newHashMap();
-
-    static {
-        SORTABLE_FIELD_FUNCTION_MAPPING.put(FlowEntity.Fields.id, FlowDefinition::getId);
-        SORTABLE_FIELD_FUNCTION_MAPPING.put(FlowEntity.Fields.tenantId, FlowDefinition::getTenantId);
-        SORTABLE_FIELD_FUNCTION_MAPPING.put(FlowEntity.Fields.createdAt, FlowDefinition::getCreatedAt);
-        SORTABLE_FIELD_FUNCTION_MAPPING.put(FlowDefinition.Fields.sort, FlowDefinition::getSort);
-        SORTABLE_FIELD_FUNCTION_MAPPING.put(FlowDefinition.Fields.version, FlowDefinition::getVersion);
-    }
+public class MybarisPlusDefinitionQuery extends AbstractMybatisPlusBaseQuery<FlowDefinition> implements DefinitionQuery {
 
     /**
      * 流程定义Mapper
@@ -42,16 +25,6 @@ public class MybarisPlusDefinitionQuery extends AbstractMybatisPlusSortableQuery
     public MybarisPlusDefinitionQuery(FlowDefinitionMapper definitionMapper) {
         this.definitionMapper = definitionMapper;
     }
-
-    /**
-     * 流程定义ID
-     */
-    private String id;
-
-    /**
-     * 机构ID
-     */
-    private String tenantId;
 
     /**
      * 流程定义Key
@@ -77,19 +50,6 @@ public class MybarisPlusDefinitionQuery extends AbstractMybatisPlusSortableQuery
      * 状态
      */
     private FlowDefinitionState state;
-
-
-    @Override
-    public DefinitionQuery id(String id) {
-        this.id = id;
-        return this;
-    }
-
-    @Override
-    public DefinitionQuery tenantId(String tenantId) {
-        this.tenantId = tenantId;
-        return this;
-    }
 
     @Override
     public DefinitionQuery definitionKey(String definitionKey) {
@@ -122,21 +82,15 @@ public class MybarisPlusDefinitionQuery extends AbstractMybatisPlusSortableQuery
     }
 
     @Override
-    protected SFunction<FlowDefinition, ?> provideSortFieldFunction(String field) {
-        return SORTABLE_FIELD_FUNCTION_MAPPING.get(field);
-    }
-
-    @Override
-    protected void executeBuildWrapper(LambdaQueryWrapper<FlowDefinition> queryWrapper) {
-        queryWrapper.eq(FlowDefinition::getDeleted, false)
-            .eq(StrUtil.isNotBlank(this.id), FlowDefinition::getId, this.id)
-            .eq(StrUtil.isNotBlank(this.tenantId), FlowDefinition::getTenantId, this.tenantId)
-            .eq(StrUtil.isNotBlank(this.definitionKey), FlowDefinition::getDefinitionKey, this.definitionKey)
-            .eq(StrUtil.isNotBlank(this.businessType), FlowDefinition::getBusinessType, this.businessType)
-            .like(StrUtil.isNotBlank(this.name), FlowDefinition::getName, this.name)
-            .eq(this.published != null, FlowDefinition::getPublished, this.published);
+    protected void executeBuildWrapper(QueryWrapper<FlowDefinition> queryWrapper) {
+        super.executeBuildWrapper(queryWrapper);
+        queryWrapper.eq(StrUtil.toUnderlineCase(FlowDefinition.Fields.deleted), false)
+            .eq(StrUtil.isNotBlank(this.definitionKey), StrUtil.toUnderlineCase(FlowDefinition.Fields.definitionKey), this.definitionKey)
+            .eq(StrUtil.isNotBlank(this.businessType), StrUtil.toUnderlineCase(FlowDefinition.Fields.businessType), this.businessType)
+            .like(StrUtil.isNotBlank(this.name), StrUtil.toUnderlineCase(FlowDefinition.Fields.name), this.name)
+            .eq(this.published != null, StrUtil.toUnderlineCase(FlowDefinition.Fields.published), this.published);
         if (this.state != null) {
-            queryWrapper.eq(FlowDefinition::getState, this.state.getValue());
+            queryWrapper.eq(StrUtil.toUnderlineCase(FlowDefinition.Fields.state), this.state.getValue());
         }
     }
 

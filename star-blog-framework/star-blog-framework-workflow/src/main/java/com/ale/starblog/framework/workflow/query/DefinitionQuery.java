@@ -9,23 +9,7 @@ import com.ale.starblog.framework.workflow.enumeration.FlowDefinitionState;
  * @author Ale
  * @version 1.0.0 2025/7/17 9:16
  */
-public interface DefinitionQuery extends SortableQuery<FlowDefinition> {
-
-    /**
-     * 流程定义ID
-     *
-     * @param id 流程定义ID
-     * @return this
-     */
-    DefinitionQuery id(String id);
-
-    /**
-     * 机构ID
-     *
-     * @param tenantId 机构ID
-     * @return this
-     */
-    DefinitionQuery tenantId(String tenantId);
+public interface DefinitionQuery extends BaseQuery<FlowDefinition> {
 
     /**
      * 流程定义Key
@@ -66,4 +50,5 @@ public interface DefinitionQuery extends SortableQuery<FlowDefinition> {
      * @return this
      */
     DefinitionQuery state(FlowDefinitionState state);
+
 }

@@ -1,12 +1,10 @@
 package com.ale.starblog.framework.workflow.query.mybatis;
 
 import cn.hutool.core.collection.CollectionUtil;
-import com.ale.starblog.framework.workflow.exception.FlowException;
+import com.ale.starblog.framework.workflow.entity.FlowEntity;
 import com.ale.starblog.framework.workflow.query.SortableQuery;
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import com.google.common.collect.Maps;
 
 import java.util.Map;
@@ -18,21 +16,19 @@ import java.util.Map;
  * @author Ale
  * @version 1.0.0 2025/7/17 9:35
  */
-public abstract class AbstractMybatisPlusSortableQuery<T> extends AbstractMybatisPlusQuery<T> implements SortableQuery<T> {
-
-
+public abstract class AbstractMybatisPlusSortableQuery<T extends FlowEntity> extends AbstractMybatisPlusQuery<T> implements SortableQuery<T> {
 
     /**
      * 排序字段映射
      */
-    protected Map<SFunction<T, ?>, Boolean> sortFieldMapping;
+    protected Map<String, Boolean> sortFieldMapping;
 
     @Override
     public SortableQuery<T> orderBy(String sortField, boolean isDesc) {
         if (this.sortFieldMapping == null) {
             this.sortFieldMapping = Maps.newHashMap();
         }
-        this.sortFieldMapping.put(this.getSortFieldFunction(sortField), isDesc);
+        this.sortFieldMapping.put(sortField, isDesc);
         return this;
     }
 
@@ -41,10 +37,10 @@ public abstract class AbstractMybatisPlusSortableQuery<T> extends AbstractMybati
         if (this.sortFieldMapping == null) {
             this.sortFieldMapping = Maps.newHashMap();
         }
-        this.sortFieldMapping.put(this.getSortFieldFunction(sortField), true);
+        this.sortFieldMapping.put(sortField, true);
         if (sortFields != null) {
             for (String field : sortFields) {
-                this.sortFieldMapping.put(this.getSortFieldFunction(field), true);
+                this.sortFieldMapping.put(field, true);
             }
         }
         return this;
@@ -55,18 +51,18 @@ public abstract class AbstractMybatisPlusSortableQuery<T> extends AbstractMybati
         if (this.sortFieldMapping == null) {
             this.sortFieldMapping = Maps.newHashMap();
         }
-        this.sortFieldMapping.put(this.getSortFieldFunction(sortField), false);
+        this.sortFieldMapping.put(sortField, false);
         if (sortFields != null) {
             for (String field : sortFields) {
-                this.sortFieldMapping.put(this.getSortFieldFunction(field), false);
+                this.sortFieldMapping.put(field, false);
             }
         }
         return this;
     }
 
     @Override
-    protected Wrapper<T> buildWrapper() {
-        LambdaQueryWrapper<T> queryWrapper = Wrappers.lambdaQuery();
+    protected QueryWrapper<T> buildQueryWrapper() {
+        QueryWrapper<T> queryWrapper = Wrappers.query();
         this.executeBuildWrapper(queryWrapper);
         if (CollectionUtil.isNotEmpty(this.sortFieldMapping)) {
             this.sortFieldMapping.forEach((field, isDesc) -> {
@@ -81,31 +77,10 @@ public abstract class AbstractMybatisPlusSortableQuery<T> extends AbstractMybati
     }
 
     /**
-     * 提供排序字段映射
-     *
-     * @param field 字段
-     * @return SFunction
-     */
-    protected abstract SFunction<T, ?> provideSortFieldFunction(String field);
-
-    /**
      * 构建查询条件
      *
      * @param queryWrapper 查询条件
      */
-    protected abstract void executeBuildWrapper(LambdaQueryWrapper<T> queryWrapper);
+    protected abstract void executeBuildWrapper(QueryWrapper<T> queryWrapper);
 
-    /**
-     * 获取排序字段映射
-     *
-     * @param field 字段
-     * @return SFunction
-     */
-    private SFunction<T, ?> getSortFieldFunction(String field) {
-        SFunction<T, ?> sortFieldFunction = this.provideSortFieldFunction(field);
-        if (sortFieldFunction == null) {
-            throw new FlowException("不支持的排序字段[{}]", field);
-        }
-        return sortFieldFunction;
-    }
 }

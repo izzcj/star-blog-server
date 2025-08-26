@@ -1,18 +1,19 @@
 package com.ale.starblog.framework.workflow.query.mybatis;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
+import com.ale.starblog.framework.workflow.dao.mybatis.mapper.FlowHistoryInstanceMapper;
 import com.ale.starblog.framework.workflow.entity.FlowEntity;
 import com.ale.starblog.framework.workflow.entity.FlowHistoryInstance;
+import com.ale.starblog.framework.workflow.entity.FlowInstance;
 import com.ale.starblog.framework.workflow.enumeration.FlowInstanceState;
-import com.ale.starblog.framework.workflow.dao.mybatis.mapper.FlowHistoryInstanceMapper;
+import com.ale.starblog.framework.workflow.model.node.CarbonCopyNode;
 import com.ale.starblog.framework.workflow.query.HistoryInstanceQuery;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
-import com.google.common.collect.Maps;
 
 import java.time.LocalDateTime;
-import java.util.Map;
+import java.util.Collection;
 
 /**
  * 基于MybatisPlus的流程历史实例查询构建器
@@ -20,20 +21,7 @@ import java.util.Map;
  * @author Ale
  * @version 1.0.0 2025/7/15 17:02
  */
-public class MybatisPlusHistoryInstanceQuery extends AbstractMybatisPlusSortableQuery<FlowHistoryInstance> implements HistoryInstanceQuery {
-
-    /**
-     * 可排序的字段函数映射
-     */
-    private static final Map<String, SFunction<FlowHistoryInstance, ?>> SORTABLE_FIELD_FUNCTION_MAPPING = Maps.newHashMap();
-
-    static {
-        SORTABLE_FIELD_FUNCTION_MAPPING.put(FlowEntity.Fields.id, FlowHistoryInstance::getId);
-        SORTABLE_FIELD_FUNCTION_MAPPING.put(FlowEntity.Fields.tenantId, FlowHistoryInstance::getTenantId);
-        SORTABLE_FIELD_FUNCTION_MAPPING.put(FlowEntity.Fields.createdAt, FlowHistoryInstance::getCreatedAt);
-        SORTABLE_FIELD_FUNCTION_MAPPING.put(FlowEntity.Fields.updatedAt, FlowHistoryInstance::getUpdatedAt);
-        SORTABLE_FIELD_FUNCTION_MAPPING.put(FlowHistoryInstance.Fields.state, FlowHistoryInstance::getState);
-    }
+public class MybatisPlusHistoryInstanceQuery extends AbstractMybatisPlusBaseQuery<FlowHistoryInstance> implements HistoryInstanceQuery {
 
     /**
      * 流程历史实例Mapper
@@ -46,16 +34,6 @@ public class MybatisPlusHistoryInstanceQuery extends AbstractMybatisPlusSortable
     }
 
     /**
-     * 流程实例ID
-     */
-    private String id;
-
-    /**
-     * 机构ID
-     */
-    private String tenantId;
-
-    /**
      * 流程发起人ID
      */
     private String starterId;
@@ -64,6 +42,11 @@ public class MybatisPlusHistoryInstanceQuery extends AbstractMybatisPlusSortable
      * 受理人ID
      */
     private String assigneeId;
+
+    /**
+     * 是否为抄送
+     */
+    private boolean isCarbonCopy;
 
     /**
      * 创建时间大于等于
@@ -86,6 +69,11 @@ public class MybatisPlusHistoryInstanceQuery extends AbstractMybatisPlusSortable
     private String businessId;
 
     /**
+     * 业务ID集合
+     */
+    private Collection<String> businessIds;
+
+    /**
      * 流程实例状态
      */
     private FlowInstanceState state;
@@ -96,18 +84,6 @@ public class MybatisPlusHistoryInstanceQuery extends AbstractMybatisPlusSortable
     private String titleLike;
 
     @Override
-    public HistoryInstanceQuery id(String id) {
-        this.id = id;
-        return this;
-    }
-
-    @Override
-    public HistoryInstanceQuery tenantId(String tenantId) {
-        this.tenantId = tenantId;
-        return this;
-    }
-
-    @Override
     public HistoryInstanceQuery starterId(String starterId) {
         this.starterId = starterId;
         return this;
@@ -116,6 +92,12 @@ public class MybatisPlusHistoryInstanceQuery extends AbstractMybatisPlusSortable
     @Override
     public HistoryInstanceQuery assigneeId(String assigneeId) {
         this.assigneeId = assigneeId;
+        return this;
+    }
+
+    @Override
+    public HistoryInstanceQuery isCarbonCopy() {
+        this.isCarbonCopy = true;
         return this;
     }
 
@@ -144,6 +126,12 @@ public class MybatisPlusHistoryInstanceQuery extends AbstractMybatisPlusSortable
     }
 
     @Override
+    public HistoryInstanceQuery businessIds(Collection<String> businessIds) {
+        this.businessIds = businessIds;
+        return this;
+    }
+
+    @Override
     public HistoryInstanceQuery state(FlowInstanceState state) {
         this.state = state;
         return this;
@@ -155,33 +143,36 @@ public class MybatisPlusHistoryInstanceQuery extends AbstractMybatisPlusSortable
         return this;
     }
 
-    @Override
-    protected SFunction<FlowHistoryInstance, ?> provideSortFieldFunction(String field) {
-        return SORTABLE_FIELD_FUNCTION_MAPPING.get(field);
-    }
-
     /**
      * 构建wrapper
      */
     @Override
-    protected void executeBuildWrapper(LambdaQueryWrapper<FlowHistoryInstance> queryWrapper) {
-        queryWrapper.eq(FlowHistoryInstance::getDeleted, false)
-            .eq(StrUtil.isNotBlank(this.id), FlowHistoryInstance::getId, this.id)
-            .eq(StrUtil.isNotBlank(this.tenantId), FlowHistoryInstance::getTenantId, this.tenantId)
-            .eq(StrUtil.isNotBlank(this.starterId), FlowHistoryInstance::getCreatedBy, this.starterId)
-            .ge(this.createdAtGe != null, FlowHistoryInstance::getCreatedAt, this.createdAtGe)
-            .le(this.createdAtLe != null, FlowHistoryInstance::getCreatedAt, this.createdAtLe)
-            .eq(StrUtil.isNotBlank(this.businessType), FlowHistoryInstance::getBusinessType, this.businessType)
-            .eq(StrUtil.isNotBlank(this.businessId), FlowHistoryInstance::getBusinessId, this.businessId)
-            .like(StrUtil.isNotBlank(this.titleLike), FlowHistoryInstance::getTitle, this.titleLike);
+    protected void executeBuildWrapper(QueryWrapper<FlowHistoryInstance> queryWrapper) {
+        super.executeBuildWrapper(queryWrapper);
+        queryWrapper.eq(StrUtil.toUnderlineCase(FlowHistoryInstance.Fields.deleted), false)
+            .eq(StrUtil.isNotBlank(this.starterId), StrUtil.toUnderlineCase(FlowEntity.Fields.createdBy), this.starterId)
+            .ge(this.createdAtGe != null, StrUtil.toUnderlineCase(FlowEntity.Fields.createdAt), this.createdAtGe)
+            .le(this.createdAtLe != null, StrUtil.toUnderlineCase(FlowEntity.Fields.createdAt), this.createdAtLe)
+            .eq(StrUtil.isNotBlank(this.businessType), StrUtil.toUnderlineCase(FlowInstance.Fields.businessType), this.businessType)
+            .eq(StrUtil.isNotBlank(this.businessId), StrUtil.toUnderlineCase(FlowInstance.Fields.businessId), this.businessId)
+            .in(CollectionUtil.isNotEmpty(this.businessIds), StrUtil.toUnderlineCase(FlowInstance.Fields.businessId), this.businessIds)
+            .like(StrUtil.isNotBlank(this.titleLike), StrUtil.toUnderlineCase(FlowInstance.Fields.title), this.titleLike);
         if (this.state != null) {
-            queryWrapper.eq(FlowHistoryInstance::getState, this.state.getValue());
+            queryWrapper.eq(StrUtil.toUnderlineCase(FlowHistoryInstance.Fields.state), this.state.getValue());
         }
         if (StrUtil.isNotBlank(this.assigneeId)) {
-            queryWrapper.exists(
-                "select 1 from flow_history_task ht where ht.instance_id = flow_history_instance.id and ht.assignee_id = {0}",
-                this.assigneeId
-            );
+            if (this.isCarbonCopy) {
+                queryWrapper.exists(
+                    "select 1 from flow_history_task ht where ht.instance_id = flow_history_instance.id and ht.assignee_id = {0} and ht.type = {1}",
+                    this.assigneeId,
+                    CarbonCopyNode.NODE_TYPE
+                );
+            } else {
+                queryWrapper.exists(
+                    "select 1 from flow_history_task ht where ht.instance_id = flow_history_instance.id and ht.assignee_id = {0}",
+                    this.assigneeId
+                );
+            }
         }
     }
 

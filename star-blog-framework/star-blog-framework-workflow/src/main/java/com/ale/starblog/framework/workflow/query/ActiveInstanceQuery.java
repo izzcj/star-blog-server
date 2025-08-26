@@ -10,23 +10,7 @@ import java.time.LocalDateTime;
  * @author Ale
  * @version 1.0.0 2025/7/16 17:56
  */
-public interface ActiveInstanceQuery extends SortableQuery<FlowInstance> {
-
-    /**
-     * 流程实例ID
-     *
-     * @param id 流程实例ID
-     * @return this
-     */
-    ActiveInstanceQuery id(String id);
-
-    /**
-     * 机构ID
-     *
-     * @param tenantId 机构ID
-     * @return this
-     */
-    ActiveInstanceQuery tenantId(String tenantId);
+public interface ActiveInstanceQuery extends BaseQuery<FlowInstance> {
 
     /**
      * 发起人

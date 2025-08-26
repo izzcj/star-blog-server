@@ -1,5 +1,6 @@
 package com.ale.starblog.framework.workflow.query;
 
+import com.ale.starblog.framework.workflow.entity.FlowEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -12,7 +13,7 @@ import java.util.List;
  * @author Ale
  * @version 1.0.0 2025/7/15 15:10
  */
-public interface Query<T> {
+public interface Query<T extends FlowEntity> {
 
     /**
      * 查询单条数据

@@ -11,23 +11,7 @@ import java.time.LocalDateTime;
  * @author Ale
  * @version 1.0.0 2025/7/16 16:51
  */
-public interface HistoryTaskQuery extends SortableQuery<FlowHistoryTask> {
-
-    /**
-     * 流程任务ID
-     *
-     * @param id 任务ID
-     * @return this
-     */
-    HistoryTaskQuery id(String id);
-
-    /**
-     * 机构ID
-     *
-     * @param tenantId 机构ID
-     * @return this
-     */
-    HistoryTaskQuery tenantId(String tenantId);
+public interface HistoryTaskQuery extends BaseQuery<FlowHistoryTask> {
 
     /**
      * 流程实例ID

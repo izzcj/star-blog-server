@@ -1,7 +1,6 @@
 package com.ale.starblog.framework.workflow.query;
 
 import com.ale.starblog.framework.workflow.entity.FlowTask;
-import com.ale.starblog.framework.workflow.enumeration.FlowTaskState;
 import com.ale.starblog.framework.workflow.enumeration.FlowTaskType;
 
 import java.time.LocalDateTime;
@@ -12,23 +11,7 @@ import java.time.LocalDateTime;
  * @author Ale
  * @version 1.0.0 2025/7/16 18:01
  */
-public interface ActiveTaskQuery extends SortableQuery<FlowTask> {
-
-    /**
-     * 流程任务ID
-     *
-     * @param id 任务ID
-     * @return this
-     */
-    ActiveTaskQuery id(String id);
-
-    /**
-     * 机构ID
-     *
-     * @param tenantId 机构ID
-     * @return this
-     */
-    ActiveTaskQuery tenantId(String tenantId);
+public interface ActiveTaskQuery extends BaseQuery<FlowTask> {
 
     /**
      * 流程实例ID
@@ -69,14 +52,6 @@ public interface ActiveTaskQuery extends SortableQuery<FlowTask> {
      * @return this
      */
     ActiveTaskQuery nameLike(String name);
-
-    /**
-     * 流程任务状态
-     *
-     * @param state 流程任务状态
-     * @return this
-     */
-    ActiveTaskQuery state(FlowTaskState state);
 
     /**
      * 受理人ID
