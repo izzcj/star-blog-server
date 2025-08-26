@@ -24,9 +24,7 @@ import com.ale.starblog.framework.workflow.support.StartInstanceParam;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * 默认流程实例服务
@@ -51,6 +49,17 @@ public class DefaultInstanceService implements InstanceService {
      * 历史流程实例dao
      */
     private final FlowHistoryInstanceDao historyInstanceDao;
+
+    /**
+     * 标识当前是否处于“流程实例启动生命周期”中
+     */
+    private final ThreadLocal<Boolean> isStartInstanceLifecycle = ThreadLocal.withInitial(() -> false);
+
+    /**
+     * 事件延迟发布队列（线程隔离，避免并发问题）
+     * 为避免在实例启动过程中触发结束导致先发布结束事件，因此使用延迟发布形式
+     */
+    private final ThreadLocal<List<Runnable>> eventRunnable = ThreadLocal.withInitial(ArrayList::new);
 
     public DefaultInstanceService(FlowDefinitionDao definitionDao, FlowInstanceDao instanceDao, FlowHistoryInstanceDao historyInstanceDao) {
         this.definitionDao = definitionDao;
@@ -237,6 +246,7 @@ public class DefaultInstanceService implements InstanceService {
         FlowHistoryInstance historyInstance = FlowHistoryInstance.of(instance, FlowInstanceState.ACTIVE);
 
         TransactionSupport.execute(() -> {
+            this.isStartInstanceLifecycle.set(true);
             InstanceEventPublisher.publishInstanceEvent(InstanceEventType.BEFORE_START, instance);
             boolean executeResult = BooleanUtil.and(
                 this.instanceDao.insert(instance),
@@ -248,8 +258,18 @@ public class DefaultInstanceService implements InstanceService {
                 throw new FlowException("创建流程实例失败！流程定义：{}，业务ID：{}，业务类型{}", instance.getDefinitionId(), instance.getBusinessId(), instance.getBusinessType());
             }
             InstanceEventPublisher.publishInstanceEvent(InstanceEventType.AFTER_START, instance);
+            this.isStartInstanceLifecycle.set(false);
+            List<Runnable> runnableList = eventRunnable.get();
+            if (CollectionUtils.isNotEmpty(runnableList)) {
+                runnableList.forEach(Runnable::run);
+                runnableList.clear();
+            }
             return true;
         });
+
+        // 清理 ThreadLocal，避免内存泄漏
+        this.isStartInstanceLifecycle.remove();
+        this.eventRunnable.remove();
 
         return instance;
     }
@@ -281,7 +301,11 @@ public class DefaultInstanceService implements InstanceService {
     private boolean endInstance(FlowInstance instance, FlowInstanceState state, InstanceEventType beforeEventType, InstanceEventType afterEventType, boolean isForce) {
         InstanceModelSupport.invalidationCache(instance.getId());
         return TransactionSupport.execute(() -> {
-            InstanceEventPublisher.publishInstanceEvent(beforeEventType, instance);
+            if (this.isStartInstanceLifecycle.get()) {
+                this.eventRunnable.get().add(() -> InstanceEventPublisher.publishInstanceEvent(beforeEventType, instance));
+            } else {
+                InstanceEventPublisher.publishInstanceEvent(beforeEventType, instance);
+            }
             FlowHistoryInstance historyInstance = FlowHistoryInstance.of(instance, state);
             if (isForce) {
                 boolean result = FlowContext.getExecutionService().forceFinishExecution(instance.getId(), state);
@@ -289,9 +313,13 @@ public class DefaultInstanceService implements InstanceService {
                     throw new FlowException("强制结束流程实例[{}]失败！", instance.getId());
                 }
             }
-            InstanceEventPublisher.publishInstanceEvent(afterEventType, historyInstance);
+            if (this.isStartInstanceLifecycle.get()) {
+                this.eventRunnable.get().add(() -> InstanceEventPublisher.publishInstanceEvent(afterEventType, historyInstance));
+            } else {
+                InstanceEventPublisher.publishInstanceEvent(afterEventType, historyInstance);
+            }
             if (log.isDebugEnabled()) {
-                log.debug("流程实例[{}][{}]成功！", instance.getId(), state.getMsg());
+                log.debug("流程实例[{}][{}]成功！", instance.getId(), state.getName());
             }
             return this.instanceDao.deleteById(instance.getId()) && this.historyInstanceDao.updateById(historyInstance);
         });
