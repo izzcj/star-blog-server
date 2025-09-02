@@ -15,7 +15,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @author Ale
  * @version 1.0.0 2025/7/18 10:09
  */
-public class MybarisPlusDefinitionQuery extends AbstractMybatisPlusBaseQuery<FlowDefinition> implements DefinitionQuery {
+public class MybarisPlusDefinitionQuery extends AbstractMybatisPlusBaseQuery<FlowDefinition, DefinitionQuery> implements DefinitionQuery {
 
     /**
      * 流程定义Mapper

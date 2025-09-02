@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
  * @author Ale
  * @version 1.0.0 2025/7/16 17:05
  */
-public class MybatisPlusHistoryTaskQuery extends AbstractMybatisPlusBaseQuery<FlowHistoryTask> implements HistoryTaskQuery {
+public class MybatisPlusHistoryTaskQuery extends AbstractMybatisPlusBaseQuery<FlowHistoryTask, HistoryTaskQuery> implements HistoryTaskQuery {
 
     /**
      * 历史流程任务查询构建器

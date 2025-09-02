@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
  * @author Ale
  * @version 1.0.0 2025/7/18 10:31
  */
-public class MybatisPlusActiveTaskQuery extends AbstractMybatisPlusBaseQuery<FlowTask> implements ActiveTaskQuery {
+public class MybatisPlusActiveTaskQuery extends AbstractMybatisPlusBaseQuery<FlowTask, ActiveTaskQuery> implements ActiveTaskQuery {
 
     /**
      * 映射字段与函数的映射关系

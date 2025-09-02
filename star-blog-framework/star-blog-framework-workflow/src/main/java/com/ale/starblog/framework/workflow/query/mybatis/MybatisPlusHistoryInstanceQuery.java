@@ -21,7 +21,7 @@ import java.util.Collection;
  * @author Ale
  * @version 1.0.0 2025/7/15 17:02
  */
-public class MybatisPlusHistoryInstanceQuery extends AbstractMybatisPlusBaseQuery<FlowHistoryInstance> implements HistoryInstanceQuery {
+public class MybatisPlusHistoryInstanceQuery extends AbstractMybatisPlusBaseQuery<FlowHistoryInstance, HistoryInstanceQuery> implements HistoryInstanceQuery {
 
     /**
      * 流程历史实例Mapper

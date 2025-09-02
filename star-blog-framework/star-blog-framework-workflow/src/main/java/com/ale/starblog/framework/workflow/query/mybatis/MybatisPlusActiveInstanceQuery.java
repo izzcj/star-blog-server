@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
  * @author Ale
  * @version 1.0.0 2025/7/18 10:22
  */
-public class MybatisPlusActiveInstanceQuery extends AbstractMybatisPlusBaseQuery<FlowInstance> implements ActiveInstanceQuery {
+public class MybatisPlusActiveInstanceQuery extends AbstractMybatisPlusBaseQuery<FlowInstance, ActiveInstanceQuery> implements ActiveInstanceQuery {
 
     /**
      * 流程实例Mapper

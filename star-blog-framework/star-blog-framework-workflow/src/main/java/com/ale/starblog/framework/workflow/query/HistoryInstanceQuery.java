@@ -12,7 +12,7 @@ import java.util.Collection;
  * @author Ale
  * @version 1.0.0 2025/7/15 14:39
  */
-public interface HistoryInstanceQuery extends BaseQuery<FlowHistoryInstance> {
+public interface HistoryInstanceQuery extends BaseQuery<FlowHistoryInstance, HistoryInstanceQuery> {
 
     /**
      * 发起人

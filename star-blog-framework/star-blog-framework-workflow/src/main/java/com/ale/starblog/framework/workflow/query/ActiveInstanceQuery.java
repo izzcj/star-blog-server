@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
  * @author Ale
  * @version 1.0.0 2025/7/16 17:56
  */
-public interface ActiveInstanceQuery extends BaseQuery<FlowInstance> {
+public interface ActiveInstanceQuery extends BaseQuery<FlowInstance, ActiveInstanceQuery> {
 
     /**
      * 发起人

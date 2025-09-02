@@ -9,7 +9,7 @@ import com.ale.starblog.framework.workflow.enumeration.FlowDefinitionState;
  * @author Ale
  * @version 1.0.0 2025/7/17 9:16
  */
-public interface DefinitionQuery extends BaseQuery<FlowDefinition> {
+public interface DefinitionQuery extends BaseQuery<FlowDefinition, DefinitionQuery> {
 
     /**
      * 流程定义Key

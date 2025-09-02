@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
  * @author Ale
  * @version 1.0.0 2025/7/16 18:01
  */
-public interface ActiveTaskQuery extends BaseQuery<FlowTask> {
+public interface ActiveTaskQuery extends BaseQuery<FlowTask, ActiveTaskQuery> {
 
     /**
      * 流程实例ID

@@ -34,7 +34,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User, UserBO, C
     @Override
     public void beforeCreate(User entity, HookContext context) {
         if (StrUtil.isBlank(entity.getPassword())) {
-            entity.setPassword(passwordEncoder.encode(SystemConstants.DEFAULT_PASSWORD));
+            entity.setPassword(this.passwordEncoder.encode(SystemConstants.DEFAULT_PASSWORD));
         }
     }
 
@@ -44,10 +44,10 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User, UserBO, C
         if (user == null) {
             throw new ServiceException("修改密码失败！用户不存在！");
         }
-        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+        if (!this.passwordEncoder.matches(oldPassword, user.getPassword())) {
             throw new ServiceException("修改密码失败！原密码错误！");
         }
-        user.setPassword(passwordEncoder.encode(newPassword));
+        user.setPassword(this.passwordEncoder.encode(newPassword));
         this.update(user, null);
     }
 }
