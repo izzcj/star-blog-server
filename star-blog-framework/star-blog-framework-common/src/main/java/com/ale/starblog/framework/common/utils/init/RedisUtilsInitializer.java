@@ -21,6 +21,7 @@ import java.lang.invoke.MethodType;
  **/
 public class RedisUtilsInitializer implements BeanPostProcessor {
 
+    @NonNull
     @Override
     public Object postProcessAfterInitialization(@NonNull Object bean, @NonNull String beanName) throws BeansException {
         if (bean instanceof RedisTemplate && StrUtil.equals(beanName, "redisTemplate")) {

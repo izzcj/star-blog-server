@@ -24,7 +24,6 @@
 
     <modules>
         <module>star-blog-admin</module>
-        <module>star-blog-web</module>
     </modules>
 
     <dependencies>

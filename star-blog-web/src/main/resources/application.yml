@@ -1,8 +1,0 @@
-server:
-  port: 9092
-
-spring:
-  profiles:
-    active: dev
-  application:
-    name: StarBlogWebService

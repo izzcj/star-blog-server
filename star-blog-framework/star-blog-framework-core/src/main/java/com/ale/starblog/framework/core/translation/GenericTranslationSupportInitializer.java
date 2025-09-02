@@ -16,6 +16,7 @@ import java.lang.invoke.MethodType;
  */
 public class GenericTranslationSupportInitializer implements BeanPostProcessor {
 
+    @NonNull
     @Override
     public Object postProcessAfterInitialization(@NonNull Object bean, @NonNull String beanName) throws BeansException {
         if (bean instanceof GenericTranslator) {

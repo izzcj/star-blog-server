@@ -48,6 +48,6 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User, UserBO, C
             throw new ServiceException("修改密码失败！原密码错误！");
         }
         user.setPassword(this.passwordEncoder.encode(newPassword));
-        this.update(user, null);
+        this.updateById(user);
     }
 }
