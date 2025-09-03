@@ -19,7 +19,7 @@ public class UtilsInitializationAutoConfiguration {
      * @return 初始化Bean
      */
     @Bean(autowireCandidate = false)
-    public RedisUtilsInitializer redisUtilsInitializer() {
+    public static RedisUtilsInitializer redisUtilsInitializer() {
         return new RedisUtilsInitializer();
     }
 
@@ -29,7 +29,7 @@ public class UtilsInitializationAutoConfiguration {
      * @return 初始化Bean
      */
     @Bean(autowireCandidate = false)
-    public JsonUtilsInitializer jsonUtilsInitializer() {
+    public static JsonUtilsInitializer jsonUtilsInitializer() {
         return new JsonUtilsInitializer();
     }
 }

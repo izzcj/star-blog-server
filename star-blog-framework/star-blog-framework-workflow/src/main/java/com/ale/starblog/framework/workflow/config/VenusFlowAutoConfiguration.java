@@ -107,7 +107,7 @@ public class VenusFlowAutoConfiguration {
      */
     @Bean
     @ConditionalOnBean(InstanceModelParser.class)
-    public InstanceModelSupportInitializer instanceModelSupportInitializer() {
+    public static InstanceModelSupportInitializer instanceModelSupportInitializer() {
         return new InstanceModelSupportInitializer();
     }
 
@@ -153,7 +153,7 @@ public class VenusFlowAutoConfiguration {
      */
     @Bean
     @ConditionalOnBean({ConditionExecutor.class, ConditionParser.class})
-    public ConditionExecutorSupportInitializer conditionExecutorSupportInitializer() {
+    public static ConditionExecutorSupportInitializer conditionExecutorSupportInitializer() {
         return new ConditionExecutorSupportInitializer();
     }
 
@@ -164,7 +164,7 @@ public class VenusFlowAutoConfiguration {
      */
     @Bean
     @ConditionalOnBean(TaskAssigneeParser.class)
-    public TaskAssigneeSupportInitializer taskAssigneeSupportInitializer() {
+    public static TaskAssigneeSupportInitializer taskAssigneeSupportInitializer() {
         return new TaskAssigneeSupportInitializer();
     }
 

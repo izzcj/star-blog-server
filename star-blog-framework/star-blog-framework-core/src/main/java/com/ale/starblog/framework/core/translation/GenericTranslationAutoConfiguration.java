@@ -46,7 +46,7 @@ public class GenericTranslationAutoConfiguration {
      * @return Bean
      */
     @Bean
-    public GenericTranslationSupportInitializer genericTranslationSupportInitializer() {
+    public static GenericTranslationSupportInitializer genericTranslationSupportInitializer() {
         return new GenericTranslationSupportInitializer();
     }
 

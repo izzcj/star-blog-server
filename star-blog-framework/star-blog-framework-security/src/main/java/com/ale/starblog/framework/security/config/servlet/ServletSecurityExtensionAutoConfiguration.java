@@ -307,7 +307,7 @@ public class ServletSecurityExtensionAutoConfiguration {
      * @return 处理器Bean
      */
     @Bean
-    public GenericAnnotationBeanPostProcessor methodPermissionCheckingAnnotationBeanPostProcessor(ObjectProvider<MethodPermissionChecker> methodPermissionCheckers) {
+    public static GenericAnnotationBeanPostProcessor methodPermissionCheckingAnnotationBeanPostProcessor(ObjectProvider<MethodPermissionChecker> methodPermissionCheckers) {
         AnnotationMethodMatcherPointcutAdvisor advisor = new AnnotationMethodMatcherPointcutAdvisor(PermissionCheck.class, false);
         var methodInterceptor = new PermissionCheckingMethodInterceptor(methodPermissionCheckers);
         advisor.setAdvice(methodInterceptor);

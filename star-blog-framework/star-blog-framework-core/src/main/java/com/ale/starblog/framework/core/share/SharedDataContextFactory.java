@@ -47,7 +47,7 @@ public class SharedDataContextFactory implements SmartLifecycle {
         }
 
         Set<String> keys = this.redisTemplate.keys(RedisSharedDataContext.SHARED_OBJECT_CONTEXT_KEY_PREFIX + StringConstants.ASTERISK);
-        if (keys != null && !keys.isEmpty()) {
+        if (!keys.isEmpty()) {
             log.info("清除共享数据: {}", keys);
             this.redisTemplate.delete(keys);
         }

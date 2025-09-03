@@ -18,7 +18,7 @@ public class VenusTransactionAutoConfiguration {
      * @return 事务支持类初始化器bean
      */
     @Bean
-    public TransactionSupportInitializer transactionSupportInitializer() {
+    public static TransactionSupportInitializer transactionSupportInitializer() {
         return new TransactionSupportInitializer();
     }
 

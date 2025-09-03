@@ -3,6 +3,7 @@ package com.ale.starblog.framework.core.service;
 import com.ale.starblog.framework.common.porxy.ProxyFactory;
 import com.ale.starblog.framework.common.porxy.config.VenusProxyAutoConfiguration;
 import com.ale.starblog.framework.core.service.proxy.ServiceProxyInitializer;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -23,12 +24,12 @@ public class ServiceAutoConfiguration {
     /**
      * Service代理初始化器bean
      *
-     * @param proxyFactory 代理工厂
+     * @param proxyFactoryObjectProvider 代理工厂提供器
      * @return Service代理初始化器
      */
     @Bean
     @ConditionalOnBean(ProxyFactory.class)
-    public ServiceProxyInitializer serviceProxyInitializer(ProxyFactory proxyFactory) {
-        return new ServiceProxyInitializer(proxyFactory);
+    public static ServiceProxyInitializer serviceProxyInitializer(ObjectProvider<ProxyFactory> proxyFactoryObjectProvider) {
+        return new ServiceProxyInitializer(proxyFactoryObjectProvider);
     }
 }

@@ -43,7 +43,7 @@ public class VenusProxyAutoConfiguration {
         BeanDefinitionRegistry registry = (BeanDefinitionRegistry) context.getBeanFactory();
         BeanDefinition definition = registry.getBeanDefinition(AopConfigUtils.AUTO_PROXY_CREATOR_BEAN_NAME);
         MutablePropertyValues propertyValues = definition.getPropertyValues();
-        Boolean proxyTargetClass = false;
+        boolean proxyTargetClass = false;
         for (PropertyValue propertyValue : propertyValues) {
             if ("proxyTargetClass".equals(propertyValue.getName())) {
                 proxyTargetClass = (Boolean) propertyValue.getValue();
