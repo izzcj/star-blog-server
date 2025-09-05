@@ -149,7 +149,8 @@ public final class MenuRouterHelper {
         return StringUtils.replaceEach(
             path,
             new String[] {HttpConstants.HTTP, HttpConstants.HTTPS, HttpConstants.WWW, "."},
-            new String[] {"", "", "", "/"});
+            new String[] {"", "", "", "/"}
+        );
     }
 
 }
