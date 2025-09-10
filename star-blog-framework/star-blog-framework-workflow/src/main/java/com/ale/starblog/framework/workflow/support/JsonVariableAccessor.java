@@ -1,5 +1,4 @@
-package com.ale.starblog.framework.workflow.entity;
-
+package com.ale.starblog.framework.workflow.support;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.map.MapUtil;
@@ -10,12 +9,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * json类型变量实体类
+ * 基于json的变量访问器
  *
  * @author Ale
  * @version 1.0.0 2025/7/3 14:39
  */
-public interface JsonVariableEntity extends VariableEntity<String> {
+public interface JsonVariableAccessor extends VariableAccessor<String> {
 
     /**
      * 获取所有变量

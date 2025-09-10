@@ -1,17 +1,16 @@
-package com.ale.starblog.framework.workflow.entity;
-
+package com.ale.starblog.framework.workflow.support;
 
 import java.util.Map;
 
 /**
- * 含有变量的实体
+ * 变量访问器
  * 最后变量以map形式使用
  *
  * @param <T> 变量类型
  * @author Ale
  * @version 1.0.0 2025/7/3 11:59
  */
-public interface VariableEntity<T> {
+public interface VariableAccessor<T> {
 
     /**
      * 获取变量

@@ -1,6 +1,7 @@
 package com.ale.starblog.framework.workflow.entity;
 
 import com.ale.starblog.framework.workflow.support.IdGeneratorSupport;
+import com.ale.starblog.framework.workflow.support.JsonVariableAccessor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.FieldNameConstants;
@@ -18,7 +19,7 @@ import java.util.Map;
 @Data
 @FieldNameConstants
 @EqualsAndHashCode(callSuper = true)
-public class FlowInstance extends FlowEntity implements JsonVariableEntity {
+public class FlowInstance extends FlowEntity implements JsonVariableAccessor {
 
     /**
      * 流程定义ID

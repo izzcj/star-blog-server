@@ -3,6 +3,7 @@ package com.ale.starblog.framework.workflow.entity;
 import com.ale.starblog.framework.workflow.enumeration.FlowExecutionState;
 import com.ale.starblog.framework.workflow.model.node.FlowNode;
 import com.ale.starblog.framework.workflow.support.IdGeneratorSupport;
+import com.ale.starblog.framework.workflow.support.JsonVariableAccessor;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -16,7 +17,7 @@ import java.util.Map;
  * @version 1.0.0 2025/6/18 16:08
  */
 @Data
-public class FlowExecution implements JsonVariableEntity, Serializable {
+public class FlowExecution implements JsonVariableAccessor, Serializable {
 
     /**
      * id
