@@ -1,7 +1,6 @@
 package com.ale.starblog.framework.security.config;
 
 import com.ale.starblog.framework.common.redis.RedisCommonAutoConfiguration;
-import com.ale.starblog.framework.security.authentication.CompositeAuthenticationProvider;
 import com.ale.starblog.framework.security.authentication.LoginProcessor;
 import com.ale.starblog.framework.security.config.servlet.LoginProcessorsHolder;
 import com.ale.starblog.framework.security.context.RedisSessionContext;
@@ -108,17 +107,6 @@ public class VenusSecurityAutoConfiguration {
     @Bean
     public LoginProcessorsHolder loginProcessorsHolder(ObjectProvider<LoginProcessor> loginProcessors) {
         return new LoginProcessorsHolder(loginProcessors);
-    }
-
-    /**
-     * 聚合认证提供器Bean
-     *
-     * @param loginProcessors 登录处理器提供器
-     * @return 认证提供器Bean
-     */
-    @Bean
-    public CompositeAuthenticationProvider compositeAuthenticationProvider(ObjectProvider<LoginProcessor> loginProcessors) {
-        return new CompositeAuthenticationProvider(loginProcessors);
     }
 
     /**

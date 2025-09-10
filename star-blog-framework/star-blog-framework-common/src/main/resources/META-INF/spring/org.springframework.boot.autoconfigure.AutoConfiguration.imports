@@ -5,3 +5,4 @@ com.ale.starblog.framework.common.exception.config.ExceptionExtensionAutoConfigu
 com.ale.starblog.framework.common.logging.LogExtensionAutoConfiguration
 com.ale.starblog.framework.common.porxy.config.VenusProxyAutoConfiguration
 com.ale.starblog.framework.common.transaction.VenusTransactionAutoConfiguration
+com.ale.starblog.framework.common.spring.SpringCommonAutoConfiguration

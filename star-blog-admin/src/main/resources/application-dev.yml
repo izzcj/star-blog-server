@@ -51,3 +51,6 @@ venus:
   # 代理配置
   proxy:
     enabled: true
+  # 通用配置
+  common:
+    enable-cors: true
