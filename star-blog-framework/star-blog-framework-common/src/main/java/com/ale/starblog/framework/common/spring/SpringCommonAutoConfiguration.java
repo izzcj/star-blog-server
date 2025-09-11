@@ -33,7 +33,7 @@ public class SpringCommonAutoConfiguration {
      * @return 跨域过滤器
      */
     @Bean
-    @ConditionalOnProperty(prefix = "venus.common", name = "enableCors")
+    @ConditionalOnProperty(prefix = "venus.common", name = "enable-cors", havingValue = "true")
     @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
     public OrderedCorsFilter orderedCorsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
