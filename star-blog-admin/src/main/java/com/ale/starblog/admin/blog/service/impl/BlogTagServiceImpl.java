@@ -44,12 +44,14 @@ public class BlogTagServiceImpl extends ServiceImpl<BlogTagMapper, BlogTag> impl
         if (!tagIds.isEmpty()) {
             return blogTagService.listByIds(tagIds)
                     .stream()
-                    .map(tag -> TagBO.builder()
+                    .map(tag ->
+                        TagBO.builder()
                             .id(tag.getId())
                             .name(tag.getName())
                             .description(tag.getDescription())
                             .color(tag.getColor())
-                            .build())
+                            .build()
+                    )
                     .collect(Collectors.toList());
         }
 
@@ -66,10 +68,12 @@ public class BlogTagServiceImpl extends ServiceImpl<BlogTagMapper, BlogTag> impl
         // 添加新的关联关系
         if (tagIds != null && !tagIds.isEmpty()) {
             List<BlogTag> relations = tagIds.stream()
-                    .map(tagId -> BlogTag.builder()
+                    .map(tagId ->
+                        BlogTag.builder()
                             .blogId(blogId)
                             .tagId(tagId)
-                            .build())
+                            .build()
+                    )
                     .collect(Collectors.toList());
             this.saveBatch(relations);
         }

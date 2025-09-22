@@ -1,7 +1,10 @@
 package com.ale.starblog.admin.blog.domain.pojo.blog;
 
 import com.ale.starblog.admin.blog.domain.pojo.tag.BlogTagVO;
+import com.ale.starblog.admin.blog.enums.BlogStatus;
+import com.ale.starblog.admin.common.constants.TranslationConstants;
 import com.ale.starblog.framework.core.pojo.BaseVO;
+import com.ale.starblog.framework.core.translation.TranslationField;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -26,14 +29,20 @@ import java.util.List;
 public class BlogVO extends BaseVO {
 
     /**
+     * 分类
+     */
+    @TranslationField(type = TranslationConstants.TRANSLATION_DICT, params = "type=blog_type")
+    private String type;
+
+    /**
+     * 分类名称
+     */
+    private String typeName;
+
+    /**
      * 标题
      */
     private String title;
-
-    /**
-     * 内容
-     */
-    private String content;
 
     /**
      * 摘要
@@ -51,19 +60,19 @@ public class BlogVO extends BaseVO {
     private Long viewCount;
 
     /**
-     * 状态 (0:草稿, 1:已发布)
+     * 状态
      */
-    private Integer status;
+    private BlogStatus status;
 
     /**
-     * 是否置顶 (0:否, 1:是)
+     * 是否置顶
      */
-    private Boolean isTop;
+    private Boolean top;
 
     /**
-     * 创建时间
+     * 发布时间
      */
-    private LocalDateTime createTime;
+    private LocalDateTime publishTime;
 
     /**
      * 标签列表

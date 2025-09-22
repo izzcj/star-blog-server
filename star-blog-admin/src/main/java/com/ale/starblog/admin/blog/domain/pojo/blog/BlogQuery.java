@@ -1,5 +1,6 @@
 package com.ale.starblog.admin.blog.domain.pojo.blog;
 
+import com.ale.starblog.admin.blog.enums.BlogStatus;
 import com.ale.starblog.framework.core.query.BaseQuery;
 import com.ale.starblog.framework.core.query.Query;
 import com.ale.starblog.framework.core.query.QueryType;
@@ -22,19 +23,25 @@ import lombok.experimental.SuperBuilder;
 public class BlogQuery extends BaseQuery {
 
     /**
+     * 分类
+     */
+    @Query
+    private String type;
+
+    /**
      * 标题
      */
     @Query(type = QueryType.LIKE_ANYWHERE)
     private String title;
 
     /**
-     * 状态 (0:草稿, 1:已发布)
+     * 状态
      */
     @Query
-    private Integer status;
+    private BlogStatus status;
 
     /**
-     * 是否置顶 (0:否, 1:是)
+     * 是否置顶
      */
     @Query
     private Boolean isTop;

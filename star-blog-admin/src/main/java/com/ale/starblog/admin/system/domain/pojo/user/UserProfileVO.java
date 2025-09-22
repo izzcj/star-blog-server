@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.util.Date;
+
 /**
  * 用户个人信息VO
  *
@@ -19,14 +21,48 @@ import lombok.experimental.SuperBuilder;
 public class UserProfileVO {
 
     /**
-     * 角色组
-     * ','号分割
+     * id
      */
-    private String roleGroup;
+    private String id;
 
     /**
-     * 用户信息
+     * 账号
      */
-    private UserVO user;
+    private String account;
+
+    /**
+     * 头像
+     */
+    private String avatar;
+
+    /**
+     * 昵称
+     */
+    private String nickname;
+
+    /**
+     * 性别
+     */
+    private String sex;
+
+    /**
+     * 手机号
+     */
+    private String mobile;
+
+    /**
+     * 邮箱
+     */
+    private String email;
+
+    /**
+     * 上次登录ip
+     */
+    private String lastLoginIp;
+
+    /**
+     * 上次登录时间
+     */
+    private Date lastLoginTime;
 
 }

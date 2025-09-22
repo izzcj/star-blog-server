@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import java.time.LocalDateTime;
+
 /**
  * 博客实体类
  *
@@ -21,6 +23,11 @@ import lombok.experimental.SuperBuilder;
 @TableName("blog")
 @EqualsAndHashCode(callSuper = true)
 public class Blog extends BaseAuditEntity {
+
+    /**
+     * 分类
+     */
+    private String type;
 
     /**
      * 标题
@@ -56,4 +63,9 @@ public class Blog extends BaseAuditEntity {
      * 是否置顶
      */
     private Boolean top;
+
+    /**
+     * 发布时间
+     */
+    private LocalDateTime publishTime;
 }

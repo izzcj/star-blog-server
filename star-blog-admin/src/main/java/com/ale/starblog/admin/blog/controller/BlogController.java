@@ -1,5 +1,6 @@
 package com.ale.starblog.admin.blog.controller;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.ale.starblog.admin.blog.domain.entity.Blog;
 import com.ale.starblog.admin.blog.domain.pojo.blog.*;
 import com.ale.starblog.admin.blog.domain.pojo.tag.BlogTagVO;
@@ -7,6 +8,7 @@ import com.ale.starblog.admin.blog.service.IBlogService;
 import com.ale.starblog.admin.blog.service.IBlogTagService;
 import com.ale.starblog.framework.common.domain.JsonPageResult;
 import com.ale.starblog.framework.common.domain.JsonResult;
+import com.ale.starblog.framework.common.exception.ServiceException;
 import com.ale.starblog.framework.core.controller.BaseController;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -14,6 +16,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -40,21 +43,23 @@ public class BlogController extends BaseController<Blog, IBlogService, BlogVO, B
      * @return 博客信息
      */
     @GetMapping("/{id}")
-    public JsonResult<BlogVO> get(@PathVariable(name = "id") Long id) {
-        BlogVO blogVO = this.queryById(id).getData();
-        if (blogVO != null) {
-            // 获取博客关联的标签
-            List<BlogTagVO> tags = this.blogTagService.getTagsByBlogId(id)
-                    .stream()
-                    .map(tagBO -> BlogTagVO.builder()
-                            .name(tagBO.getName())
-                            .description(tagBO.getDescription())
-                            .color(tagBO.getColor())
-                            .build())
-                    .collect(Collectors.toList());
-            blogVO.setTags(tags);
-        }
-        return JsonResult.success(blogVO);
+    public JsonResult<BlogDetailsVO> get(@PathVariable(name = "id") Long id) {
+        Blog blog = Optional.ofNullable(this.service.getById(id))
+            .orElseThrow(() -> new ServiceException("博客不存在"));
+        BlogDetailsVO result = BeanUtil.copyProperties(blog, BlogDetailsVO.class);
+        // 获取博客关联的标签
+        List<BlogTagVO> tags = this.blogTagService.getTagsByBlogId(id)
+            .stream()
+            .map(tagBO ->
+                BlogTagVO.builder()
+                    .name(tagBO.getName())
+                    .description(tagBO.getDescription())
+                    .color(tagBO.getColor())
+                    .build()
+            )
+            .collect(Collectors.toList());
+        result.setTags(tags);
+        return JsonResult.success(result);
     }
 
     /**

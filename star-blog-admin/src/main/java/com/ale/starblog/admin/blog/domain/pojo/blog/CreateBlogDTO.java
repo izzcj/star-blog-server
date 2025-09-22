@@ -1,5 +1,6 @@
 package com.ale.starblog.admin.blog.domain.pojo.blog;
 
+import com.ale.starblog.admin.blog.enums.BlogStatus;
 import com.ale.starblog.framework.core.pojo.BaseCreateDTO;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -25,6 +26,12 @@ import java.util.List;
 public class CreateBlogDTO extends BaseCreateDTO {
 
     /**
+     * 分类
+     */
+    @NotBlank(message = "分类不能为空")
+    private String type;
+
+    /**
      * 标题
      */
     @NotBlank(message = "标题不能为空")
@@ -47,14 +54,14 @@ public class CreateBlogDTO extends BaseCreateDTO {
     private String coverImage;
 
     /**
-     * 状态 (0:草稿, 1:已发布)
+     * 状态
      */
-    private Integer status;
+    private BlogStatus status;
 
     /**
-     * 是否置顶 (0:否, 1:是)
+     * 是否置顶
      */
-    private Boolean isTop;
+    private Boolean top;
 
     /**
      * 标签ID列表
