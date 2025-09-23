@@ -20,16 +20,12 @@ public class LoginHttpSecurityConfigurer implements HttpSecurityConfigurer {
      * 退出处理器
      */
     private final VenusLogoutHandler logoutHandler;
+
     /**
      * 退出成功处理器
      */
     private final VenusLogoutSuccessHandler logoutSuccessHandler;
 
-    /**
-     * 配置Http安全
-     *
-     * @param http http安全对象
-     */
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.logout(

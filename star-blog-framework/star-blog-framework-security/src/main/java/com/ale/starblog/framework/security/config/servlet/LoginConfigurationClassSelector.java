@@ -1,9 +1,14 @@
 package com.ale.starblog.framework.security.config.servlet;
 
+import com.ale.starblog.framework.security.authentication.VenusAuthenticationFailureHandler;
+import com.ale.starblog.framework.security.authentication.VenusAuthenticationSuccessHandler;
+import com.ale.starblog.framework.security.authentication.VenusLogoutHandler;
+import com.ale.starblog.framework.security.authentication.VenusLogoutSuccessHandler;
 import org.springframework.context.annotation.ImportSelector;
 import org.springframework.core.annotation.AnnotationAttributes;
 import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.lang.NonNull;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.util.Assert;
 
 import java.util.ArrayList;
@@ -24,15 +29,14 @@ public class LoginConfigurationClassSelector implements ImportSelector {
         var annotationAttributes = AnnotationAttributes.fromMap(importingClassMetadata.getAnnotationAttributes(EnableVenusAuthentication.class.getName()));
         Assert.notNull(annotationAttributes, "注解EnableVefAuthentication属性不能为空");
         List<String> classNames = new ArrayList<>();
-        /*classNames.add(VenusAuthenticationSuccessHandler.class.getName());
+        classNames.add(VenusAuthenticationSuccessHandler.class.getName());
         classNames.add(VenusAuthenticationFailureHandler.class.getName());
         classNames.add(VenusLogoutHandler.class.getName());
         classNames.add(VenusLogoutSuccessHandler.class.getName());
         classNames.add(BCryptPasswordEncoder.class.getName());
         classNames.add(LoginProcessorsHolder.class.getName());
-        classNames.add(AccountPasswordLoginProcessor.class.getName());
         classNames.add(LoginHttpSecurityConfigurer.class.getName());
-        classNames.add(CompositeAuthenticationHttpSecurityConfigurer.class.getName());*/
+        classNames.add(CompositeAuthenticationHttpSecurityConfigurer.class.getName());
         if (annotationAttributes.getBoolean("limitLoginRate")) {
             classNames.add(LoginRateLimitHttpSecurityConfigurer.class.getName());
         }

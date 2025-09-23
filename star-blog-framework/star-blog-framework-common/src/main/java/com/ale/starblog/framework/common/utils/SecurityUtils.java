@@ -60,13 +60,13 @@ public final class SecurityUtils {
     public static AuthenticatedUser getLoginUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null) {
-            throw new SecurityException("未获取到用户认证信息！");
+            return null;
         }
 
         if (authentication.getPrincipal() instanceof AuthenticatedUser authenticatedUser) {
             return authenticatedUser;
         }
 
-        throw new SecurityException("未获取到用户认证信息！");
+        return null;
     }
 }

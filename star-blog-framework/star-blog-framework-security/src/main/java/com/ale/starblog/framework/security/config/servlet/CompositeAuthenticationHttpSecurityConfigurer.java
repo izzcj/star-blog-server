@@ -37,11 +37,6 @@ public class CompositeAuthenticationHttpSecurityConfigurer implements HttpSecuri
      */
     private final LoginProcessorsHolder loginProcessorsHolder;
 
-    /**
-     * 配置Http安全
-     *
-     * @param http http安全对象
-     */
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.authenticationProvider(

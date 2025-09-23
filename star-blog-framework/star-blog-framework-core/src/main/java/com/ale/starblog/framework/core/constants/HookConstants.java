@@ -14,6 +14,11 @@ import lombok.NoArgsConstructor;
 public class HookConstants {
 
     /**
+     * 查询参数-key
+     */
+    public static final String QUERY_KEY = "query";
+
+    /**
      * 创建实体DTO-key
      */
     public static final String CREATE_DTO_KEY = "createDTO";

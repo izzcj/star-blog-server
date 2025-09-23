@@ -64,8 +64,7 @@ public abstract class BaseController<E extends BaseEntity, S extends IBaseServic
      * @return VO类型
      */
     private Class<V> deduceVoClass() {
-        Class<V> clazz = CastUtils.cast(GenericTypeUtils.resolveTypeArguments(this.getClass(), BaseController.class, 2));
-        return clazz;
+        return CastUtils.cast(GenericTypeUtils.resolveTypeArguments(this.getClass(), BaseController.class, 2));
     }
 
     /**
@@ -107,7 +106,9 @@ public abstract class BaseController<E extends BaseEntity, S extends IBaseServic
      * @return 结果
      */
     protected JsonResult<List<V>> queryList(BaseQuery query) {
-        List<B> boList = this.service.queryList(query);
+        HookContext hookContext = new HookContext();
+        hookContext.set(HookConstants.QUERY_KEY, query);
+        List<B> boList = this.service.queryList(query, hookContext);
         List<V> result = BeanUtil.copyToList(boList, this.voClass);
         if (CollectionUtil.isNotEmpty(result)) {
             result.forEach(this::translation);
@@ -123,7 +124,9 @@ public abstract class BaseController<E extends BaseEntity, S extends IBaseServic
      * @return 结果
      */
     protected JsonResult<JsonPageResult.PageData<V>> queryPage(@PageableDefault(page = 1, size = 20) Pageable pageable, BaseQuery query) {
-        IPage<B> pageData = this.service.queryPage(pageable, query);
+        HookContext hookContext = new HookContext();
+        hookContext.set(HookConstants.QUERY_KEY, query);
+        IPage<B> pageData = this.service.queryPage(pageable, query, hookContext);
         List<V> data = BeanUtil.copyToList(pageData.getRecords(), this.voClass);
         if (CollectionUtil.isNotEmpty(data)) {
             data.forEach(this::translation);

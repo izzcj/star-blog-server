@@ -31,12 +31,9 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.context.SecurityContextRepository;
 
 import java.util.List;
@@ -55,6 +52,7 @@ import java.util.stream.Collectors;
 @AutoConfigureAfter(VenusSecurityAutoConfiguration.class)
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 public class ServletSecurityExtensionAutoConfiguration {
+
     /**
      * 安全配置
      */
@@ -89,85 +87,6 @@ public class ServletSecurityExtensionAutoConfiguration {
     @Bean
     public VenusAuthenticationEntryPoint venusAuthenticationEntryPoint() {
         return new VenusAuthenticationEntryPoint();
-    }
-
-    /**
-     * 认证成功处理器
-     *
-     * @return 认证成功处理器Bean
-     */
-    @Bean
-    public VenusAuthenticationSuccessHandler venusAuthenticationSuccessHandler() {
-        return new VenusAuthenticationSuccessHandler();
-    }
-
-    /**
-     * 认证失败处理器
-     *
-     * @return 认证失败处理器Bean
-     */
-    @Bean
-    public VenusAuthenticationFailureHandler venusAuthenticationFailureHandler() {
-        return new VenusAuthenticationFailureHandler();
-    }
-
-    /**
-     * 登出处理器
-     *
-     * @param tokenManager     Token管理器
-     * @param logoutProcessors 登出处理器提供器
-     * @return 登出处理器Bean
-     */
-    @Bean
-    public VenusLogoutHandler venusLogoutHandler(TokenManager tokenManager, ObjectProvider<LogoutProcessor> logoutProcessors) {
-        return new VenusLogoutHandler(tokenManager, logoutProcessors);
-    }
-
-    /**
-     * 登出成功处理器
-     *
-     * @return 登出成功处理器Bean
-     */
-    @Bean
-    public VenusLogoutSuccessHandler venusLogoutSuccessHandler() {
-        return new VenusLogoutSuccessHandler();
-    }
-
-    /**
-     * 密码加密器
-     *
-     * @return 密码加密Bean
-     */
-    @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    /**
-     * 登录配置
-     *
-     * @param logoutHandler        登出处理器
-     * @param logoutSuccessHandler 登出成功处理器
-     * @return 登录配置Bean
-     */
-    @Bean
-    public LoginHttpSecurityConfigurer loginHttpSecurityConfigurer(VenusLogoutHandler logoutHandler, VenusLogoutSuccessHandler logoutSuccessHandler) {
-        return new LoginHttpSecurityConfigurer(logoutHandler, logoutSuccessHandler);
-    }
-
-    /**
-     * 聚合认证安全配置器
-     *
-     * @param authenticationSuccessHandler 认证成功处理器
-     * @param authenticationFailureHandler 认证失败处理器
-     * @param loginProcessorsHolder        登录处理器持有器
-     * @return 聚合认证安全配置Bean
-     */
-    @Bean
-    public CompositeAuthenticationHttpSecurityConfigurer compositeAuthenticationHttpSecurityConfigurer(AuthenticationSuccessHandler authenticationSuccessHandler,
-                                                                                                       AuthenticationFailureHandler authenticationFailureHandler,
-                                                                                                       LoginProcessorsHolder loginProcessorsHolder) {
-        return new CompositeAuthenticationHttpSecurityConfigurer(authenticationSuccessHandler, authenticationFailureHandler, loginProcessorsHolder);
     }
 
     /**

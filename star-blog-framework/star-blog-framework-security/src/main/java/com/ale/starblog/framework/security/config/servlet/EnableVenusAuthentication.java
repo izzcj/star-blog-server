@@ -6,6 +6,7 @@ import java.lang.annotation.*;
 
 /**
  * 开启Venus认证
+ * 不开启则需要自行实现认证逻辑
  *
  * @author Ale
  * @version 1.0.0
