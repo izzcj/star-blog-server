@@ -133,11 +133,13 @@ public class LogAppenderProvider {
      */
     private static LayoutWrappingEncoder<ILoggingEvent> buildLayoutWrappingEncoder(LoggerContext loggerContext) {
         PatternLayout layout = new PatternLayout();
-        layout.setPattern("%d{yyyy-MM-dd HH:mm:ss.SSS} - [%thread] %-5level %logger - %m%n");
+        // \x1B\[[\d;]*m 去掉ASCII中的颜色
+        layout.setPattern("%d{yyyy-MM-dd HH:mm:ss.SSS} - [%thread] %-5level %logger - %replace(%msg){\"\\x1B\\[[\\d;]*m\",\"\"}%n");
         layout.setContext(loggerContext);
         layout.start();
         LayoutWrappingEncoder<ILoggingEvent> encoder = new LayoutWrappingEncoder<>();
         encoder.setLayout(layout);
+        encoder.start();
         return encoder;
     }
 

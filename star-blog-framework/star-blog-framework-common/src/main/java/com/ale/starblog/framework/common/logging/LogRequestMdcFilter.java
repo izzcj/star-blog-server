@@ -10,6 +10,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
+import org.springframework.boot.ansi.AnsiColor;
+import org.springframework.boot.ansi.AnsiOutput;
 import org.springframework.boot.web.servlet.filter.OrderedFilter;
 import org.springframework.lang.NonNull;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -44,30 +46,23 @@ public class LogRequestMdcFilter extends OncePerRequestFilter implements Ordered
             if (authenticatedUser != null) {
                 log.info(
                     "[{}][{}][{}]: {}ms",
-                    authenticatedUser.getName(),
-                    request.getMethod() + StringConstants.SPACE + request.getRequestURI(),
-                    request.getRemoteAddr(),
-                    elapsedTime
-                    /*AnsiOutput.toString(AnsiColor.BRIGHT_YELLOW, authenticatedUser.getName(), StringConstants.COLON, authenticatedUser.getId()),
+                    AnsiOutput.toString(AnsiColor.BRIGHT_YELLOW, authenticatedUser.getName(), StringConstants.COLON, authenticatedUser.getId()),
                     AnsiOutput.toString(AnsiColor.BRIGHT_CYAN, request.getMethod(), StringConstants.SPACE, request.getRequestURI()),
                     AnsiOutput.toString(AnsiColor.BRIGHT_BLUE, request.getRemoteAddr()),
                     AnsiOutput.toString(
                         elapsedTime > 3000 ? AnsiColor.BRIGHT_YELLOW : AnsiColor.GREEN,
                         elapsedTime
-                    )*/
+                    )
                 );
             } else {
                 log.info(
                     "[{}][{}]: {}ms",
-                    request.getMethod() + StringConstants.SPACE + request.getRequestURI(),
-                    request.getRemoteAddr(),
-                    elapsedTime
-                    /*AnsiOutput.toString(AnsiColor.BRIGHT_CYAN, request.getMethod(), StringConstants.SPACE, request.getRequestURI()),
+                    AnsiOutput.toString(AnsiColor.BRIGHT_CYAN, request.getMethod(), StringConstants.SPACE, request.getRequestURI()),
                     AnsiOutput.toString(AnsiColor.BRIGHT_BLUE, request.getRemoteAddr()),
                     AnsiOutput.toString(
                         elapsedTime > 3000 ? AnsiColor.BRIGHT_YELLOW : AnsiColor.GREEN,
                         elapsedTime
-                    )*/
+                    )
                 );
             }
             MDC.clear();
