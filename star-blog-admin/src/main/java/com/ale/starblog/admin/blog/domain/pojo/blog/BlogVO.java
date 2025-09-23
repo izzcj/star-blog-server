@@ -75,6 +75,17 @@ public class BlogVO extends BaseVO {
     private LocalDateTime publishTime;
 
     /**
+     * 创建人
+     */
+    @TranslationField(type = TranslationConstants.TRANSLATION_USER)
+    private Long createBy;
+
+    /**
+     * 创建人姓名
+     */
+    private String createByName;
+
+    /**
      * 标签列表
      */
     private List<BlogTagVO> tags;

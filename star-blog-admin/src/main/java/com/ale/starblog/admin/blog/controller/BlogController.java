@@ -10,6 +10,7 @@ import com.ale.starblog.framework.common.domain.JsonPageResult;
 import com.ale.starblog.framework.common.domain.JsonResult;
 import com.ale.starblog.framework.common.exception.ServiceException;
 import com.ale.starblog.framework.core.controller.BaseController;
+import com.ale.starblog.framework.core.translation.GenericTranslationSupport;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.validation.annotation.Validated;
@@ -28,7 +29,7 @@ import java.util.stream.Collectors;
  */
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/blog/blog")
+@RequestMapping("/blog")
 public class BlogController extends BaseController<Blog, IBlogService, BlogVO, BlogBO, CreateBlogDTO, ModifyBlogDTO> {
 
     /**
@@ -47,6 +48,7 @@ public class BlogController extends BaseController<Blog, IBlogService, BlogVO, B
         Blog blog = Optional.ofNullable(this.service.getById(id))
             .orElseThrow(() -> new ServiceException("博客不存在"));
         BlogDetailsVO result = BeanUtil.copyProperties(blog, BlogDetailsVO.class);
+        GenericTranslationSupport.translate(result);
         // 获取博客关联的标签
         List<BlogTagVO> tags = this.blogTagService.getTagsByBlogId(id)
             .stream()
@@ -114,7 +116,7 @@ public class BlogController extends BaseController<Blog, IBlogService, BlogVO, B
      * @return Void
      */
     @PutMapping("/{id}/view-count")
-    public JsonResult<Void> incrementViewCount(@PathVariable(name = "id") String id) {
+    public JsonResult<Void> incrementViewCount(@PathVariable(name = "id") Long id) {
         this.service.incrementViewCount(id);
         return JsonResult.success();
     }

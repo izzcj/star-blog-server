@@ -76,6 +76,11 @@ public class BlogBO extends BaseBO {
     private LocalDateTime publishTime;
 
     /**
+     * 创建人
+     */
+    private Long createBy;
+
+    /**
      * 标签ID列表
      */
     private List<Long> tagIds;

@@ -20,5 +20,5 @@ public interface IBlogService extends IBaseService<Blog, BlogBO, CreateBlogDTO, 
      *
      * @param id 博客ID
      */
-    void incrementViewCount(String id);
+    void incrementViewCount(Long id);
 }

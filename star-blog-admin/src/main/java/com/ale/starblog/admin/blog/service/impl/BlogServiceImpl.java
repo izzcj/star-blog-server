@@ -47,7 +47,7 @@ public class BlogServiceImpl extends BaseServiceImpl<BlogMapper, Blog, BlogBO, C
     }
 
     @Override
-    public void incrementViewCount(String id) {
+    public void incrementViewCount(Long id) {
         Blog blog = this.getById(id);
         if (blog != null) {
             blog.setViewCount(blog.getViewCount() + 1);

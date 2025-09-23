@@ -96,26 +96,32 @@ public class GenericTranslationSupport {
      * @param instance 对象实例
      */
     private static void translate(ReflectionField field, Object instance) {
-        boolean isString = String.class.isAssignableFrom(field.field().getType());
         ResolvableType type = ResolvableType.forField(field.field());
-        boolean isStringList = List.class.isAssignableFrom(type.toClass()) && type.hasGenerics() && type.resolveGeneric(0) == String.class;
-        if (!isString && !isStringList) {
-            return;
-        }
+        boolean isCollection = Collection.class.isAssignableFrom(type.toClass());
 
         List<String> values = Lists.newArrayList();
-        if (isString) {
-            String value = field.getValue(instance);
-            if (StrUtil.isBlank(value)) {
-                return;
-            }
-            values.add(value);
-        } else {
-            List<String> valueList = field.getValue(instance);
+        if (isCollection) {
+            List<Object> valueList = field.getValue(instance);
             if (valueList == null || valueList.isEmpty()) {
                 return;
             }
-            values.addAll(valueList);
+            for (Object object : valueList) {
+                if (object instanceof String stringValue) {
+                    values.add(stringValue);
+                    continue;
+                }
+                values.add(object.toString());
+            }
+        } else {
+            Object value = field.getValue(instance);
+            if (value == null) {
+                return;
+            }
+            if (value instanceof String stringValue) {
+                values.add(stringValue);
+            } else {
+                values.add(value.toString());
+            }
         }
 
         TranslationField annotation = field.field().getAnnotation(TranslationField.class);
