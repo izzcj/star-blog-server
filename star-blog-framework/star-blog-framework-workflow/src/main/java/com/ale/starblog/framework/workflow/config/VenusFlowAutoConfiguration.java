@@ -24,6 +24,7 @@ import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -44,6 +45,7 @@ import java.lang.invoke.MethodType;
 @ComponentScan(basePackageClasses = ComponentScanMark.class)
 @Import(VenusFlowServiceAutoConfiguration.class)
 @EnableConfigurationProperties(VenusFlowProperties.class)
+@ConditionalOnProperty(prefix = "venus.workflow", name = "enabled", havingValue = "true")
 public class VenusFlowAutoConfiguration {
 
     /**
@@ -59,6 +61,7 @@ public class VenusFlowAutoConfiguration {
      * @return 数据库初始化器Bean
      */
     @Bean
+    @ConditionalOnBean(DataSource.class)
     public DatabaseSchemaInitializer databaseSchemaInitializer(DataSource dataSource, ObjectProvider<SqlStatementsBuilder> sqlStatementsBuilders) {
         return new DatabaseSchemaInitializer(this.venusFlowProperties, dataSource, sqlStatementsBuilders);
     }

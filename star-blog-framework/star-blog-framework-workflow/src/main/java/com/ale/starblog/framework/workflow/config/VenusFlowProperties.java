@@ -1,6 +1,8 @@
 package com.ale.starblog.framework.workflow.config;
 
+import com.ale.starblog.framework.common.support.EnableAwareProperties;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
@@ -10,8 +12,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @version 1.0.0 2025/7/8 9:27
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 @ConfigurationProperties(prefix = "venus.workflow")
-public class VenusFlowProperties {
+public class VenusFlowProperties extends EnableAwareProperties {
 
     /**
      * 是否生成逻辑节点任务
