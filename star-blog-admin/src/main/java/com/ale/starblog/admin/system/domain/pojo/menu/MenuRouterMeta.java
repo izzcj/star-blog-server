@@ -28,7 +28,7 @@ public class MenuRouterMeta {
     private String icon;
 
     /**
-     * 设置为true，则不会被 <keep-alive>缓存
+     * 设置为true，则不会被 <keep-alive />缓存
      */
     private boolean noCache;
 

@@ -56,6 +56,11 @@ public class UserProfileVO {
     private String email;
 
     /**
+     * 备注
+     */
+    private String remark;
+
+    /**
      * 上次登录ip
      */
     private String lastLoginIp;

@@ -7,7 +7,7 @@ package com.ale.starblog.framework.common.exception;
  * @version 1.0.0
  * @since 2024/6/26
  **/
-public class ServiceException extends AbstractBaseException {
+public class ServiceException extends VenusException {
 
     public ServiceException(ExceptionCode exceptionCode) {
         super(exceptionCode);

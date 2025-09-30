@@ -13,59 +13,59 @@ import lombok.Getter;
  **/
 @Getter
 @EqualsAndHashCode(callSuper = true)
-public abstract class AbstractBaseException extends RuntimeException {
+public abstract class VenusException extends RuntimeException {
 
     /**
      * 异常响应码
      */
     private final int code;
 
-    public AbstractBaseException() {
+    public VenusException() {
         super(ExceptionCode.DEFAULT_SERVICE_ERROR.getMsg());
         this.code = ExceptionCode.DEFAULT_ERROR.getCode();
     }
 
-    public AbstractBaseException(ExceptionCode exceptionCode) {
+    public VenusException(ExceptionCode exceptionCode) {
         super(exceptionCode.getMsg());
         this.code = exceptionCode.getCode();
     }
 
-    public AbstractBaseException(int code, String message) {
+    public VenusException(int code, String message) {
         super(message);
         this.code = code;
     }
 
-    public AbstractBaseException(int code, String message, Object... args) {
+    public VenusException(int code, String message, Object... args) {
         super(StrFormatter.format(message, args));
         this.code = code;
     }
 
-    public AbstractBaseException(String message) {
+    public VenusException(String message) {
         super(message);
         this.code = ExceptionCode.DEFAULT_ERROR.getCode();
     }
 
-    public AbstractBaseException(String message, Object... args) {
+    public VenusException(String message, Object... args) {
         super(StrFormatter.format(message, args));
         this.code = ExceptionCode.DEFAULT_ERROR.getCode();
     }
 
-    public AbstractBaseException(int code, String message, Throwable cause) {
+    public VenusException(int code, String message, Throwable cause) {
         super(message, cause);
         this.code = code;
     }
 
-    public AbstractBaseException(int code, String message, Throwable cause, Object... args) {
+    public VenusException(int code, String message, Throwable cause, Object... args) {
         super(StrFormatter.format(message, args), cause);
         this.code = code;
     }
 
-    public AbstractBaseException(String message, Throwable cause) {
+    public VenusException(String message, Throwable cause) {
         super(message, cause);
         this.code = ExceptionCode.DEFAULT_ERROR.getCode();
     }
 
-    public AbstractBaseException(String message, Throwable cause, Object... args) {
+    public VenusException(String message, Throwable cause, Object... args) {
         super(StrFormatter.format(message, args), cause);
         this.code = ExceptionCode.DEFAULT_ERROR.getCode();
     }

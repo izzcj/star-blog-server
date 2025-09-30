@@ -22,7 +22,7 @@ import org.springframework.boot.logging.LogLevel;
 import org.springframework.context.ApplicationContext;
 
 /**
- * 日志输出配置提供者
+ * 日志输出配置提供器
  *
  * @author Ale
  * @version 1.0.0

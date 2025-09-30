@@ -1,0 +1,39 @@
+package com.ale.starblog.framework.core.endpoint;
+
+import com.ale.starblog.framework.common.domain.Result;
+import com.ale.starblog.framework.common.support.facade.RequestMethodMatcher;
+import com.ale.starblog.framework.common.support.facade.RequestUriMatcher;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+/**
+ * 端点接口
+ *
+ * @author Ale
+ * @version 1.0.0 2025/9/28 14:02
+ */
+public interface Endpoint {
+
+    /**
+     * 获取请求URI匹配器
+     *
+     * @return 请求URI匹配器
+     */
+    RequestUriMatcher getRequestUriMatcher();
+
+    /**
+     * 获取请求方法匹配器
+     *
+     * @return 请求方法匹配器
+     */
+    RequestMethodMatcher getRequestMethodMatcher();
+
+    /**
+     * 处理请求
+     *
+     * @param request 请求对象
+     * @param response 响应对象
+     * @return 结果对象
+     */
+    Result<?> handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception;
+}

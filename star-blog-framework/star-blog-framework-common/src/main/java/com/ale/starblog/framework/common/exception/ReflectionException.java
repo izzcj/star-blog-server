@@ -7,7 +7,7 @@ package com.ale.starblog.framework.common.exception;
  * @version 1.0.0
  * @since 2025/3/4
  */
-public class ReflectionException extends AbstractBaseException {
+public class ReflectionException extends VenusException {
 
 
     public ReflectionException(int code, String message) {

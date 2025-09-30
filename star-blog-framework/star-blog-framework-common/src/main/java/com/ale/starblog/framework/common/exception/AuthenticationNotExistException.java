@@ -7,7 +7,7 @@ package com.ale.starblog.framework.common.exception;
  * @version 1.0.0
  * @since 2024/7/9
  **/
-public class AuthenticationNotExistException extends AbstractBaseException {
+public class AuthenticationNotExistException extends VenusException {
 
     public AuthenticationNotExistException(String message, Throwable cause, Object... args) {
         super(message, cause, args);

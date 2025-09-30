@@ -6,3 +6,6 @@ com.ale.starblog.framework.core.controller.ControllerExtensionAutoConfiguration
 com.ale.starblog.framework.core.share.SharedDataContextAutoConfiguration
 com.ale.starblog.framework.core.service.ServiceAutoConfiguration
 com.ale.starblog.framework.core.translation.GenericTranslationAutoConfiguration
+com.ale.starblog.framework.core.oss.OssAutoConfiguration
+com.ale.starblog.framework.core.endpoint.EndpointAutoConfiguration
+com.ale.starblog.framework.core.filter.VenusFilterAutoConfiguration

@@ -2,7 +2,7 @@ package com.ale.starblog.framework.common.exception.handler;
 
 import com.ale.starblog.framework.common.domain.JsonResult;
 import com.ale.starblog.framework.common.exception.ExceptionCode;
-import com.ale.starblog.framework.common.exception.AbstractBaseException;
+import com.ale.starblog.framework.common.exception.VenusException;
 import com.ale.starblog.framework.common.exception.ServiceException;
 import com.ale.starblog.framework.common.spring.OrderedCorsFilter;
 import com.ale.starblog.framework.common.utils.ServletUtils;
@@ -41,14 +41,14 @@ public class GlobalExceptionCatchFilter extends OncePerRequestFilter implements 
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain) throws IOException {
         try {
             filterChain.doFilter(request, new VenusHttpServletResponseWrapper(response));
-        } catch (AbstractBaseException e) {
+        } catch (VenusException e) {
             this.handleVenusException(e, response);
         } catch (ServletException e) {
             Throwable cause = e.getRootCause();
             if (cause == null) {
                 cause = e.getCause();
             }
-            if (cause instanceof AbstractBaseException exception) {
+            if (cause instanceof VenusException exception) {
                 this.handleVenusException(exception, response);
             } else if (cause instanceof DataAccessException exception) {
                 this.handleDataAccessException(exception, response);
@@ -67,7 +67,7 @@ public class GlobalExceptionCatchFilter extends OncePerRequestFilter implements 
      * @param response  响应
      * @throws IOException IO异常
      */
-    private void handleVenusException(AbstractBaseException exception, HttpServletResponse response) throws IOException {
+    private void handleVenusException(VenusException exception, HttpServletResponse response) throws IOException {
         log.warn(
             "{}异常：{}",
             exception instanceof ServiceException ? "业务" : "Venus框架",

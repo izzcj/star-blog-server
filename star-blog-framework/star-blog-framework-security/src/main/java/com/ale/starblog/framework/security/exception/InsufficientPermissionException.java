@@ -1,7 +1,7 @@
 package com.ale.starblog.framework.security.exception;
 
 import com.ale.starblog.framework.common.exception.ExceptionCode;
-import com.ale.starblog.framework.common.exception.AbstractBaseException;
+import com.ale.starblog.framework.common.exception.VenusException;
 
 /**
  * 权限不足异常
@@ -10,7 +10,7 @@ import com.ale.starblog.framework.common.exception.AbstractBaseException;
  * @version 1.0.0
  * @since 2024/6/27
  **/
-public class InsufficientPermissionException extends AbstractBaseException {
+public class InsufficientPermissionException extends VenusException {
 
     public InsufficientPermissionException(ExceptionCode exceptionCode) {
         super(exceptionCode);

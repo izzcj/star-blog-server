@@ -22,17 +22,20 @@
     </modules>
 
     <properties>
+        <java.version>21</java.version>
         <hutool.version>5.8.18</hutool.version>
         <mybatis.version>3.0.4</mybatis.version>
         <mybatis-plus.version>3.5.7</mybatis-plus.version>
         <jjwt.version>0.11.5</jjwt.version>
         <fastjosn2.version>2.0.34</fastjosn2.version>
-        <google-guave.version>32.1.1-jre</google-guave.version>
+        <google-guave.version>33.5.0-jre</google-guave.version>
         <kryo.version>5.5.0</kryo.version>
         <druid.version>1.2.16</druid.version>
         <validation.version>3.2.5</validation.version>
         <apache-commons.version>3.17.0</apache-commons.version>
         <netty-version>4.2.4.Final</netty-version>
+        <thumbnailator.version>0.4.20</thumbnailator.version>
+        <minion.version>8.5.10</minion.version>
     </properties>
 
     <!-- 通用依赖 -->
@@ -123,6 +126,18 @@
                 <groupId>com.esotericsoftware</groupId>
                 <artifactId>kryo</artifactId>
                 <version>${kryo.version}</version>
+            </dependency>
+            <!-- 图片压缩工具 -->
+            <dependency>
+                <groupId>net.coobird</groupId>
+                <artifactId>thumbnailator</artifactId>
+                <version>${thumbnailator.version}</version>
+            </dependency>
+            <!-- minio -->
+            <dependency>
+                <groupId>io.minio</groupId>
+                <artifactId>minio</artifactId>
+                <version>${minion.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

@@ -7,7 +7,7 @@ package com.ale.starblog.framework.common.exception;
  * @version 1.0.0
  * @since 2024/6/25
  **/
-public class UtilException extends AbstractBaseException {
+public class UtilException extends VenusException {
 
     public UtilException(int code, String message) {
         super(code, message);

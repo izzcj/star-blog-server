@@ -7,7 +7,7 @@ package com.ale.starblog.framework.common.exception;
  * @version 1.0.0
  * @since 2024/6/24
  **/
-public class BadResultCodeException extends AbstractBaseException {
+public class BadResultCodeException extends VenusException {
 
     public BadResultCodeException(int code, String message) {
         super(code, message);

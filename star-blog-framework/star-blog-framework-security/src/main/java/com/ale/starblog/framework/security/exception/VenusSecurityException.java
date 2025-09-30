@@ -1,7 +1,7 @@
 package com.ale.starblog.framework.security.exception;
 
 import com.ale.starblog.framework.common.exception.ExceptionCode;
-import com.ale.starblog.framework.common.exception.AbstractBaseException;
+import com.ale.starblog.framework.common.exception.VenusException;
 
 /**
  * VenusSecurity异常
@@ -10,7 +10,7 @@ import com.ale.starblog.framework.common.exception.AbstractBaseException;
  * @version 1.0.0
  * @since 2024/6/25
  **/
-public class VenusSecurityException extends AbstractBaseException {
+public class VenusSecurityException extends VenusException {
 
     public VenusSecurityException(ExceptionCode exceptionCode) {
         super(exceptionCode);

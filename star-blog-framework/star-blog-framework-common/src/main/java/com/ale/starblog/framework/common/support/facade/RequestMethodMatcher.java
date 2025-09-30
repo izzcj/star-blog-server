@@ -1,0 +1,26 @@
+package com.ale.starblog.framework.common.support.facade;
+
+import org.springframework.http.HttpMethod;
+
+/**
+ * 请求方法匹配器
+ *
+ * @author Ale
+ * @version 1.0.0 2025/9/28 14:02
+ */
+public interface RequestMethodMatcher {
+
+    /**
+     * 匹配任意方法
+     */
+    RequestMethodMatcher ANY = method -> true;
+
+    /**
+     * 是否匹配Http请求方法
+     *
+     * @param method Http请求方法
+     * @return bool
+     */
+    boolean matches(HttpMethod method);
+
+}

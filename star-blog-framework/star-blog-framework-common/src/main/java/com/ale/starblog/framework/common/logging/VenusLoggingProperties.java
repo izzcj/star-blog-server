@@ -1,6 +1,8 @@
 package com.ale.starblog.framework.common.logging;
 
+import com.ale.starblog.framework.common.support.EnableAwareProperties;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.logging.LogLevel;
 
@@ -14,13 +16,9 @@ import java.util.Map;
  * @since 2025/3/14
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 @ConfigurationProperties(prefix = "venus.logging")
-public class VenusLoggingProperties {
-
-    /**
-     * 是否开启文件日志
-     */
-    private boolean enabled;
+public class VenusLoggingProperties extends EnableAwareProperties {
 
     /**
      * 日志级别

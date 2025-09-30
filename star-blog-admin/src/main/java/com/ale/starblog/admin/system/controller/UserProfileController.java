@@ -1,6 +1,7 @@
 package com.ale.starblog.admin.system.controller;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.ale.starblog.admin.common.constants.SystemConstants;
 import com.ale.starblog.admin.common.utils.AuthenticationUtils;
 import com.ale.starblog.admin.system.domain.entity.User;
 import com.ale.starblog.admin.system.domain.pojo.user.*;
@@ -41,5 +42,15 @@ public class UserProfileController {
             return JsonResult.fail("获取用户信息失败！用户不存在！");
         }
         return JsonResult.success(BeanUtil.copyProperties(user, UserProfileVO.class));
+    }
+
+    /**
+     * 获取站长信息
+     *
+     * @return 站长信息
+     */
+    @GetMapping("/master")
+    public JsonResult<UserProfileVO> masterInfo() {
+        return JsonResult.success(BeanUtil.copyProperties(this.userService.getById(SystemConstants.MASTER_USER_ID), UserProfileVO.class));
     }
 }

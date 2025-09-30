@@ -18,6 +18,7 @@
     <version>1.0.0</version>
 
     <properties>
+        <java.version>21</java.version>
         <star-blog.version>1.0.0</star-blog.version>
     </properties>
 

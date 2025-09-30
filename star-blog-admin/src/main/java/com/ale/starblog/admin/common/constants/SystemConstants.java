@@ -10,6 +10,11 @@ package com.ale.starblog.admin.common.constants;
 public class SystemConstants {
 
     /**
+     * 站长账号ID
+     */
+    public static final Long MASTER_USER_ID = 1L;
+
+    /**
      * 默认密码
      */
     public static final String DEFAULT_PASSWORD = "venus123456";

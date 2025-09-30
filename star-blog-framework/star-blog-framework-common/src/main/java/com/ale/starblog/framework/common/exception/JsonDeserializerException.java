@@ -7,7 +7,7 @@ package com.ale.starblog.framework.common.exception;
  * @version 1.0.0
  * @since 2022/10/19 星期三 00:35
  */
-public class JsonDeserializerException extends AbstractBaseException {
+public class JsonDeserializerException extends VenusException {
 
     /**
      * Constructs a new runtime exception with the specified detail message.

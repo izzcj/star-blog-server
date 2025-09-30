@@ -1,6 +1,8 @@
 package com.ale.starblog.framework.common.porxy.config;
 
+import com.ale.starblog.framework.common.support.EnableAwareProperties;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
@@ -11,12 +13,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @since 2025/4/29 星期二 9:43
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 @ConfigurationProperties(prefix = "venus.proxy")
-public class VenusProxyProperties {
-
-    /**
-     * 是否开启代理
-     */
-    private boolean enabled;
+public class VenusProxyProperties extends EnableAwareProperties {
 
 }
