@@ -7,7 +7,6 @@ import com.ale.starblog.framework.common.constants.StringConstants;
 import com.ale.starblog.framework.common.domain.JsonResult;
 import com.ale.starblog.framework.common.domain.Result;
 import com.ale.starblog.framework.common.support.facade.RequestMethodMatcher;
-import com.ale.starblog.framework.common.support.facade.RequestUriMatcher;
 import com.ale.starblog.framework.common.utils.ServletUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -35,11 +34,6 @@ public final class OssServiceDownloadEndpoint extends OssPathMatchEndpoint {
 
     public OssServiceDownloadEndpoint(ObjectProvider<OssService> ossServices) {
         super(ossServices);
-    }
-
-    @Override
-    public RequestUriMatcher getRequestUriMatcher() {
-        return uri -> this.pathMatcher.match(OSS_DOWNLOAD_PATH_PATTERN, uri);
     }
 
     @Override

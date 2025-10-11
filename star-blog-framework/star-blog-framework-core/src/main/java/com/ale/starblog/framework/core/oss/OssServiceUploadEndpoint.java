@@ -6,7 +6,6 @@ import com.ale.starblog.framework.common.constants.StringConstants;
 import com.ale.starblog.framework.common.domain.JsonResult;
 import com.ale.starblog.framework.common.domain.Result;
 import com.ale.starblog.framework.common.support.facade.RequestMethodMatcher;
-import com.ale.starblog.framework.common.support.facade.RequestUriMatcher;
 import com.ale.starblog.framework.common.utils.ImageUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -52,21 +51,6 @@ public final class OssServiceUploadEndpoint extends OssPathMatchEndpoint {
         super(ossServices);
     }
 
-    /**
-     * 获取请求URI匹配器
-     *
-     * @return 请求URI匹配器
-     */
-    @Override
-    public RequestUriMatcher getRequestUriMatcher() {
-        return uri -> this.pathMatcher.match(OSS_UPLOAD_PATH_PATTERN, uri);
-    }
-
-    /**
-     * 获取请求方法匹配器
-     *
-     * @return 请求方法匹配器
-     */
     @Override
     public RequestMethodMatcher getRequestMethodMatcher() {
         return method -> HttpMethod.POST == method;

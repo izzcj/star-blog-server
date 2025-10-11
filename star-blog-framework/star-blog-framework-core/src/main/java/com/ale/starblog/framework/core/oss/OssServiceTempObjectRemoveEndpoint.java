@@ -4,7 +4,6 @@ import cn.hutool.core.util.StrUtil;
 import com.ale.starblog.framework.common.domain.JsonResult;
 import com.ale.starblog.framework.common.domain.Result;
 import com.ale.starblog.framework.common.support.facade.RequestMethodMatcher;
-import com.ale.starblog.framework.common.support.facade.RequestUriMatcher;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.ObjectProvider;
@@ -30,11 +29,6 @@ public class OssServiceTempObjectRemoveEndpoint extends OssPathMatchEndpoint {
     }
 
     @Override
-    public RequestUriMatcher getRequestUriMatcher() {
-        return uri -> this.pathMatcher.match(OSS_TEMP_OBJECT_REMOVAL_PATH_PATTERN, uri);
-    }
-
-    @Override
     public RequestMethodMatcher getRequestMethodMatcher() {
         return method -> HttpMethod.DELETE == method;
     }
@@ -45,7 +39,7 @@ public class OssServiceTempObjectRemoveEndpoint extends OssPathMatchEndpoint {
     }
 
     @Override
-    protected Result<?> handle(HttpServletRequest request, HttpServletResponse response, OssService ossService, Map<String, String> variables) throws Exception {
+    protected Result<?> handle(HttpServletRequest request, HttpServletResponse response, OssService ossService, Map<String, String> variables) {
         String objectKey = request.getParameter("objectKey");
         if (StrUtil.isBlank(objectKey)) {
             return JsonResult.fail("要移除临时对象文件的Key不能为空");
