@@ -17,6 +17,7 @@ import java.io.IOException;
  * @since 2025/3/25
  */
 @JsonComponent
+@SuppressWarnings("rawtypes")
 public class EnumJsonSerializer extends StdSerializer<BaseEnum> {
 
     public EnumJsonSerializer() {

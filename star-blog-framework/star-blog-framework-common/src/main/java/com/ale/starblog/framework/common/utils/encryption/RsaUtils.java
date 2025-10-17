@@ -3,6 +3,7 @@ package com.ale.starblog.framework.common.utils.encryption;
 import cn.hutool.core.util.StrUtil;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
 import javax.crypto.Cipher;
 import java.io.ByteArrayOutputStream;
@@ -24,6 +25,7 @@ import java.util.Map;
  * @version 1.0.0
  * @since 2025/4/18
  **/
+@Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class RsaUtils {
 
@@ -82,7 +84,7 @@ public final class RsaUtils {
         try {
             KEY_PAIR_MAP.putAll(genKeyPair());
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("RSAUtils init error", e);
         }
     }
 

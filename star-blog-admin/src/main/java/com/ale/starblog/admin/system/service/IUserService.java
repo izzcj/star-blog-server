@@ -4,7 +4,7 @@ import com.ale.starblog.admin.system.domain.entity.User;
 import com.ale.starblog.admin.system.domain.pojo.user.CreateUserDTO;
 import com.ale.starblog.admin.system.domain.pojo.user.ModifyUserDTO;
 import com.ale.starblog.admin.system.domain.pojo.user.UserBO;
-import com.ale.starblog.framework.core.service.IBaseService;
+import com.ale.starblog.framework.core.service.ICrudService;
 
 /**
  * 用户服务接口
@@ -13,7 +13,7 @@ import com.ale.starblog.framework.core.service.IBaseService;
  * @version 1.0.0
  * @since 2025/3/13
  */
-public interface IUserService extends IBaseService<User, UserBO, CreateUserDTO, ModifyUserDTO> {
+public interface IUserService extends ICrudService<User, UserBO, CreateUserDTO, ModifyUserDTO> {
 
     /**
      * 修改用户密码

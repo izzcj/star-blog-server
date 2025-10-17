@@ -7,7 +7,7 @@ import com.ale.starblog.admin.system.domain.pojo.dict.type.DictTypeBO;
 import com.ale.starblog.admin.system.domain.pojo.dict.type.ModifyDictTypeDTO;
 import com.ale.starblog.admin.system.mapper.DictTypeMapper;
 import com.ale.starblog.admin.system.service.IDictTypeService;
-import com.ale.starblog.framework.core.service.BaseServiceImpl;
+import com.ale.starblog.framework.core.service.AbstractCrudServiceImpl;
 import com.ale.starblog.framework.core.translation.GenericTranslationSupport;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
  * @version 1.0.0 2025/5/29 11:11
  */
 @Service
-public class DictTypeServiceImpl extends BaseServiceImpl<DictTypeMapper, DictType, DictTypeBO, CreateDictTypeDTO, ModifyDictTypeDTO> implements IDictTypeService {
+public class DictTypeServiceImpl extends AbstractCrudServiceImpl<DictTypeMapper, DictType, DictTypeBO, CreateDictTypeDTO, ModifyDictTypeDTO> implements IDictTypeService {
 
     @Override
     public void refreshCache() {

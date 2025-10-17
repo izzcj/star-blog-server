@@ -2,7 +2,7 @@ package com.ale.starblog.admin.system.domain.pojo.menu;
 
 import com.ale.starblog.admin.system.enums.MenuType;
 import com.ale.starblog.framework.common.enumeration.SwitchStatus;
-import com.ale.starblog.framework.common.support.facade.TreeNode;
+import com.ale.starblog.framework.common.support.TreeNode;
 import com.ale.starblog.framework.core.pojo.BaseBO;
 import lombok.AllArgsConstructor;
 import lombok.Data;

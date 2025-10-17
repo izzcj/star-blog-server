@@ -1,4 +1,4 @@
-package com.ale.starblog.framework.common.support.facade;
+package com.ale.starblog.framework.common.support;
 
 import cn.hutool.core.collection.CollectionUtil;
 import com.ale.starblog.framework.common.utils.CastUtils;

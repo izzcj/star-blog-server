@@ -18,9 +18,8 @@ import java.util.concurrent.CountDownLatch;
 /**
  * 对象存储支持
  *
- * @author venus
- * @version 1.0.0
- * @since 2023/1/30 星期一 17:05
+ * @author Ale
+ * @version 1.0.0 2025/9/30 17:05
  */
 @Component
 public final class OssSupport {
@@ -154,10 +153,7 @@ public final class OssSupport {
      * @return Map
      */
     public static Map<String, Boolean> existsAll(OssServiceProvider ossServiceProvider, Set<String> objectKeys) {
-        OssService used = ossServices.stream().filter(ossService -> ossService.supports(ossServiceProvider)).findFirst().orElse(null);
-        if (used == null) {
-            throw new OssException("OSS对象存储[{}]未实现或未启用", ossServiceProvider.name());
-        }
+        OssService used = findOssService(ossServiceProvider);
 
         var latch = new CountDownLatch(objectKeys.size());
         Map<String, Boolean> result = Maps.newConcurrentMap();
@@ -253,10 +249,7 @@ public final class OssSupport {
      * @return 输入流Map
      */
     public static Map<String, InputStream> downloadObjects(OssServiceProvider ossServiceProvider, Set<String> objectKeys) {
-        OssService used = ossServices.stream().filter(ossService -> ossService.supports(ossServiceProvider)).findFirst().orElse(null);
-        if (used == null) {
-            throw new OssException("OSS对象存储[{}]未实现或未启用", ossServiceProvider.name());
-        }
+        OssService used = findOssService(ossServiceProvider);
 
         var latch = new CountDownLatch(objectKeys.size());
         Map<String, InputStream> result = Maps.newConcurrentMap();
@@ -330,10 +323,7 @@ public final class OssSupport {
      * @return 对象Key Map
      */
     public static Map<String, String> uploadObjects(OssServiceProvider ossServiceProvider, String objectKeyPrefix, Map<String, InputStream> objectContents) {
-        OssService used = ossServices.stream().filter(ossService -> ossService.supports(ossServiceProvider)).findFirst().orElse(null);
-        if (used == null) {
-            throw new OssException("OSS对象存储[{}]未实现或未启用", ossServiceProvider.name());
-        }
+        OssService used = findOssService(ossServiceProvider);
 
         var latch = new CountDownLatch(objectContents.size());
         Map<String, String> result = Maps.newConcurrentMap();
@@ -653,5 +643,22 @@ public final class OssSupport {
         }
 
         throw new OssException("OSS对象存储[{}]未实现或未启用", ossServiceProvider.name());
+    }
+
+    /**
+     * 查找OSS服务
+     *
+     * @param ossServiceProvider OSS实现
+     * @return OSS服务
+     */
+    private static OssService findOssService(OssServiceProvider ossServiceProvider) {
+        OssService used = ossServices.stream()
+            .filter(ossService -> ossService.supports(ossServiceProvider))
+            .findFirst()
+            .orElse(null);
+        if (used == null) {
+            throw new OssException("OSS对象存储[{}]未实现或未启用", ossServiceProvider.name());
+        }
+        return used;
     }
 }

@@ -17,26 +17,6 @@ public interface AuthenticatedUser extends UserDetails, CredentialsContainer {
         return this.getAccount();
     }
 
-    @Override
-    default boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    default boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    default boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    default boolean isEnabled() {
-        return true;
-    }
-
     /**
      * 获取用户账号
      *

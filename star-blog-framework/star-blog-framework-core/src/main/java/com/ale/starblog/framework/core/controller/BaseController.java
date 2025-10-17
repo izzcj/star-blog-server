@@ -13,8 +13,8 @@ import com.ale.starblog.framework.core.pojo.BaseCreateDTO;
 import com.ale.starblog.framework.core.pojo.BaseModifyDTO;
 import com.ale.starblog.framework.core.pojo.BaseVO;
 import com.ale.starblog.framework.core.query.BaseQuery;
-import com.ale.starblog.framework.core.service.HookContext;
-import com.ale.starblog.framework.core.service.IBaseService;
+import com.ale.starblog.framework.core.service.hook.HookContext;
+import com.ale.starblog.framework.core.service.ICrudService;
 import com.ale.starblog.framework.core.translation.GenericTranslationSupport;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import jakarta.annotation.Resource;
@@ -40,7 +40,7 @@ import java.util.stream.Collectors;
  * @since 2025/3/31
  */
 @Slf4j
-public abstract class BaseController<E extends BaseEntity, S extends IBaseService<E, B, C, M>, V extends BaseVO, B extends BaseBO, C extends BaseCreateDTO, M extends BaseModifyDTO> {
+public abstract class BaseController<E extends BaseEntity, S extends ICrudService<E, B, C, M>, V extends BaseVO, B extends BaseBO, C extends BaseCreateDTO, M extends BaseModifyDTO> {
 
     /**
      * Service
@@ -106,7 +106,7 @@ public abstract class BaseController<E extends BaseEntity, S extends IBaseServic
      * @return 结果
      */
     protected JsonResult<List<V>> queryList(BaseQuery query) {
-        HookContext hookContext = new HookContext();
+        HookContext hookContext = HookContext.newContext();
         hookContext.set(HookConstants.QUERY_KEY, query);
         List<B> boList = this.service.queryList(query, hookContext);
         List<V> result = BeanUtil.copyToList(boList, this.voClass);
@@ -124,7 +124,7 @@ public abstract class BaseController<E extends BaseEntity, S extends IBaseServic
      * @return 结果
      */
     protected JsonResult<JsonPageResult.PageData<V>> queryPage(@PageableDefault(page = 1, size = 20) Pageable pageable, BaseQuery query) {
-        HookContext hookContext = new HookContext();
+        HookContext hookContext = HookContext.newContext();
         hookContext.set(HookConstants.QUERY_KEY, query);
         IPage<B> pageData = this.service.queryPage(pageable, query, hookContext);
         List<V> data = BeanUtil.copyToList(pageData.getRecords(), this.voClass);
@@ -146,7 +146,7 @@ public abstract class BaseController<E extends BaseEntity, S extends IBaseServic
      * @return 结果
      */
     protected JsonResult<Void> createEntity(C createDTO) {
-        HookContext hookContext = new HookContext();
+        HookContext hookContext = HookContext.newContext();
         hookContext.set(HookConstants.CREATE_DTO_KEY, createDTO);
         this.service.create(createDTO, hookContext);
         return JsonResult.success();
@@ -162,7 +162,7 @@ public abstract class BaseController<E extends BaseEntity, S extends IBaseServic
         if (createDTOList == null || createDTOList.isEmpty()) {
             return JsonResult.fail("批量新增失败！新增实体列表为空！");
         }
-        HookContext hookContext = new HookContext();
+        HookContext hookContext = HookContext.newContext();
         hookContext.set(HookConstants.CREATE_DTO_LIST_KEY, createDTOList);
         this.service.batchCreate(createDTOList, hookContext);
         return JsonResult.success();
@@ -178,7 +178,7 @@ public abstract class BaseController<E extends BaseEntity, S extends IBaseServic
         if (modifyDTO.getId() == null) {
             return JsonResult.fail("修改实体失败！实体ID为空！");
         }
-        HookContext hookContext = new HookContext();
+        HookContext hookContext = HookContext.newContext();
         hookContext.set(HookConstants.MODIFY_DTO_KEY, modifyDTO);
         this.service.modify(modifyDTO, hookContext);
         return JsonResult.success();
@@ -197,7 +197,7 @@ public abstract class BaseController<E extends BaseEntity, S extends IBaseServic
         Map<Long, M> mapping = modifyDTOList
             .stream()
             .collect(Collectors.toMap(M::getId, Function.identity()));
-        HookContext hookContext = new HookContext();
+        HookContext hookContext = HookContext.newContext();
         hookContext.set(HookConstants.MODIFY_DTO_MAP_KEY, mapping);
         this.service.batchModify(modifyDTOList, hookContext);
         return JsonResult.success();

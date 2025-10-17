@@ -19,6 +19,11 @@ import java.time.LocalDateTime;
 public abstract class BaseBO {
 
     /**
+     * ID
+     */
+    private Long id;
+
+    /**
      * 创建时间
      */
     private LocalDateTime createTime;

@@ -8,7 +8,6 @@ import org.springframework.context.annotation.ImportSelector;
 import org.springframework.core.annotation.AnnotationAttributes;
 import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.lang.NonNull;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.util.Assert;
 
 import java.util.ArrayList;
@@ -33,7 +32,6 @@ public class LoginConfigurationClassSelector implements ImportSelector {
         classNames.add(VenusAuthenticationFailureHandler.class.getName());
         classNames.add(VenusLogoutHandler.class.getName());
         classNames.add(VenusLogoutSuccessHandler.class.getName());
-        classNames.add(BCryptPasswordEncoder.class.getName());
         classNames.add(LoginProcessorsHolder.class.getName());
         classNames.add(LoginHttpSecurityConfigurer.class.getName());
         classNames.add(CompositeAuthenticationHttpSecurityConfigurer.class.getName());

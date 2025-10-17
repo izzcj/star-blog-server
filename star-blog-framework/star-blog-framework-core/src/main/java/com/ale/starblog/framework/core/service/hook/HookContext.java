@@ -1,8 +1,11 @@
-package com.ale.starblog.framework.core.service;
+package com.ale.starblog.framework.core.service.hook;
 
 import com.ale.starblog.framework.common.data.DataRepository;
 import com.ale.starblog.framework.common.utils.CastUtils;
 import com.google.common.collect.Maps;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -14,6 +17,8 @@ import java.util.function.Supplier;
  * @version 1.0.0
  * @since 2025/3/26
  */
+@Getter
+@NoArgsConstructor(staticName = "newContext")
 public class HookContext implements DataRepository {
 
     /**

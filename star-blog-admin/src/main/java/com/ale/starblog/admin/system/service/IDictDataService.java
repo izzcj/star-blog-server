@@ -4,7 +4,7 @@ import com.ale.starblog.admin.system.domain.entity.DictData;
 import com.ale.starblog.admin.system.domain.pojo.dict.data.CreateDictDataDTO;
 import com.ale.starblog.admin.system.domain.pojo.dict.data.DictDataBO;
 import com.ale.starblog.admin.system.domain.pojo.dict.data.ModifyDictDataDTO;
-import com.ale.starblog.framework.core.service.IBaseService;
+import com.ale.starblog.framework.core.service.ICrudService;
 
 /**
  * 字典数据服务接口
@@ -12,5 +12,5 @@ import com.ale.starblog.framework.core.service.IBaseService;
  * @author Ale
  * @version 1.0.0 2025/5/30 14:40
  */
-public interface IDictDataService extends IBaseService<DictData, DictDataBO, CreateDictDataDTO, ModifyDictDataDTO> {
+public interface IDictDataService extends ICrudService<DictData, DictDataBO, CreateDictDataDTO, ModifyDictDataDTO> {
 }

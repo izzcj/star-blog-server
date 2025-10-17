@@ -1,7 +1,7 @@
 package com.ale.starblog.framework.core.service.proxy;
 
 import com.ale.starblog.framework.common.porxy.ProxyFactory;
-import com.ale.starblog.framework.core.service.IBaseService;
+import com.ale.starblog.framework.core.service.ICrudService;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.config.BeanPostProcessor;
@@ -27,7 +27,7 @@ public class ServiceProxyInitializer implements BeanPostProcessor {
     @NonNull
     @Override
     public Object postProcessAfterInitialization(@NonNull Object bean, @NonNull String beanName) throws BeansException {
-        if (bean instanceof IBaseService) {
+        if (bean instanceof ICrudService) {
             return this.proxyFactoryObjectProvider.getIfAvailable().createProxy(bean, new ServiceProxyMethodInvoker());
         }
         return bean;

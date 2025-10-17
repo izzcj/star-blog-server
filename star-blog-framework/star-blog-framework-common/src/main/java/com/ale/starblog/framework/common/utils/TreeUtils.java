@@ -1,7 +1,7 @@
 package com.ale.starblog.framework.common.utils;
 
 import cn.hutool.core.collection.CollectionUtil;
-import com.ale.starblog.framework.common.support.facade.TreeNode;
+import com.ale.starblog.framework.common.support.TreeNode;
 import com.google.common.collect.Lists;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

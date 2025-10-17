@@ -9,8 +9,8 @@ import com.ale.starblog.admin.system.domain.pojo.user.UserBO;
 import com.ale.starblog.admin.system.mapper.UserMapper;
 import com.ale.starblog.admin.system.service.IUserService;
 import com.ale.starblog.framework.common.exception.ServiceException;
-import com.ale.starblog.framework.core.service.BaseServiceImpl;
-import com.ale.starblog.framework.core.service.HookContext;
+import com.ale.starblog.framework.core.service.AbstractCrudServiceImpl;
+import com.ale.starblog.framework.core.service.hook.HookContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -24,7 +24,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl extends BaseServiceImpl<UserMapper, User, UserBO, CreateUserDTO, ModifyUserDTO> implements IUserService {
+public class UserServiceImpl extends AbstractCrudServiceImpl<UserMapper, User, UserBO, CreateUserDTO, ModifyUserDTO> implements IUserService {
 
     /**
      * 密码编码器

@@ -16,11 +16,12 @@ import java.util.Arrays;
 /**
  * 基于Cglib的代理
  *
+ * @param <T> 原始对象类型
  * @author Ale
  * @version 1.0.0
  * @since 2025/4/28 星期一 17:45
  */
-public class CglibProxy extends AbstractProxy implements MethodInterceptor {
+public class CglibProxy<T> extends AbstractProxy<T> implements MethodInterceptor {
 
     /**
      * Enhancer
@@ -28,13 +29,17 @@ public class CglibProxy extends AbstractProxy implements MethodInterceptor {
     private final Enhancer enhancer = new Enhancer();
 
     @Override
-    protected Object create(Object originalObject) {
+    protected Object create(T originalObject) {
         if (AopUtils.isJdkDynamicProxy(originalObject)) {
             throw new UnsupportedOperationException(StrUtil.format("被代理类[{}]为Jdk代理类，无法使用Cglib代理", originalObject.getClass()));
         }
         ApplicationContext applicationContext = SpringUtil.getApplicationContext();
         Class<?> objectClass = originalObject.getClass();
-        enhancer.setSuperclass(objectClass.getSuperclass());
+        if (AopUtils.isCglibProxy(originalObject)) {
+            enhancer.setSuperclass(objectClass.getSuperclass());
+        } else {
+            enhancer.setSuperclass(objectClass);
+        }
         enhancer.setCallback(this);
         Constructor<?>[] constructors = objectClass.getConstructors();
         for (Constructor<?> constructor : constructors) {

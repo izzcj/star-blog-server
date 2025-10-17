@@ -1,11 +1,12 @@
 package com.ale.starblog.framework.core.service;
 
 import com.ale.starblog.framework.common.domain.entity.BaseEntity;
-import com.ale.starblog.framework.common.porxy.ProxyResolvable;
 import com.ale.starblog.framework.core.pojo.BaseBO;
 import com.ale.starblog.framework.core.pojo.BaseCreateDTO;
 import com.ale.starblog.framework.core.pojo.BaseModifyDTO;
 import com.ale.starblog.framework.core.query.BaseQuery;
+import com.ale.starblog.framework.core.service.hook.HookContext;
+import com.ale.starblog.framework.core.service.hook.LocalServiceHook;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -14,7 +15,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 /**
- * 通用service接口
+ * CRUD服务接口
  *
  * @param <E> 实体类型
  * @param <B> 实体BO类型
@@ -24,7 +25,7 @@ import java.util.List;
  * @version 1.0.0
  * @since 2025/3/7
  */
-public interface IBaseService<E extends BaseEntity, B extends BaseBO, C extends BaseCreateDTO, M extends BaseModifyDTO> extends IService<E>, ServerHook<E>, ProxyResolvable<IBaseService<E, B, C, M>> {
+public interface ICrudService<E extends BaseEntity, B extends BaseBO, C extends BaseCreateDTO, M extends BaseModifyDTO> extends IService<E>, LocalServiceHook<E> {
 
     /**
      * 根据查询条件查询单个实体

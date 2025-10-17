@@ -85,13 +85,7 @@ public class GenericJsonRedisSerializer implements RedisSerializer<Object> {
         objectMapper.registerModule(new SimpleModule().addSerializer(new NullValueSerializer(classPropertyTypeName)));
     }
 
-    /**
-     * 序列化
-     *
-     * @param source object to serialize. Can be {@literal null}.
-     * @return 字节数组
-     * @throws SerializationException 序列化异常
-     */
+    @Nullable
     @Override
     public byte[] serialize(@Nullable Object source) throws SerializationException {
 
@@ -106,13 +100,7 @@ public class GenericJsonRedisSerializer implements RedisSerializer<Object> {
         }
     }
 
-    /**
-     * 反序列化
-     *
-     * @param source object binary representation. Can be {@literal null}.
-     * @return 对象
-     * @throws SerializationException 反序列化异常
-     */
+    @Nullable
     @Override
     public Object deserialize(@Nullable byte[] source) throws SerializationException {
         return this.deserialize(source, Object.class);

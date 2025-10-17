@@ -5,7 +5,7 @@ import com.ale.starblog.admin.system.domain.pojo.menu.CreateMenuDTO;
 import com.ale.starblog.admin.system.domain.pojo.menu.MenuBO;
 import com.ale.starblog.admin.system.domain.pojo.menu.MenuRouterVO;
 import com.ale.starblog.admin.system.domain.pojo.menu.ModifyMenuDTO;
-import com.ale.starblog.framework.core.service.IBaseService;
+import com.ale.starblog.framework.core.service.ICrudService;
 
 import java.util.Collection;
 import java.util.List;
@@ -17,7 +17,7 @@ import java.util.List;
  * @version 1.0.0
  * @since 2025/4/8
  */
-public interface IMenuService extends IBaseService<Menu, MenuBO, CreateMenuDTO, ModifyMenuDTO> {
+public interface IMenuService extends ICrudService<Menu, MenuBO, CreateMenuDTO, ModifyMenuDTO> {
 
     /**
      * 通过角色id获取菜单id集合

@@ -19,15 +19,6 @@ import java.time.LocalDate;
 @Component
 public class LocalDateObjectWriter implements ObjectWriter<LocalDate> {
 
-    /**
-     * 序列化
-     *
-     * @param jsonWriter JSON写入器
-     * @param object 值
-     * @param fieldName 字段名称
-     * @param fieldType 字段类型
-     * @param features 特性
-     */
     @Override
     public void write(JSONWriter jsonWriter, Object object, Object fieldName, Type fieldType, long features) {
         jsonWriter.writeString(

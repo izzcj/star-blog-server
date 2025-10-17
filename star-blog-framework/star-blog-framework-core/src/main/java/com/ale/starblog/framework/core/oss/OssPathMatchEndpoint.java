@@ -3,7 +3,7 @@ package com.ale.starblog.framework.core.oss;
 import cn.hutool.core.util.StrUtil;
 import com.ale.starblog.framework.common.domain.JsonResult;
 import com.ale.starblog.framework.common.domain.Result;
-import com.ale.starblog.framework.common.support.facade.RequestUriMatcher;
+import com.ale.starblog.framework.common.support.RequestUriMatcher;
 import com.ale.starblog.framework.core.endpoint.Endpoint;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

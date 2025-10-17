@@ -1,4 +1,4 @@
-package com.ale.starblog.framework.common.support.facade;
+package com.ale.starblog.framework.common.support;
 
 /**
  * 请求URI匹配器

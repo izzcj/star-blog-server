@@ -6,8 +6,6 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.ValueInstantiator;
 import lombok.RequiredArgsConstructor;
 
-import java.io.IOException;
-
 /**
  * 强制实例化
  *
@@ -38,14 +36,13 @@ public class ForceValueInstantiator extends ValueInstantiator {
         return INSTANCE_CACHE.computeIfAbsent(clazz, ForceValueInstantiator::new);
     }
 
-
     @Override
     public boolean canCreateUsingDefault() {
         return true;
     }
 
     @Override
-    public Object createUsingDefault(DeserializationContext context) throws IOException {
+    public Object createUsingDefault(DeserializationContext context) {
         return ReflectionUtils.instantiate(this.clazz);
     }
 }

@@ -1,11 +1,9 @@
 package com.ale.starblog.framework.common.utils;
 
 import cn.hutool.core.convert.Convert;
-import cn.hutool.core.text.NamingCase;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ReflectUtil;
 import com.ale.starblog.framework.common.cache.CacheManager;
-import com.ale.starblog.framework.common.enumeration.BaseEnum;
 import com.ale.starblog.framework.common.exception.ReflectionException;
 import com.ale.starblog.framework.common.support.ReflectionField;
 import com.ale.starblog.framework.common.support.ReflectionMethod;
@@ -145,51 +143,6 @@ public final class ReflectionUtils {
                 Collectors.toMap(reflectionField -> reflectionField.field().getName(), Function.identity())
             )
         );
-    }
-
-    /**
-     * 将一个Map转为一个Bean对象
-     *
-     * @param map Map
-     * @param clazz Bean类
-     * @return Bean类实例
-     * @param <T> Bean类型
-     */
-    @SuppressWarnings("unchecked")
-    public static <T> T toBean(Map<String, Object> map, Class<T> clazz) {
-        if (map == null) {
-            return null;
-        }
-
-        T instance = instantiate(clazz);
-        if (map.isEmpty()) {
-            return instance;
-        }
-
-        Map<String, ReflectionField> fieldMap = getClassObjectFieldMap(clazz, true);
-        map.forEach((field, value) -> {
-            if (value == null) {
-                return;
-            }
-            ReflectionField reflectionField = fieldMap.get(NamingCase.toCamelCase(field));
-            if (reflectionField == null) {
-                return;
-            }
-
-            Class<?> fieldType = reflectionField.field().getType();
-            if (fieldType.isAssignableFrom(value.getClass())) {
-                reflectionField.setValue(instance, value);
-            } else if (BaseEnum.class.isAssignableFrom(fieldType) && fieldType.isEnum() && value instanceof String enumValue) {
-                reflectionField.setValue(
-                    instance,
-                    Enum.valueOf(fieldType.asSubclass(Enum.class), enumValue)
-                );
-            } else {
-                reflectionField.setValue(instance, Convert.convert(fieldType, value));
-            }
-        });
-
-        return instance;
     }
 
     record ClassAnnotatedFieldsCacheKey(Class<?> clazz, Class<? extends Annotation> annotationClass) {

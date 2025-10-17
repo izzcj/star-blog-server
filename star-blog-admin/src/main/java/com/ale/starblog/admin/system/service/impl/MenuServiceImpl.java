@@ -15,7 +15,7 @@ import com.ale.starblog.admin.system.service.IUserRoleService;
 import com.ale.starblog.admin.system.support.MenuRouterHelper;
 import com.ale.starblog.framework.common.enumeration.SwitchStatus;
 import com.ale.starblog.framework.common.utils.TreeUtils;
-import com.ale.starblog.framework.core.service.BaseServiceImpl;
+import com.ale.starblog.framework.core.service.AbstractCrudServiceImpl;
 import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
  */
 @Service
 @RequiredArgsConstructor
-public class MenuServiceImpl extends BaseServiceImpl<MenuMapper, Menu, MenuBO, CreateMenuDTO, ModifyMenuDTO> implements IMenuService {
+public class MenuServiceImpl extends AbstractCrudServiceImpl<MenuMapper, Menu, MenuBO, CreateMenuDTO, ModifyMenuDTO> implements IMenuService {
 
     /**
      * 用户角色服务

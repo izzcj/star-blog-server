@@ -11,14 +11,15 @@ import java.lang.reflect.Proxy;
 /**
  * 基于JDK的动态代理
  *
+ * @param <T> 原始对象类型
  * @author Ale
  * @version 1.0.0
  * @since 2025/4/29 星期二 9:31
  */
-public class JDKProxy extends AbstractProxy implements InvocationHandler {
+public class JDKProxy<T> extends AbstractProxy<T> implements InvocationHandler {
 
     @Override
-    protected Object create(Object originalObject) {
+    protected Object create(T originalObject) {
         if (AopUtils.isCglibProxy(originalObject)) {
             throw new UnsupportedOperationException(StrUtil.format("被代理类[{}]为Cglib代理类，无法使用Jdk代理", originalObject.getClass()));
         }

@@ -8,24 +8,25 @@ import java.lang.reflect.Method;
 /**
  * 抽象代理类
  *
+ * @param <T> 原始对象类型
  * @author Ale
  * @version 1.0.0
  * @since 2025/4/29 星期二 9:17
  */
-public abstract class AbstractProxy implements VenusProxy {
+public abstract class AbstractProxy<T> implements VenusProxy<T> {
 
     /**
      * 原始对象
      */
-    protected Object originalObject;
+    protected T originalObject;
 
     /**
      * 代理方法回调器
      */
-    protected ProxyMethodInvoker proxyMethodInvoker;
+    protected ProxyMethodInvoker<T> proxyMethodInvoker;
 
     @Override
-    public Object createProxy(Object originalObject, ProxyMethodInvoker proxyMethodInvoker) {
+    public Object createProxy(T originalObject, ProxyMethodInvoker<T> proxyMethodInvoker) {
         this.originalObject = originalObject;
         this.proxyMethodInvoker = proxyMethodInvoker;
         return this.create(originalObject);
@@ -37,7 +38,7 @@ public abstract class AbstractProxy implements VenusProxy {
      * @param originalObject 原始对象
      * @return 代理对象
      */
-    protected abstract Object create(Object originalObject);
+    protected abstract Object create(T originalObject);
 
     /**
      * 代理方法回调
@@ -50,15 +51,15 @@ public abstract class AbstractProxy implements VenusProxy {
     protected Object methodInvoke(Method method, Object[] args) throws Throwable {
         if (this.proxyMethodInvoker != null) {
             Object result = null;
-            if (this.proxyMethodInvoker.before(this.originalObject, this.originalObject, method, args)) {
+            if (this.proxyMethodInvoker.before(this, this.originalObject, method, args)) {
                 try {
                     result = method.invoke(this.originalObject, args);
                 } catch (InvocationTargetException e) {
-                    if (this.proxyMethodInvoker.afterException(this.originalObject, this.originalObject, method, args, e.getTargetException())) {
+                    if (this.proxyMethodInvoker.afterException(this, this.originalObject, method, args, e.getTargetException())) {
                         throw e.getTargetException();
                     }
                 }
-                if (this.proxyMethodInvoker.after(this.originalObject, this.originalObject, method, args, result)) {
+                if (this.proxyMethodInvoker.after(this, this.originalObject, method, args, result)) {
                     return result;
                 }
                 return null;

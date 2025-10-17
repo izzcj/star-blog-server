@@ -1,4 +1,4 @@
-package com.ale.starblog.framework.core.service;
+package com.ale.starblog.framework.core.service.hook;
 
 import com.ale.starblog.framework.common.domain.entity.BaseEntity;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -13,7 +13,7 @@ import java.util.List;
  * @version 1.0.0
  * @since 2025/3/26
  */
-public interface ServerHook<E extends BaseEntity> {
+public interface ServiceHook<E extends BaseEntity> {
 
     /**
      * 查询前置处理
@@ -135,36 +135,45 @@ public interface ServerHook<E extends BaseEntity> {
     /**
      * 删除前置处理
      *
-     * @param id      ID
+     * @param entity  删除的实体
      * @param context 上下文
      */
-    default void beforeDelete(Long id, HookContext context) {
+    default void beforeDelete(E entity, HookContext context) {
     }
 
     /**
      * 删除后置处理
      *
-     * @param id      ID
+     * @param entity  删除的实体
      * @param context 上下文
      */
-    default void afterDelete(Long id, HookContext context) {
+    default void afterDelete(E entity, HookContext context) {
     }
 
     /**
      * 批量删除前置处理
      *
-     * @param ids     ID列表
-     * @param context 上下文
+     * @param entityList 删除的实体集合
+     * @param context    上下文
      */
-    default void beforeBatchDelete(List<Long> ids, HookContext context) {
+    default void beforeBatchDelete(List<E> entityList, HookContext context) {
     }
 
     /**
      * 批量删除后置处理
      *
-     * @param ids     ID列表
+     * @param entityList 删除的实体集合
+     * @param context    上下文
+     */
+    default void afterBatchDelete(List<E> entityList, HookContext context) {
+    }
+
+    /**
+     * 清理钩子上下文前置处理
+     *
      * @param context 上下文
      */
-    default void afterBatchDelete(List<Long> ids, HookContext context) {
+    default void beforeClearHookContext(HookContext context) {
     }
+
 }

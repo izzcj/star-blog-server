@@ -9,8 +9,8 @@ import com.ale.starblog.admin.blog.service.IBlogService;
 import com.ale.starblog.admin.blog.service.IBlogTagService;
 import com.ale.starblog.framework.common.utils.CastUtils;
 import com.ale.starblog.framework.core.constants.HookConstants;
-import com.ale.starblog.framework.core.service.BaseServiceImpl;
-import com.ale.starblog.framework.core.service.HookContext;
+import com.ale.starblog.framework.core.service.AbstractCrudServiceImpl;
+import com.ale.starblog.framework.core.service.hook.HookContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +23,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @RequiredArgsConstructor
-public class BlogServiceImpl extends BaseServiceImpl<BlogMapper, Blog, BlogBO, CreateBlogDTO, ModifyBlogDTO> implements IBlogService {
+public class BlogServiceImpl extends AbstractCrudServiceImpl<BlogMapper, Blog, BlogBO, CreateBlogDTO, ModifyBlogDTO> implements IBlogService {
 
     /**
      * 博客标签关联服务

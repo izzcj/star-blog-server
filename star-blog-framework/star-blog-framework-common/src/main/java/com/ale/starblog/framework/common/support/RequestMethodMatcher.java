@@ -1,4 +1,4 @@
-package com.ale.starblog.framework.common.support.facade;
+package com.ale.starblog.framework.common.support;
 
 import org.springframework.http.HttpMethod;
 
@@ -19,7 +19,7 @@ public interface RequestMethodMatcher {
      * 是否匹配Http请求方法
      *
      * @param method Http请求方法
-     * @return bool
+     * @return 是否匹配
      */
     boolean matches(HttpMethod method);
 

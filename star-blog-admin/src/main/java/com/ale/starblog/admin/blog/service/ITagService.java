@@ -4,7 +4,7 @@ import com.ale.starblog.admin.blog.domain.entity.Tag;
 import com.ale.starblog.admin.blog.domain.pojo.tag.TagBO;
 import com.ale.starblog.admin.blog.domain.pojo.tag.CreateTagDTO;
 import com.ale.starblog.admin.blog.domain.pojo.tag.ModifyTagDTO;
-import com.ale.starblog.framework.core.service.IBaseService;
+import com.ale.starblog.framework.core.service.ICrudService;
 
 /**
  * 标签服务接口
@@ -13,5 +13,5 @@ import com.ale.starblog.framework.core.service.IBaseService;
  * @version 1.0.0
  * @since 2025/8/12
  */
-public interface ITagService extends IBaseService<Tag, TagBO, CreateTagDTO, ModifyTagDTO> {
+public interface ITagService extends ICrudService<Tag, TagBO, CreateTagDTO, ModifyTagDTO> {
 }

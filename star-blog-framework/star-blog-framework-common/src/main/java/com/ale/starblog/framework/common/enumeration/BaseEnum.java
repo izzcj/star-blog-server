@@ -168,7 +168,7 @@ public interface BaseEnum<T> {
     /**
      * 枚举容器
      */
-    @SuppressWarnings({"unchecked"})
+    @SuppressWarnings({"unchecked", "rawtypes"})
     class EnumContainer {
 
         /**

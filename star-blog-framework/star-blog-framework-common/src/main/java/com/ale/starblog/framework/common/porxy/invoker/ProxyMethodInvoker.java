@@ -5,11 +5,12 @@ import java.lang.reflect.Method;
 /**
  * 代理方法回调器
  *
+ * @param <T> 原始对象类型
  * @author Ale
  * @version 1.0.0
  * @since 2025/4/28 星期一 17:46
  */
-public interface ProxyMethodInvoker {
+public interface ProxyMethodInvoker<T> {
 
     /**
      * 代理方法前回调
@@ -20,7 +21,7 @@ public interface ProxyMethodInvoker {
      * @param args   参数
      * @return 是否继续执行
      */
-    boolean before(Object proxy, Object target, Method method, Object[] args);
+    boolean before(Object proxy, T target, Method method, Object[] args);
 
     /**
      * 代理方法后回调
@@ -34,7 +35,7 @@ public interface ProxyMethodInvoker {
      * @param returnValue 返回值
      * @return 是否继续执行
      */
-    boolean after(Object proxy, Object target, Method method, Object[] args, Object returnValue);
+    boolean after(Object proxy, T target, Method method, Object[] args, Object returnValue);
 
     /**
      * 代理方法异常回调
@@ -46,6 +47,6 @@ public interface ProxyMethodInvoker {
      * @param throwable 异常
      * @return 是否继续执行
      */
-    boolean afterException(Object proxy, Object target, Method method, Object[] args, Throwable throwable);
+    boolean afterException(Object proxy, T target, Method method, Object[] args, Throwable throwable);
 
 }

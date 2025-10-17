@@ -1,5 +1,6 @@
 package com.ale.starblog.framework.common.domain.entity;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ArrayUtil;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
@@ -9,6 +10,7 @@ import org.springframework.core.annotation.AnnotationAttributes;
 import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.lang.NonNull;
 import org.springframework.util.ClassUtils;
+
 
 /**
  * 实体扫描器注册
@@ -25,19 +27,20 @@ public class EntityScannerRegistrar implements ImportBeanDefinitionRegistrar {
             importingClassMetadata.getAnnotationAttributes(EntityScan.class.getName())
         );
 
-        if (attributes != null) {
-            String[] basePackages = attributes.getStringArray("value");
-            if (ArrayUtil.isEmpty(basePackages)) {
-                basePackages = new String[] {
-                    ClassUtils.getPackageName(importingClassMetadata.getClassName())
-                };
-            }
-            BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(DefaultEntityManager.class);
-            builder.addConstructorArgValue(basePackages);
-            builder.addConstructorArgReference("entityInitializers");
-            builder.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-
-            registry.registerBeanDefinition(DefaultEntityManager.class.getName(), builder.getBeanDefinition());
+        if (CollectionUtil.isEmpty(attributes)) {
+            return;
         }
+        String[] basePackages = attributes.getStringArray("value");
+        if (ArrayUtil.isEmpty(basePackages)) {
+            basePackages = new String[] {
+                ClassUtils.getPackageName(importingClassMetadata.getClassName())
+            };
+        }
+        BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(DefaultEntityManager.class);
+        builder.addConstructorArgValue(basePackages);
+        builder.addConstructorArgReference("entityInitializers");
+        builder.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
+
+        registry.registerBeanDefinition(DefaultEntityManager.class.getName(), builder.getBeanDefinition());
     }
 }

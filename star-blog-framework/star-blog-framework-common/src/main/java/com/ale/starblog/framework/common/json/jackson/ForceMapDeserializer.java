@@ -1,5 +1,6 @@
 package com.ale.starblog.framework.common.json.jackson;
 
+import cn.hutool.core.util.StrUtil;
 import com.ale.starblog.framework.common.exception.JsonDeserializerException;
 import com.ale.starblog.framework.common.utils.CastUtils;
 import com.fasterxml.jackson.core.JsonParser;
@@ -28,9 +29,10 @@ public class ForceMapDeserializer extends MapDeserializer {
 
     @Override
     public Map<Object, Object> deserialize(JsonParser p, DeserializationContext context) throws IOException {
+        // 不能序列化时
         if (!_valueInstantiator.canInstantiate()) {
 
-            // Usually, readonly type is wrapped super class
+            // 遍历构造器，寻找「包装父类」的构造器
             for (Constructor<?> constructor : this._valueClass.getDeclaredConstructors()) {
                 if (constructor.getParameterTypes().length == 1 && constructor.getParameterTypes()[0] == _valueClass.getSuperclass()) {
                     MapType superType = context.getTypeFactory().constructMapType(
@@ -73,7 +75,7 @@ public class ForceMapDeserializer extends MapDeserializer {
                             }
                         }
                     } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-                        throw new JsonDeserializerException("Create instance \"" + this._valueClass.getName() + "\" failed", e);
+                        throw new JsonDeserializerException(StrUtil.format("创建实例[{}]失败", this._valueClass.getName()), e);
                     }
                 }
             }

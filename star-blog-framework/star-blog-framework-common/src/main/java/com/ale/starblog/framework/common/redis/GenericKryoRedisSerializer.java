@@ -5,6 +5,7 @@ import com.ale.starblog.framework.common.utils.KryoUtils;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.SerializationException;
 import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 
 /**
  * Kryo序列化器
@@ -31,28 +32,18 @@ public class GenericKryoRedisSerializer implements RedisSerializer<Object> {
         return true;
     }
 
-    /**
-     * Serialize the given object to binary data.
-     *
-     * @param o object to serialize. Can be {@literal null}.
-     * @return the equivalent binary data. Can be {@literal null}.
-     */
+    @Nullable
     @Override
-    public byte[] serialize(Object o) throws SerializationException {
+    public byte[] serialize(@Nullable Object o) throws SerializationException {
         if (o == null) {
             return EMPTY_ARRAY;
         }
         return KryoUtils.serialize(o);
     }
 
-    /**
-     * Deserialize an object from the given binary data.
-     *
-     * @param bytes object binary representation. Can be {@literal null}.
-     * @return the equivalent object instance. Can be {@literal null}.
-     */
+    @Nullable
     @Override
-    public Object deserialize(byte[] bytes) throws SerializationException {
+    public Object deserialize(@Nullable byte[] bytes) throws SerializationException {
         if (ArrayUtil.isEmpty(bytes)) {
             return null;
         }
