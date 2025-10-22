@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.util.Date;
+import java.util.Set;
 
 /**
  * 用户个人信息VO
@@ -69,5 +70,20 @@ public class UserProfileVO {
      * 上次登录时间
      */
     private Date lastLoginTime;
+
+    /**
+     * 是否为管理员
+     */
+    private Boolean admin;
+
+    /**
+     * 用户角色ID集合
+     */
+    private Set<Long> roleIds;
+
+    /**
+     * 权限列表
+     */
+    private Set<String> permissions;
 
 }
