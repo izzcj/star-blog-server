@@ -35,7 +35,7 @@ public class LogRequestMdcFilter extends OncePerRequestFilter implements Ordered
     private final int order;
 
     @Override
-    protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain) throws ServletException, IOException {
         long beginTime = System.currentTimeMillis();
         AuthenticatedUser authenticatedUser = SecurityUtils.getLoginUser();
         try {

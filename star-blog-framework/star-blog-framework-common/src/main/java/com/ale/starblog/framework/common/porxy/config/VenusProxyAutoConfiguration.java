@@ -5,6 +5,8 @@ import com.ale.starblog.framework.common.porxy.ProxyFactory;
 import com.ale.starblog.framework.common.porxy.ComponentScanMark;
 import com.ale.starblog.framework.common.porxy.cglib.CglibProxyFactory;
 import com.ale.starblog.framework.common.porxy.jdk.JDKProxyFactory;
+import com.ale.starblog.framework.common.utils.CastUtils;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.aop.config.AopConfigUtils;
 import org.springframework.beans.MutablePropertyValues;
@@ -46,7 +48,7 @@ public class VenusProxyAutoConfiguration {
         boolean proxyTargetClass = false;
         for (PropertyValue propertyValue : propertyValues) {
             if ("proxyTargetClass".equals(propertyValue.getName())) {
-                proxyTargetClass = (Boolean) propertyValue.getValue();
+                proxyTargetClass = CastUtils.cast(propertyValue.getValue());
                 break;
             }
         }

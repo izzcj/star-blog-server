@@ -212,7 +212,7 @@ public final class RedisUtils {
      * @param defaultValue 默认值
      * @return 值
      */
-    public static String get(String key, String defaultValue) {
+    public static String getString(String key, String defaultValue) {
         String value = getString(key);
         return value == null ? defaultValue : value;
     }
@@ -289,7 +289,7 @@ public final class RedisUtils {
     public static Set<String> getKeys(String keyPrefix) {
         Set<String> keys = redisTemplate.keys(keyPrefix + StringConstants.ASTERISK);
 
-        if (keys == null) {
+        if (CollectionUtil.isEmpty(keys)) {
             return Collections.emptySet();
         }
 
@@ -357,7 +357,7 @@ public final class RedisUtils {
             @Override
             public Object execute(@NonNull RedisOperations operations) throws DataAccessException {
                 Set<String> keys = operations.keys(keyPrefix + StringConstants.ASTERISK);
-                if (!CollectionUtil.isEmpty(keys)) {
+                if (CollectionUtil.isNotEmpty(keys)) {
                     operations.delete(keys);
                 }
                 return null;

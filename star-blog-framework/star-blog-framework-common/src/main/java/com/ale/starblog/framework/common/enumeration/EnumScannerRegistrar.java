@@ -1,5 +1,6 @@
 package com.ale.starblog.framework.common.enumeration;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ArrayUtil;
 import com.ale.starblog.framework.common.utils.ClassUtils;
 import org.springframework.beans.factory.config.BeanDefinition;
@@ -20,10 +21,14 @@ import org.springframework.lang.NonNull;
 public class EnumScannerRegistrar implements ImportBeanDefinitionRegistrar {
 
     @Override
-    public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, @NonNull BeanDefinitionRegistry registry) {
+    public void registerBeanDefinitions(@NonNull AnnotationMetadata importingClassMetadata, @NonNull BeanDefinitionRegistry registry) {
         AnnotationAttributes attributes = AnnotationAttributes.fromMap(
             importingClassMetadata.getAnnotationAttributes(EnumScan.class.getName())
         );
+
+        if (CollectionUtil.isEmpty(attributes)) {
+            return;
+        }
 
         String[] basePackages = attributes.getStringArray("value");
         if (ArrayUtil.isEmpty(basePackages)) {

@@ -5,6 +5,7 @@ import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.core.convert.converter.ConverterFactory;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.http.MediaType;
+import org.springframework.lang.NonNull;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -45,27 +46,27 @@ public class VenusWebMvcConfigurer implements WebMvcConfigurer {
     private final ObjectProvider<HandlerInterceptor> handlerInterceptors;
 
     @Override
-    public void addInterceptors(InterceptorRegistry registry) {
+    public void addInterceptors(@NonNull InterceptorRegistry registry) {
         this.handlerInterceptors.orderedStream().forEach(registry::addInterceptor);
     }
 
     @Override
-    public void addFormatters(FormatterRegistry registry) {
+    public void addFormatters(@NonNull FormatterRegistry registry) {
         this.converterFactories.orderedStream().forEach(registry::addConverterFactory);
     }
 
     @Override
-    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
+    public void addArgumentResolvers(@NonNull List<HandlerMethodArgumentResolver> resolvers) {
         this.handlerMethodArgumentResolvers.orderedStream().forEach(resolvers::add);
     }
 
     @Override
-    public void addReturnValueHandlers(List<HandlerMethodReturnValueHandler> handlers) {
+    public void addReturnValueHandlers(@NonNull List<HandlerMethodReturnValueHandler> handlers) {
         this.handlerMethodReturnValueHandlers.orderedStream().forEach(handlers::add);
     }
 
     @Override
-    public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
+    public void configureContentNegotiation(@NonNull ContentNegotiationConfigurer configurer) {
         configurer.defaultContentType(MediaType.APPLICATION_JSON);
     }
 }

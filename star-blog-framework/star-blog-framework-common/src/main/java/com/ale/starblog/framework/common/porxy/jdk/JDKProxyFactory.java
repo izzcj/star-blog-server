@@ -12,6 +12,7 @@ import com.ale.starblog.framework.common.porxy.invoker.ProxyMethodInvoker;
  */
 public class JDKProxyFactory implements ProxyFactory {
 
+    @SuppressWarnings({"unchecked", "rawtypes"})
     @Override
     public Object createProxy(Object originalObject, ProxyMethodInvoker proxyMethodInvoker) {
         return new JDKProxy().createProxy(originalObject, proxyMethodInvoker);

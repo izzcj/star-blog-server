@@ -9,6 +9,7 @@ import com.ale.starblog.framework.security.event.VenusLoginSuccessEvent;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationListener;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -30,7 +31,7 @@ public class LoginSuccessEventListener implements ApplicationListener<VenusLogin
     private final IUserService userService;
 
     @Override
-    public void onApplicationEvent(VenusLoginSuccessEvent event) {
+    public void onApplicationEvent(@NonNull VenusLoginSuccessEvent event) {
         AuthUser authUser = CastUtils.cast(event.getAuthenticatedUser());
         if (authUser == null) {
             return;

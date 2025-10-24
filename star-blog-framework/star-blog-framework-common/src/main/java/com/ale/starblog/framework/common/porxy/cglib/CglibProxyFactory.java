@@ -12,6 +12,7 @@ import com.ale.starblog.framework.common.porxy.invoker.ProxyMethodInvoker;
  */
 public class CglibProxyFactory implements ProxyFactory {
 
+    @SuppressWarnings({"unchecked", "rawtypes"})
     @Override
     public Object createProxy(Object originalObject, ProxyMethodInvoker proxyMethodInvoker) {
         return new CglibProxy().createProxy(originalObject, proxyMethodInvoker);
