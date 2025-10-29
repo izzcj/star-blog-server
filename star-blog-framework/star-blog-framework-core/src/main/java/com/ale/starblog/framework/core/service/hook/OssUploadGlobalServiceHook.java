@@ -125,7 +125,7 @@ public class OssUploadGlobalServiceHook implements GlobalServiceHook<BaseEntity>
             Collection<String> newObjectKeys = this.resolveKeys(reflectionField.field(), reflectionField.getValue(entity));
 
             if (CollectionUtil.isEmpty(oldObjectKeys) && CollectionUtil.isEmpty(newObjectKeys)) {
-                return;
+                continue;
             }
 
             // 旧字段为空，新字段不为空，需要移动新对象
@@ -276,6 +276,9 @@ public class OssUploadGlobalServiceHook implements GlobalServiceHook<BaseEntity>
      * @param processedKeys   已处理Key集合
      */
     private void setReplacedValue(ReflectionField reflectionField, BaseEntity entity, Object value, Collection<String> originalKeys, Collection<String> processedKeys) {
+        if (value == null) {
+            return;
+        }
         for (OssUploadKeyReplacer ossUploadKeyReplacer : this.ossUploadKeyReplacers) {
             var newValue = ossUploadKeyReplacer.replaceKey(reflectionField.field(), value, originalKeys, processedKeys);
             if (newValue != null) {

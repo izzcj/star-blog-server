@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 
 /**
@@ -17,6 +18,7 @@ import org.springframework.context.annotation.Import;
  * @since 2022/12/5 星期一 18:21
  */
 @AutoConfiguration
+@ComponentScan(basePackageClasses = ComponentScanMark.class)
 @Import(OssSupport.class)
 @EnableConfigurationProperties(MinioProperties.class)
 public class OssAutoConfiguration {

@@ -17,6 +17,7 @@ public interface IBlogService extends ICrudService<Blog, BlogBO, CreateBlogDTO, 
 
     /**
      * 增加博客浏览量
+     * 访问量比较大时可以使用Redis进行缓存
      *
      * @param id 博客ID
      */

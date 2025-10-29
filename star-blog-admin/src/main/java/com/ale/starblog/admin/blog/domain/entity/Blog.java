@@ -4,6 +4,8 @@ import com.ale.starblog.admin.blog.enums.BlogStatus;
 import com.ale.starblog.framework.common.domain.entity.BaseAuditEntity;
 import com.ale.starblog.framework.core.oss.OssUpload;
 import com.ale.starblog.framework.core.oss.RichText;
+import com.baomidou.mybatisplus.annotation.FieldStrategy;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -52,6 +54,7 @@ public class Blog extends BaseAuditEntity {
      * 封面图片
      */
     @OssUpload
+    @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private String coverImage;
 
     /**

@@ -4,6 +4,7 @@ import com.ale.starblog.admin.blog.domain.entity.Blog;
 import com.ale.starblog.admin.blog.domain.pojo.blog.BlogBO;
 import com.ale.starblog.admin.blog.domain.pojo.blog.CreateBlogDTO;
 import com.ale.starblog.admin.blog.domain.pojo.blog.ModifyBlogDTO;
+import com.ale.starblog.admin.blog.enums.BlogStatus;
 import com.ale.starblog.admin.blog.mapper.BlogMapper;
 import com.ale.starblog.admin.blog.service.IBlogService;
 import com.ale.starblog.admin.blog.service.IBlogTagService;
@@ -31,6 +32,13 @@ public class BlogServiceImpl extends AbstractCrudServiceImpl<BlogMapper, Blog, B
     private final IBlogTagService blogTagService;
 
     @Override
+    public void beforeCreate(Blog entity, HookContext context) {
+        if (entity.getStatus() == null) {
+            entity.setStatus(BlogStatus.DRAFT);
+        }
+    }
+
+    @Override
     public void afterCreate(Blog entity, HookContext context) {
         CreateBlogDTO createDTO = CastUtils.cast(context.get(HookConstants.CREATE_DTO_KEY));
         // 保存博客标签关联关系
@@ -41,7 +49,7 @@ public class BlogServiceImpl extends AbstractCrudServiceImpl<BlogMapper, Blog, B
 
     @Override
     public void afterModify(Blog entity, HookContext context) {
-        ModifyBlogDTO modifyBlogDTO = CastUtils.cast(context.get(HookConstants.MODIFY_DTO_MAP_KEY));
+        ModifyBlogDTO modifyBlogDTO = CastUtils.cast(context.get(HookConstants.MODIFY_DTO_KEY));
         // 更新博客标签关联关系
         this.blogTagService.updateBlogTags(entity.getId(), modifyBlogDTO.getTagIds());
     }
