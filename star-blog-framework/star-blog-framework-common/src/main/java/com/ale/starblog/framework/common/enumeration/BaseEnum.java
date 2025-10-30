@@ -5,6 +5,8 @@ import com.ale.starblog.framework.common.support.Option;
 import com.ale.starblog.framework.common.utils.CastUtils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -20,7 +22,7 @@ import java.util.stream.Stream;
  * @version 1.0.0
  * @since 2024/6/26
  **/
-public interface BaseEnum<T> {
+public interface BaseEnum<T extends Serializable> {
 
     /**
      * 初始化
@@ -84,7 +86,7 @@ public interface BaseEnum<T> {
      * @param name  枚举名称
      * @return 枚举
      */
-    static <T, R extends BaseEnum<T>> R getByName(Class<R> clazz, String name) {
+    static <T extends Serializable, R extends BaseEnum<T>> R getByName(Class<R> clazz, String name) {
         return Stream.of(clazz.getEnumConstants())
             .filter(baseEnum -> baseEnum.getName().equals(name))
             .findAny()
@@ -100,7 +102,7 @@ public interface BaseEnum<T> {
      * @param value 枚举值
      * @return 枚举
      */
-    static <T, R extends BaseEnum<T>> R getByValue(Class<R> clazz, T value) {
+    static <T extends Serializable, R extends BaseEnum<T>> R getByValue(Class<R> clazz, T value) {
         return getByValue(clazz, value, "枚举值不存在！");
     }
 
@@ -114,7 +116,7 @@ public interface BaseEnum<T> {
      * @param errorMessage  枚举值
      * @return 枚举
      */
-    static <T, R extends BaseEnum<T>> R getByValue(Class<R> clazz, T value, String errorMessage) {
+    static <T extends Serializable, R extends BaseEnum<T>> R getByValue(Class<R> clazz, T value, String errorMessage) {
         return Stream.of(clazz.getEnumConstants())
             .filter(baseEnum -> {
                 if (value instanceof Enum<?>) {
@@ -133,7 +135,7 @@ public interface BaseEnum<T> {
      * @param clazz 枚举类型
      * @return 枚举字典列表
      */
-    static <T> List<Option> convertToSelection(Class<? extends BaseEnum<T>> clazz) {
+    static <T extends Serializable> List<Option> convertToSelection(Class<? extends BaseEnum<T>> clazz) {
         return Stream.of(clazz.getEnumConstants())
             .map(baseEnum -> Option.of(baseEnum.getMsg(), CastUtils.cast(baseEnum.getValue()), baseEnum.getName()))
             .collect(Collectors.toList());
@@ -182,7 +184,7 @@ public interface BaseEnum<T> {
          * @param <T>      枚举值泛型
          * @param baseEnum 枚举
          */
-        public static <T> void putEnum(BaseEnum<T> baseEnum) {
+        public static <T extends Serializable> void putEnum(BaseEnum<T> baseEnum) {
             String enumString = baseEnum.toString();
             ENUM_MAP.put(baseEnum, new EnumBean(enumString, enumString, enumString));
         }
@@ -195,7 +197,7 @@ public interface BaseEnum<T> {
          * @param value    枚举值
          * @param msg      枚举描述
          */
-        public static <T> void putEnum(BaseEnum<T> baseEnum, T value, String msg) {
+        public static <T extends Serializable> void putEnum(BaseEnum<T> baseEnum, T value, String msg) {
             if (value instanceof Enum<?>) {
                 ENUM_MAP.put(baseEnum, new EnumBean(value.toString(), baseEnum.toString(), msg));
             } else {
@@ -211,7 +213,7 @@ public interface BaseEnum<T> {
          * @param baseEnum 枚举
          * @return 枚举
          */
-        static <K extends BaseEnum<T>, T> EnumBean<T> getEnum(K baseEnum) {
+        static <K extends BaseEnum<T>, T extends Serializable> EnumBean<T> getEnum(K baseEnum) {
             return ENUM_MAP.get(baseEnum);
         }
     }
@@ -223,7 +225,7 @@ public interface BaseEnum<T> {
      */
     @Getter
     @AllArgsConstructor
-    class EnumBean<T> {
+    class EnumBean<T extends Serializable> {
 
         /**
          * 枚举值

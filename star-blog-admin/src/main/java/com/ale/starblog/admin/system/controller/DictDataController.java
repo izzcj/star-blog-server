@@ -5,12 +5,14 @@ import com.ale.starblog.admin.system.domain.pojo.dict.data.*;
 import com.ale.starblog.admin.system.service.IDictDataService;
 import com.ale.starblog.framework.common.domain.JsonPageResult;
 import com.ale.starblog.framework.common.domain.JsonResult;
+import com.ale.starblog.framework.common.support.Option;
 import com.ale.starblog.framework.core.controller.BaseController;
 import org.springframework.data.domain.Pageable;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 字典数据接口
@@ -54,6 +56,22 @@ public class DictDataController extends BaseController<DictData, IDictDataServic
     @GetMapping("/list")
     public JsonResult<List<DictDataVO>> list(DictDataQuery query) {
         return this.queryList(query);
+    }
+
+    /**
+     * 获取字典数据选项
+     *
+     * @param query 查询条件
+     * @return 字典数据选项
+     */
+    @GetMapping("/options")
+    public JsonResult<List<Option>> options(DictDataQuery query) {
+        List<DictDataBO> result = this.service.queryList(query);
+        return JsonResult.success(
+            result.stream()
+                .map(dictDataBO -> Option.of(dictDataBO.getDictLabel(), dictDataBO.getDictValue(), dictDataBO.getDictType()))
+                .collect(Collectors.toList())
+        );
     }
 
     /**

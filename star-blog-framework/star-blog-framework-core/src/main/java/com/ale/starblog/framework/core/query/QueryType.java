@@ -9,7 +9,7 @@ import com.ale.starblog.framework.common.enumeration.BaseEnum;
  * @version 1.0.0
  * @since 2025/3/7
  */
-public enum QueryType implements BaseEnum<Void> {
+public enum QueryType implements BaseEnum<String> {
 
     /**
      * 等于

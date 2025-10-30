@@ -45,7 +45,7 @@ public class OssServiceBaseUrlEndpoint implements Endpoint {
     }
 
     @Override
-    public Result<?> handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public Result<?> handleRequest(HttpServletRequest request, HttpServletResponse response) {
         OssServiceProvider[] providers = OssServiceProvider.values();
         Map<String, String> baseUrlMap = Maps.newHashMapWithExpectedSize(providers.length);
         for (OssServiceProvider provider : providers) {

@@ -5,6 +5,7 @@ import com.ale.starblog.framework.common.utils.CastUtils;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
 
+import java.io.Serializable;
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -19,7 +20,7 @@ import java.sql.SQLException;
  * @version 1.0.0
  * @since 2025/3/25
  */
-public class EnumTypeHandler<T, E extends BaseEnum<T>> extends BaseTypeHandler<E> {
+public class EnumTypeHandler<T extends Serializable, E extends BaseEnum<T>> extends BaseTypeHandler<E> {
 
     /**
      * 枚举类

@@ -9,3 +9,4 @@ com.ale.starblog.framework.core.translation.GenericTranslationAutoConfiguration
 com.ale.starblog.framework.core.oss.OssAutoConfiguration
 com.ale.starblog.framework.core.endpoint.EndpointAutoConfiguration
 com.ale.starblog.framework.core.filter.VenusFilterAutoConfiguration
+com.ale.starblog.framework.core.enumeration.EnumerationAutoConfiguration

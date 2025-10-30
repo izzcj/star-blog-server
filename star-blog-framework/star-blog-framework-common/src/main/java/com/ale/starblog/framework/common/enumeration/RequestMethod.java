@@ -7,7 +7,7 @@ package com.ale.starblog.framework.common.enumeration;
  * @version 1.0.0
  * @since 2024/6/28
  **/
-public enum RequestMethod implements BaseEnum<Void> {
+public enum RequestMethod implements BaseEnum<String> {
 
     /**
      * 所有方法

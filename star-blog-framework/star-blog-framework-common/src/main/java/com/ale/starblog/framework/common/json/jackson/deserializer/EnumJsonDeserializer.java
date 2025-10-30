@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
 import java.io.IOException;
+import java.io.Serializable;
 
 /**
  * 枚举反序列化器
@@ -17,7 +18,7 @@ import java.io.IOException;
  * @version 1.0.0
  * @since 2025/3/25
  */
-public class EnumJsonDeserializer<T> extends StdDeserializer<BaseEnum<T>> {
+public class EnumJsonDeserializer<T extends Serializable> extends StdDeserializer<BaseEnum<T>> {
 
     /**
      * 枚举类

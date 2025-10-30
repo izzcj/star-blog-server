@@ -9,7 +9,7 @@ import com.ale.starblog.framework.common.enumeration.BaseEnum;
  * @version 1.0.0
  * @since 2024/6/26
  **/
-public enum LoginType implements BaseEnum<Void> {
+public enum LoginType implements BaseEnum<String> {
 
     /**
      * 通过账号和密码登录
