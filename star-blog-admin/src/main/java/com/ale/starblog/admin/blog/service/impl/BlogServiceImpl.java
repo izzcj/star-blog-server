@@ -1,5 +1,6 @@
 package com.ale.starblog.admin.blog.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.ale.starblog.admin.blog.domain.entity.Blog;
 import com.ale.starblog.admin.blog.domain.pojo.blog.BlogBO;
 import com.ale.starblog.admin.blog.domain.pojo.blog.CreateBlogDTO;
@@ -14,6 +15,8 @@ import com.ale.starblog.framework.core.service.AbstractCrudServiceImpl;
 import com.ale.starblog.framework.core.service.hook.HookContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * 博客服务实现类
@@ -56,10 +59,28 @@ public class BlogServiceImpl extends AbstractCrudServiceImpl<BlogMapper, Blog, B
 
     @Override
     public void incrementViewCount(Long id) {
-        Blog blog = this.getById(id);
+        Blog blog = this.lambdaQuery()
+            .select(Blog::getId, Blog::getViewCount)
+            .eq(Blog::getId, id)
+            .one();
         if (blog != null) {
-            blog.setViewCount(blog.getViewCount() + 1);
-            this.update(blog, null);
+            this.lambdaUpdate()
+                .set(Blog::getViewCount, blog.getViewCount() + 1)
+                .eq(Blog::getId, id)
+                .update();
         }
+    }
+
+    @Override
+    public List<BlogBO> fetchHotBlogs() {
+        // 按照浏览量排序取前10
+        return this.lambdaQuery()
+            .eq(Blog::getStatus, BlogStatus.PUBLISHED)
+            .orderByDesc(Blog::getViewCount)
+            .last("limit 10")
+            .list()
+            .stream()
+            .map(blog -> BeanUtil.copyProperties(blog, BlogBO.class))
+            .toList();
     }
 }

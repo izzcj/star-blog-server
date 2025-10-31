@@ -6,6 +6,8 @@ import com.ale.starblog.admin.blog.domain.pojo.blog.CreateBlogDTO;
 import com.ale.starblog.admin.blog.domain.pojo.blog.ModifyBlogDTO;
 import com.ale.starblog.framework.core.service.ICrudService;
 
+import java.util.List;
+
 /**
  * 博客服务接口
  *
@@ -22,4 +24,11 @@ public interface IBlogService extends ICrudService<Blog, BlogBO, CreateBlogDTO, 
      * @param id 博客ID
      */
     void incrementViewCount(Long id);
+
+    /**
+     * 获取热门博客
+     *
+     * @return 热门博客
+     */
+    List<BlogBO> fetchHotBlogs();
 }

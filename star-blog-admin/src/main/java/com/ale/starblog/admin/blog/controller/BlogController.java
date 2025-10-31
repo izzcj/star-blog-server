@@ -77,6 +77,22 @@ public class BlogController extends BaseController<Blog, IBlogService, BlogVO, B
     }
 
     /**
+     * 获取热门博客
+     *
+     * @return 热门博客
+     */
+    @GetMapping("/hot")
+    public JsonResult<List<BlogVO>> fetchHotBlogs() {
+        return JsonResult.success(
+            this.service.fetchHotBlogs()
+                .stream()
+                .map(blogBO -> BeanUtil.copyProperties(blogBO, BlogVO.class))
+                .peek(GenericTranslationSupport::translate)
+                .collect(Collectors.toList())
+        );
+    }
+
+    /**
      * 创建博客
      *
      * @param createBlogDTO 创建博客dto

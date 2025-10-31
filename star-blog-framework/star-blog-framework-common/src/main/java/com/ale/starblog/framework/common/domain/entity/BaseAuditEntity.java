@@ -22,7 +22,7 @@ import java.io.Serial;
 @NoArgsConstructor
 @FieldNameConstants(asEnum = true)
 @EqualsAndHashCode(callSuper = true)
-public class BaseAuditEntity extends BaseEntity {
+public abstract class BaseAuditEntity extends BaseEntity {
 
     @Serial
     private static final long serialVersionUID = 5244624660683251996L;
