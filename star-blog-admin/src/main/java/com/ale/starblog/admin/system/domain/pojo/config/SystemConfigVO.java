@@ -61,7 +61,7 @@ public class SystemConfigVO extends BaseVO {
     private SystemConfigDataSourceType dataSourceType;
 
     /**
-     * 数据配置
+     * 数据源配置
      */
     private String dataSourceConfig;
 }

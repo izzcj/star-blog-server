@@ -22,12 +22,7 @@ public enum SystemConfigDataSourceType implements BaseEnum<String> {
     /**
      * 枚举
      */
-    ENUM("枚举"),
-
-    /**
-     * 数据接口
-     */
-    DATA_API("数据接口");
+    ENUM("枚举");
 
     SystemConfigDataSourceType(String msg) {
         this.init(this.toString(), msg);

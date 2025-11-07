@@ -23,7 +23,7 @@ public class SystemConfigQuery extends BaseQuery {
     /**
      * 分类
      */
-    @Query(type = QueryType.LIKE_ANYWHERE)
+    @Query
     private String category;
 
     /**
@@ -35,6 +35,6 @@ public class SystemConfigQuery extends BaseQuery {
     /**
      * key
      */
-    @Query(type = QueryType.LIKE_ANYWHERE)
+    @Query
     private String key;
 }
