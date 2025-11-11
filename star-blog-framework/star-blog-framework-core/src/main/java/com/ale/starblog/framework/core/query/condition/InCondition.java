@@ -17,6 +17,7 @@ import java.util.Collection;
 @Component
 public class InCondition implements QueryCondition {
 
+    @SuppressWarnings("rawtypes")
     @Override
     public void build(String fieldName, Object fieldValue, QueryWrapper<?> queryWrapper, QueryParameter[] parameters) {
         if (fieldValue instanceof Collection collection) {

@@ -36,6 +36,11 @@ public class SystemConfigVO extends BaseVO {
     private String categoryName;
 
     /**
+     * 排序
+     */
+    private Integer sort;
+
+    /**
      * 名称
      */
     private String name;

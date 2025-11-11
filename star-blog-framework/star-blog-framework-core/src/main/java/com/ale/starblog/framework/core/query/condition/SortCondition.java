@@ -22,7 +22,7 @@ import java.util.List;
 @Component
 public class SortCondition implements QueryCondition {
 
-    @SuppressWarnings({"unchecked"})
+    @SuppressWarnings({"unchecked", "rawtypes"})
     @Override
     public void build(String fieldName, Object fieldValue, QueryWrapper<?> queryWrapper, QueryParameter[] parameters) {
         String order = DataBaseConstants.ORDER_ASC;

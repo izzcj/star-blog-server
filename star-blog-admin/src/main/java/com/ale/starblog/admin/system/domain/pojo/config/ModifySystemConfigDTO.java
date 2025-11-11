@@ -28,6 +28,11 @@ public class ModifySystemConfigDTO extends BaseModifyDTO {
     private String category;
 
     /**
+     * 排序
+     */
+    private Integer sort;
+
+    /**
      * 名称
      */
     private String name;

@@ -37,4 +37,10 @@ public class SystemConfigQuery extends BaseQuery {
      */
     @Query
     private String key;
+
+    /**
+     * 排序
+     */
+    @Query(type = QueryType.SORT)
+    private String sortField = "sort";
 }
