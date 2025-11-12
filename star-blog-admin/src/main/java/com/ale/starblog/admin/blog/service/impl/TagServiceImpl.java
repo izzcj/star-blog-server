@@ -10,7 +10,7 @@ import com.ale.starblog.framework.core.service.AbstractCrudServiceImpl;
 import org.springframework.stereotype.Service;
 
 /**
- * 博客标签服务实现类
+ * 标签服务实现类
  *
  * @author Ale
  * @version 1.0.0

@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
- * 博客标签mapper
+ * 标签mapper
  *
  * @author Ale
  * @version 1.0.0

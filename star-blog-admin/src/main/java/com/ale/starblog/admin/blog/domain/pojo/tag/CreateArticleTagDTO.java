@@ -1,6 +1,7 @@
 package com.ale.starblog.admin.blog.domain.pojo.tag;
 
-import com.ale.starblog.framework.core.pojo.BaseBO;
+import com.ale.starblog.framework.core.pojo.BaseCreateDTO;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -8,7 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 /**
- * 博客标签BO
+ * 创建文章标签DTO
  *
  * @author Ale
  * @version 1.0.0
@@ -19,16 +20,12 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class BlogTagBO extends BaseBO {
-
-    /**
-     * ID
-     */
-    private Long id;
+public class CreateArticleTagDTO extends BaseCreateDTO {
 
     /**
      * 标签名称
      */
+    @NotBlank(message = "标签名称不能为空")
     private String name;
 
     /**

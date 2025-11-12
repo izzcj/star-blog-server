@@ -1,6 +1,6 @@
-package com.ale.starblog.admin.blog.domain.pojo.blog;
+package com.ale.starblog.admin.blog.domain.pojo.article;
 
-import com.ale.starblog.admin.blog.enums.BlogStatus;
+import com.ale.starblog.admin.blog.enums.ArticleStatus;
 import com.ale.starblog.framework.core.query.BaseQuery;
 import com.ale.starblog.framework.core.query.Query;
 import com.ale.starblog.framework.core.query.QueryType;
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 /**
- * 博客查询条件
+ * 文章查询条件
  *
  * @author Ale
  * @version 1.0.0
@@ -20,7 +20,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class BlogQuery extends BaseQuery {
+public class ArticleQuery extends BaseQuery {
 
     /**
      * 分类
@@ -38,7 +38,7 @@ public class BlogQuery extends BaseQuery {
      * 状态
      */
     @Query
-    private BlogStatus status;
+    private ArticleStatus status;
 
     /**
      * 是否置顶

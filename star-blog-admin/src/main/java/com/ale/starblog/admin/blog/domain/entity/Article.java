@@ -1,6 +1,6 @@
 package com.ale.starblog.admin.blog.domain.entity;
 
-import com.ale.starblog.admin.blog.enums.BlogStatus;
+import com.ale.starblog.admin.blog.enums.ArticleStatus;
 import com.ale.starblog.framework.common.domain.entity.BaseAuditEntity;
 import com.ale.starblog.framework.core.oss.OssUpload;
 import com.ale.starblog.framework.core.oss.RichText;
@@ -13,7 +13,7 @@ import lombok.experimental.SuperBuilder;
 import java.time.LocalDateTime;
 
 /**
- * 博客实体类
+ * 文章实体类
  *
  * @author Ale
  * @version 1.0.0
@@ -24,9 +24,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(callSuper = true)
-@TableName("blog")
+@TableName("blog_article")
 @EqualsAndHashCode(callSuper = true)
-public class Blog extends BaseAuditEntity {
+public class Article extends BaseAuditEntity {
 
     /**
      * 分类
@@ -65,7 +65,7 @@ public class Blog extends BaseAuditEntity {
     /**
      * 状态
      */
-    private BlogStatus status;
+    private ArticleStatus status;
 
     /**
      * 是否置顶

@@ -1,6 +1,6 @@
 package com.ale.starblog.admin.blog.domain.pojo.tag;
 
-import com.ale.starblog.framework.core.pojo.BaseModifyDTO;
+import com.ale.starblog.framework.core.pojo.BaseVO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 /**
- * 修改博客标签DTO
+ * 文章标签VO
  *
  * @author Ale
  * @version 1.0.0
@@ -19,7 +19,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class ModifyBlogTagDTO extends BaseModifyDTO {
+public class ArticleTagVO extends BaseVO {
 
     /**
      * 标签名称

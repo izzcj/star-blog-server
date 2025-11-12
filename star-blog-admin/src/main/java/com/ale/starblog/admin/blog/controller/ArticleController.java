@@ -1,11 +1,11 @@
 package com.ale.starblog.admin.blog.controller;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.ale.starblog.admin.blog.domain.entity.Blog;
-import com.ale.starblog.admin.blog.domain.pojo.blog.*;
-import com.ale.starblog.admin.blog.domain.pojo.tag.BlogTagVO;
-import com.ale.starblog.admin.blog.service.IBlogService;
-import com.ale.starblog.admin.blog.service.IBlogTagService;
+import com.ale.starblog.admin.blog.domain.entity.Article;
+import com.ale.starblog.admin.blog.domain.pojo.article.*;
+import com.ale.starblog.admin.blog.domain.pojo.tag.ArticleTagVO;
+import com.ale.starblog.admin.blog.service.IArticleService;
+import com.ale.starblog.admin.blog.service.IArticleTagService;
 import com.ale.starblog.framework.common.domain.JsonPageResult;
 import com.ale.starblog.framework.common.domain.JsonResult;
 import com.ale.starblog.framework.common.exception.ServiceException;
@@ -21,7 +21,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
- * /博客管理/博客管理
+ * /博客管理/文章管理
  *
  * @author Ale
  * @version 1.0.0
@@ -29,31 +29,31 @@ import java.util.stream.Collectors;
  */
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/blog")
-public class BlogController extends BaseController<Blog, IBlogService, BlogVO, BlogBO, CreateBlogDTO, ModifyBlogDTO> {
+@RequestMapping("/blog/article")
+public class ArticleController extends BaseController<Article, IArticleService, ArticleVO, ArticleBO, CreateArticleDTO, ModifyArticleDTO> {
 
     /**
-     * 博客标签关联服务
+     * 文章标签关联服务
      */
-    private final IBlogTagService blogTagService;
+    private final IArticleTagService articleTagService;
 
     /**
-     * 通过id获取博客
+     * 通过id获取文章
      *
-     * @param id 博客id
-     * @return 博客信息
+     * @param id 文章id
+     * @return 文章信息
      */
     @GetMapping("/{id}")
-    public JsonResult<BlogDetailsVO> get(@PathVariable(name = "id") Long id) {
-        Blog blog = Optional.ofNullable(this.service.getById(id))
-            .orElseThrow(() -> new ServiceException("博客不存在"));
-        BlogDetailsVO result = BeanUtil.copyProperties(blog, BlogDetailsVO.class);
+    public JsonResult<ArticleDetailsVO> get(@PathVariable(name = "id") Long id) {
+        Article article = Optional.ofNullable(this.service.getById(id))
+            .orElseThrow(() -> new ServiceException("文章不存在"));
+        ArticleDetailsVO result = BeanUtil.copyProperties(article, ArticleDetailsVO.class);
         GenericTranslationSupport.translate(result);
-        // 获取博客关联的标签
-        List<BlogTagVO> tags = this.blogTagService.getTagsByBlogId(id)
+        // 获取文章关联的标签
+        List<ArticleTagVO> tags = this.articleTagService.getTagsByArticleId(id)
             .stream()
             .map(tagBO ->
-                BlogTagVO.builder()
+                ArticleTagVO.builder()
                     .name(tagBO.getName())
                     .description(tagBO.getDescription())
                     .color(tagBO.getColor())
@@ -65,59 +65,59 @@ public class BlogController extends BaseController<Blog, IBlogService, BlogVO, B
     }
 
     /**
-     * 分页获取博客
+     * 分页获取文章
      *
      * @param pageable 分页参数
      * @param query    查询条件
-     * @return 博客分页数据
+     * @return 文章分页数据
      */
     @GetMapping("/page")
-    public JsonResult<JsonPageResult.PageData<BlogVO>> page(Pageable pageable, BlogQuery query) {
+    public JsonResult<JsonPageResult.PageData<ArticleVO>> page(Pageable pageable, ArticleQuery query) {
         return this.queryPage(pageable, query);
     }
 
     /**
-     * 获取热门博客
+     * 获取热门文章
      *
-     * @return 热门博客
+     * @return 热门文章
      */
     @GetMapping("/hot")
-    public JsonResult<List<BlogVO>> fetchHotBlogs() {
+    public JsonResult<List<ArticleVO>> fetchHotBlogs() {
         return JsonResult.success(
-            this.service.fetchHotBlogs()
+            this.service.fetchHotArticles()
                 .stream()
-                .map(blogBO -> BeanUtil.copyProperties(blogBO, BlogVO.class))
+                .map(articleBO -> BeanUtil.copyProperties(articleBO, ArticleVO.class))
                 .peek(GenericTranslationSupport::translate)
                 .collect(Collectors.toList())
         );
     }
 
     /**
-     * 创建博客
+     * 创建文章
      *
-     * @param createBlogDTO 创建博客dto
+     * @param createArticleDTO 创建文章dto
      * @return Void
      */
     @PostMapping
-    public JsonResult<Void> create(@RequestBody @Validated CreateBlogDTO createBlogDTO) {
-        return this.createEntity(createBlogDTO);
+    public JsonResult<Void> create(@RequestBody @Validated CreateArticleDTO createArticleDTO) {
+        return this.createEntity(createArticleDTO);
     }
 
     /**
-     * 修改博客
+     * 修改文章
      *
-     * @param modifyBlogDTO 修改博客dto
+     * @param modifyArticleDTO 修改文章dto
      * @return Void
      */
     @PutMapping
-    public JsonResult<Void> modify(@RequestBody @Validated ModifyBlogDTO modifyBlogDTO) {
-        return this.modifyEntity(modifyBlogDTO);
+    public JsonResult<Void> modify(@RequestBody @Validated ModifyArticleDTO modifyArticleDTO) {
+        return this.modifyEntity(modifyArticleDTO);
     }
 
     /**
-     * 删除博客
+     * 删除文章
      *
-     * @param id 博客id
+     * @param id 文章id
      * @return Void
      */
     @DeleteMapping("/{id}")
@@ -126,9 +126,9 @@ public class BlogController extends BaseController<Blog, IBlogService, BlogVO, B
     }
 
     /**
-     * 增加博客浏览量
+     * 增加文章浏览量
      *
-     * @param id 博客id
+     * @param id 文章id
      * @return Void
      */
     @PutMapping("/{id}/view-count")

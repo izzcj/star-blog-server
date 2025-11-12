@@ -1,7 +1,7 @@
-package com.ale.starblog.admin.blog.domain.pojo.blog;
+package com.ale.starblog.admin.blog.domain.pojo.article;
 
-import com.ale.starblog.admin.blog.domain.pojo.tag.BlogTagVO;
-import com.ale.starblog.admin.blog.enums.BlogStatus;
+import com.ale.starblog.admin.blog.domain.pojo.tag.ArticleTagVO;
+import com.ale.starblog.admin.blog.enums.ArticleStatus;
 import com.ale.starblog.admin.common.constants.TranslationConstants;
 import com.ale.starblog.framework.core.pojo.BaseVO;
 import com.ale.starblog.framework.core.translation.TranslationField;
@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * 博客VO
+ * 文章VO
  *
  * @author Ale
  * @version 1.0.0
@@ -26,7 +26,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class BlogVO extends BaseVO {
+public class ArticleVO extends BaseVO {
 
     /**
      * 分类
@@ -62,7 +62,7 @@ public class BlogVO extends BaseVO {
     /**
      * 状态
      */
-    private BlogStatus status;
+    private ArticleStatus status;
 
     /**
      * 是否置顶
@@ -88,5 +88,5 @@ public class BlogVO extends BaseVO {
     /**
      * 标签列表
      */
-    private List<BlogTagVO> tags;
+    private List<ArticleTagVO> tags;
 }

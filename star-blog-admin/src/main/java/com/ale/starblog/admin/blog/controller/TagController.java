@@ -24,10 +24,10 @@ import org.springframework.web.bind.annotation.*;
 public class TagController extends BaseController<Tag, ITagService, TagVO, TagBO, CreateTagDTO, ModifyTagDTO> {
 
     /**
-     * 通过id获取博客标签
+     * 通过id获取标签
      *
-     * @param id 博客标签id
-     * @return 博客标签信息
+     * @param id 标签id
+     * @return 标签信息
      */
     @GetMapping("/{id}")
     public JsonResult<TagVO> get(@PathVariable(name = "id") Long id) {
@@ -35,11 +35,11 @@ public class TagController extends BaseController<Tag, ITagService, TagVO, TagBO
     }
 
     /**
-     * 分页获取博客标签
+     * 分页获取标签
      *
      * @param pageable 分页参数
      * @param query    查询条件
-     * @return 博客标签分页数据
+     * @return 标签分页数据
      */
     @GetMapping("/page")
     public JsonResult<JsonPageResult.PageData<TagVO>> page(Pageable pageable, TagQuery query) {
@@ -47,9 +47,9 @@ public class TagController extends BaseController<Tag, ITagService, TagVO, TagBO
     }
 
     /**
-     * 创建博客标签
+     * 创建标签
      *
-     * @param createTagDTO 创建博客标签dto
+     * @param createTagDTO 创建标签dto
      * @return Void
      */
     @PostMapping
@@ -58,9 +58,9 @@ public class TagController extends BaseController<Tag, ITagService, TagVO, TagBO
     }
 
     /**
-     * 修改博客标签
+     * 修改标签
      *
-     * @param modifyTagDTO 修改博客标签dto
+     * @param modifyTagDTO 修改标签dto
      * @return Void
      */
     @PutMapping
@@ -69,9 +69,9 @@ public class TagController extends BaseController<Tag, ITagService, TagVO, TagBO
     }
 
     /**
-     * 删除博客标签
+     * 删除标签
      *
-     * @param id 博客标签id
+     * @param id 标签id
      * @return Void
      */
     @DeleteMapping("/{id}")

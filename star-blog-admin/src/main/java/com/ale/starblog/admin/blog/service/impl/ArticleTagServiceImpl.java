@@ -1,9 +1,9 @@
 package com.ale.starblog.admin.blog.service.impl;
 
-import com.ale.starblog.admin.blog.domain.entity.BlogTag;
+import com.ale.starblog.admin.blog.domain.entity.ArticleTag;
 import com.ale.starblog.admin.blog.domain.pojo.tag.TagBO;
-import com.ale.starblog.admin.blog.mapper.BlogTagMapper;
-import com.ale.starblog.admin.blog.service.IBlogTagService;
+import com.ale.starblog.admin.blog.mapper.ArticleTagMapper;
+import com.ale.starblog.admin.blog.service.IArticleTagService;
 import com.ale.starblog.admin.blog.service.ITagService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * 博客标签关联服务实现类
+ * 文章标签关联服务实现类
  *
  * @author Ale
  * @version 1.0.0
@@ -23,26 +23,26 @@ import java.util.stream.Collectors;
  */
 @Service
 @RequiredArgsConstructor
-public class BlogTagServiceImpl extends ServiceImpl<BlogTagMapper, BlogTag> implements IBlogTagService {
+public class ArticleTagServiceImpl extends ServiceImpl<ArticleTagMapper, ArticleTag> implements IArticleTagService {
 
     /**
-     * 博客标签服务
+     * 标签服务
      */
-    private final ITagService blogTagService;
+    private final ITagService tagService;
 
     @Override
-    public List<TagBO> getTagsByBlogId(Long blogId) {
-        // 查询博客关联的标签ID列表
+    public List<TagBO> getTagsByArticleId(Long articleId) {
+        // 查询文章关联的标签ID列表
         List<Long> tagIds = this.lambdaQuery()
-            .eq(BlogTag::getBlogId, blogId)
+            .eq(ArticleTag::getArticleId, articleId)
             .list()
             .stream()
-            .map(BlogTag::getTagId)
+            .map(ArticleTag::getTagId)
             .collect(Collectors.toList());
 
         // 根据标签ID列表查询标签信息
         if (!tagIds.isEmpty()) {
-            return blogTagService.listByIds(tagIds)
+            return this.tagService.listByIds(tagIds)
                     .stream()
                     .map(tag ->
                         TagBO.builder()
@@ -60,17 +60,17 @@ public class BlogTagServiceImpl extends ServiceImpl<BlogTagMapper, BlogTag> impl
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void updateBlogTags(Long blogId, List<Long> tagIds) {
+    public void updateArticleTags(Long articleId, List<Long> tagIds) {
         // 删除原有的关联关系
-        this.remove(new LambdaQueryWrapper<BlogTag>()
-                .eq(BlogTag::getBlogId, blogId));
+        this.remove(new LambdaQueryWrapper<ArticleTag>()
+                .eq(ArticleTag::getArticleId, articleId));
 
         // 添加新的关联关系
         if (tagIds != null && !tagIds.isEmpty()) {
-            List<BlogTag> relations = tagIds.stream()
+            List<ArticleTag> relations = tagIds.stream()
                     .map(tagId ->
-                        BlogTag.builder()
-                            .blogId(blogId)
+                        ArticleTag.builder()
+                            .articleId(articleId)
                             .tagId(tagId)
                             .build()
                     )

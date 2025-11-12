@@ -1,6 +1,6 @@
-package com.ale.starblog.admin.blog.domain.pojo.blog;
+package com.ale.starblog.admin.blog.domain.pojo.article;
 
-import com.ale.starblog.admin.blog.enums.BlogStatus;
+import com.ale.starblog.admin.blog.enums.ArticleStatus;
 import com.ale.starblog.framework.core.pojo.BaseModifyDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,7 +11,7 @@ import lombok.experimental.SuperBuilder;
 import java.util.List;
 
 /**
- * 修改博客DTO
+ * 修改文章DTO
  *
  * @author Ale
  * @version 1.0.0
@@ -22,7 +22,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class ModifyBlogDTO extends BaseModifyDTO {
+public class ModifyArticleDTO extends BaseModifyDTO {
 
     /**
      * 分类
@@ -52,7 +52,7 @@ public class ModifyBlogDTO extends BaseModifyDTO {
     /**
      * 状态
      */
-    private BlogStatus status;
+    private ArticleStatus status;
 
     /**
      * 是否置顶

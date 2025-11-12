@@ -4,14 +4,14 @@ import com.ale.starblog.framework.common.enumeration.BaseEnum;
 import lombok.Getter;
 
 /**
- * 博客状态枚举
+ * 文章状态枚举
  *
  * @author Ale
  * @version 1.0.0
  * @since 2025/8/12
  */
 @Getter
-public enum BlogStatus implements BaseEnum<String> {
+public enum ArticleStatus implements BaseEnum<String> {
 
     /**
      * 草稿
@@ -38,7 +38,7 @@ public enum BlogStatus implements BaseEnum<String> {
      */
     PUBLISHED("published", "已发布");
 
-    BlogStatus(String value, String msg) {
+    ArticleStatus(String value, String msg) {
         this.init(value, msg);
     }
 }

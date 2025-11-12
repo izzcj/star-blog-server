@@ -17,7 +17,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(callSuper = true)
-@TableName("tag")
+@TableName("blog_tag")
 @EqualsAndHashCode(callSuper = true)
 public class Tag extends BaseAuditEntity {
 

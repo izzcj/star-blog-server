@@ -1,18 +1,18 @@
-package com.ale.starblog.admin.blog.domain.pojo.blog;
+package com.ale.starblog.admin.blog.domain.pojo.article;
 
-import com.ale.starblog.admin.blog.enums.BlogStatus;
-import com.ale.starblog.framework.core.pojo.BaseCreateDTO;
-import jakarta.validation.constraints.NotBlank;
+import com.ale.starblog.admin.blog.enums.ArticleStatus;
+import com.ale.starblog.framework.core.pojo.BaseBO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * 创建博客DTO
+ * 文章BO
  *
  * @author Ale
  * @version 1.0.0
@@ -23,24 +23,26 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class CreateBlogDTO extends BaseCreateDTO {
+public class ArticleBO extends BaseBO {
+
+    /**
+     * ID
+     */
+    private Long id;
 
     /**
      * 分类
      */
-    @NotBlank(message = "分类不能为空")
     private String type;
 
     /**
      * 标题
      */
-    @NotBlank(message = "标题不能为空")
     private String title;
 
     /**
      * 内容
      */
-    @NotBlank(message = "内容不能为空")
     private String content;
 
     /**
@@ -54,14 +56,29 @@ public class CreateBlogDTO extends BaseCreateDTO {
     private String coverImage;
 
     /**
+     * 浏览量
+     */
+    private Long viewCount;
+
+    /**
      * 状态
      */
-    private BlogStatus status;
+    private ArticleStatus status;
 
     /**
      * 是否置顶
      */
     private Boolean top;
+
+    /**
+     * 发布时间
+     */
+    private LocalDateTime publishTime;
+
+    /**
+     * 创建人
+     */
+    private Long createBy;
 
     /**
      * 标签ID列表

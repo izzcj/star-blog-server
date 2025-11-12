@@ -6,7 +6,7 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 /**
- * 博客标签实体类
+ * 文章标签实体类
  *
  * @author Ale
  * @version 1.0.0
@@ -17,14 +17,14 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(callSuper = true)
-@TableName("blog_tag")
+@TableName("blog_article_tag")
 @EqualsAndHashCode(callSuper = true)
-public class BlogTag extends BaseEntity {
+public class ArticleTag extends BaseEntity {
 
     /**
-     * 博客ID
+     * 文章ID
      */
-    private Long blogId;
+    private Long articleId;
 
     /**
      * 标签ID
