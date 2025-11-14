@@ -1,7 +1,6 @@
 package com.ale.starblog.admin.system.domain.entity;
 
 import com.ale.starblog.framework.common.domain.entity.BaseAuditEntity;
-import com.ale.starblog.framework.common.enumeration.SwitchStatus;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -57,8 +56,8 @@ public class DictData extends BaseAuditEntity {
     private Integer sort;
 
     /**
-     * 状态
+     * 是否启用
      */
-    private SwitchStatus state;
+    private Boolean enabled;
 
 }

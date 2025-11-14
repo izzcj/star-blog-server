@@ -1,6 +1,5 @@
 package com.ale.starblog.admin.system.domain.pojo.dict.data;
 
-import com.ale.starblog.framework.common.enumeration.SwitchStatus;
 import com.ale.starblog.framework.core.pojo.BaseVO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -57,8 +56,8 @@ public class DictDataVO extends BaseVO {
     private Integer sort;
 
     /**
-     * 状态
+     * 是否启用
      */
-    private SwitchStatus state;
+    private Boolean enabled;
 
 }

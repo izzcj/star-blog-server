@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
  * @since 2025/3/25
  */
 @Component
-@SuppressWarnings({"unchecked"})
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class EnumJsonDeserializerModule extends SimpleModule implements EnumInitializer {
 
     @Override

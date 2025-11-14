@@ -15,6 +15,9 @@ import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 
+import javax.sql.DataSource;
+import java.sql.SQLException;
+
 /**
  * Mybatis-plus拓展自动配置
  *
@@ -29,12 +32,19 @@ public class MybatisPlusExtensionAutoConfiguration {
     /**
      * 分页插件
      *
+     * @param dataSource 数据源
      * @return MybatisPlusInterceptor
      */
     @Bean
-    public MybatisPlusInterceptor mybatisPlusInterceptor() {
+    public MybatisPlusInterceptor mybatisPlusInterceptor(DataSource dataSource) throws SQLException {
         MybatisPlusInterceptor mybatisPlusInterceptor = new MybatisPlusInterceptor();
-        mybatisPlusInterceptor.addInnerInterceptor(new PaginationInnerInterceptor(DbType.MYSQL));
+        DbType dbType = DbType.getDbType(
+            dataSource.getConnection()
+                .getMetaData()
+                .getDatabaseProductName()
+                .toLowerCase()
+        );
+        mybatisPlusInterceptor.addInnerInterceptor(new PaginationInnerInterceptor(dbType));
         return mybatisPlusInterceptor;
     }
 
