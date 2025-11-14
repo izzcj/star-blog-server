@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
  * @version 1.0.0 2025/5/30 14:45
  */
 @RestController
-@RequestMapping("/system/dict/data")
+@RequestMapping("/system/dict-data")
 public class DictDataController extends BaseController<DictData, IDictDataService, DictDataVO, DictDataBO, CreateDictDataDTO, ModifyDictDataDTO> {
 
     /**
@@ -69,7 +69,7 @@ public class DictDataController extends BaseController<DictData, IDictDataServic
         List<DictDataBO> result = this.service.queryList(query);
         return JsonResult.success(
             result.stream()
-                .map(dictDataBO -> Option.of(dictDataBO.getDictLabel(), dictDataBO.getDictValue(), dictDataBO.getDictType()))
+                .map(dictDataBO -> Option.of(dictDataBO.getDictLabel(), dictDataBO.getDictValue(), dictDataBO.getDictKey()))
                 .collect(Collectors.toList())
         );
     }

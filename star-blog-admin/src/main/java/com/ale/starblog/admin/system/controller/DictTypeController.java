@@ -19,7 +19,7 @@ import java.util.List;
  * @version 1.0.0 2025/5/29 11:13
  */
 @RestController
-@RequestMapping("/system/dict/type")
+@RequestMapping("/system/dict-type")
 public class DictTypeController extends BaseController<DictType, IDictTypeService, DictTypeVO, DictTypeBO, CreateDictTypeDTO, ModifyDictTypeDTO> {
 
     /**
@@ -94,7 +94,7 @@ public class DictTypeController extends BaseController<DictType, IDictTypeServic
      *
      * @return Void
      */
-    @PostMapping("/refresh/cache")
+    @PostMapping("/refresh-cache")
     public JsonResult<Void> refreshCache() {
         this.service.refreshCache();
         return JsonResult.success();

@@ -27,9 +27,9 @@ public class ModifyDictDataDTO extends BaseModifyDTO {
     private String dictLabel;
 
     /**
-     * 字典键值
+     * 字典key
      */
-    private String dictValue;
+    private String dictKey;
 
     /**
      * 样式属性（其他样式扩展）

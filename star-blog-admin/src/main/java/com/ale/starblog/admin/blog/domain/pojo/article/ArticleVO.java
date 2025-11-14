@@ -31,7 +31,7 @@ public class ArticleVO extends BaseVO {
     /**
      * 分类
      */
-    @TranslationField(type = TranslationConstants.TRANSLATION_DICT, params = "type=blog_type")
+    @TranslationField(type = TranslationConstants.TRANSLATION_DICT, params = "type=article-type")
     private String type;
 
     /**

@@ -26,8 +26,13 @@ public class DictTypeBO extends BaseBO {
     private String dictName;
 
     /**
-     * 字典类型
+     * 字典key
      */
-    private String dictType;
+    private String dictKey;
+
+    /**
+     * 排序
+     */
+    private Integer sort;
 
 }

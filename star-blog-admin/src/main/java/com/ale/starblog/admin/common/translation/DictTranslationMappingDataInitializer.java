@@ -47,7 +47,7 @@ public class DictTranslationMappingDataInitializer implements GenericTranslation
             return Collections.emptyMap();
         }
         List<DictData> dictDataList = this.dictDataService.lambdaQuery()
-            .eq(DictData::getDictType, dictType)
+            .eq(DictData::getDictKey, dictType)
             .list();
         return dictDataList.stream()
             .collect(Collectors.toMap(DictData::getDictValue, DictData::getDictLabel));
@@ -60,7 +60,7 @@ public class DictTranslationMappingDataInitializer implements GenericTranslation
             return Collections.emptyList();
         }
         Map<String, List<DictData>> dictDataGroupMap = allDictData.stream()
-            .collect(Collectors.groupingBy(DictData::getDictType));
+            .collect(Collectors.groupingBy(DictData::getDictKey));
         List<GenericTranslationMappingData> result = Lists.newArrayListWithCapacity(dictDataGroupMap.size());
         dictDataGroupMap.forEach((dictKey, dictDataList) -> result.add(
             GenericTranslationMappingData.builder()

@@ -26,8 +26,8 @@ public class VenusCoreConventionalConfigProvider implements ConventionalConfigPr
         configMap.put("spring.mvc.format.time", "HH:mm:ss");
         configMap.put("spring.mvc.servlet.load-on-startup", 1);
         configMap.put("spring.mvc.throw-exception-if-no-handler-found", true);
-        configMap.put("spring.data.web.pageable.page-parameter", "pageNum");
-        configMap.put("spring.data.web.pageable.size-parameter", "pageSize");
+        configMap.put("spring.data.web.pageable.page-parameter", "page");
+        configMap.put("spring.data.web.pageable.size-parameter", "size");
         configMap.put("spring.servlet.multipart.enabled", true);
         configMap.put("spring.servlet.multipart.max-file-size", "512MB");
         configMap.put("spring.servlet.multipart.max-request-size", "512MB");

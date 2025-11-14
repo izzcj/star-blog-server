@@ -27,9 +27,14 @@ public class DictDataQuery extends BaseQuery {
     private String dickName;
 
     /**
-     * 字典类型
+     * 字典key
      */
     @Query
-    private String dictType;
+    private String dictKey;
 
+    /**
+     * 排序字段
+     */
+    @Query(type = QueryType.SORT)
+    private String sort = "sort";
 }

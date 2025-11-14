@@ -32,9 +32,9 @@ public class DictDataBO extends BaseBO {
     private String dictValue;
 
     /**
-     * 字典类型
+     * 字典key
      */
-    private String dictType;
+    private String dictKey;
 
     /**
      * 样式属性（其他样式扩展）

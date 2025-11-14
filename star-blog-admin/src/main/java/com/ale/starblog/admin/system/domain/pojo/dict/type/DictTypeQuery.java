@@ -2,6 +2,7 @@ package com.ale.starblog.admin.system.domain.pojo.dict.type;
 
 import com.ale.starblog.framework.core.query.BaseQuery;
 import com.ale.starblog.framework.core.query.Query;
+import com.ale.starblog.framework.core.query.QueryType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -31,4 +32,9 @@ public class DictTypeQuery extends BaseQuery {
     @Query
     private String dictType;
 
+    /**
+     * 排序
+     */
+    @Query(type = QueryType.SORT)
+    private String sort = "sort";
 }
