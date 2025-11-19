@@ -31,7 +31,7 @@ public class DictDataController extends BaseController<DictData, IDictDataServic
      * @return 字典数据VO
      */
     @GetMapping("/{id}")
-    public JsonResult<DictDataVO> get(@PathVariable("id") Long id) {
+    public JsonResult<DictDataVO> fetchDetails(@PathVariable("id") Long id) {
         return this.queryById(id);
     }
 
@@ -43,7 +43,7 @@ public class DictDataController extends BaseController<DictData, IDictDataServic
      * @return 字典数据分页数据
      */
     @GetMapping("/page")
-    public JsonResult<JsonPageResult.PageData<DictDataVO>> page(Pageable pageable, DictDataQuery query) {
+    public JsonResult<JsonPageResult.PageData<DictDataVO>> fetchPage(Pageable pageable, DictDataQuery query) {
         return this.queryPage(pageable, query);
     }
 
@@ -54,7 +54,7 @@ public class DictDataController extends BaseController<DictData, IDictDataServic
      * @return 字典数据列表
      */
     @GetMapping("/list")
-    public JsonResult<List<DictDataVO>> list(DictDataQuery query) {
+    public JsonResult<List<DictDataVO>> fetchList(DictDataQuery query) {
         return this.queryList(query);
     }
 
@@ -65,7 +65,7 @@ public class DictDataController extends BaseController<DictData, IDictDataServic
      * @return 字典数据选项
      */
     @GetMapping("/options")
-    public JsonResult<List<Option>> options(DictDataQuery query) {
+    public JsonResult<List<Option>> fetchOptions(DictDataQuery query) {
         List<DictDataBO> result = this.service.queryList(query);
         return JsonResult.success(
             result.stream()
@@ -81,7 +81,7 @@ public class DictDataController extends BaseController<DictData, IDictDataServic
      * @return Void
      */
     @PostMapping
-    public JsonResult<Void> add(@RequestBody @Validated CreateDictDataDTO createDictDataDTO) {
+    public JsonResult<Void> create(@RequestBody @Validated CreateDictDataDTO createDictDataDTO) {
         return this.createEntity(createDictDataDTO);
     }
 
@@ -92,7 +92,7 @@ public class DictDataController extends BaseController<DictData, IDictDataServic
      * @return Void
      */
     @PutMapping
-    public JsonResult<Void> edit(@RequestBody @Validated ModifyDictDataDTO modifyDictDataDTO) {
+    public JsonResult<Void> modify(@RequestBody @Validated ModifyDictDataDTO modifyDictDataDTO) {
         return this.modifyEntity(modifyDictDataDTO);
     }
 

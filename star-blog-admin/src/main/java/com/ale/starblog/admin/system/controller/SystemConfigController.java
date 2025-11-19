@@ -28,8 +28,19 @@ public class SystemConfigController extends BaseController<SystemConfig, ISystem
      * @return 系统配置VO
      */
     @GetMapping("/{id}")
-    public JsonResult<SystemConfigVO> get(@PathVariable("id") Long id) {
+    public JsonResult<SystemConfigVO> fetchDetails(@PathVariable("id") Long id) {
         return this.queryById(id);
+    }
+
+    /**
+     * 获取系统配置
+     *
+     * @param query 查询条件
+     * @return 系统配置VO
+     */
+    @GetMapping
+    public JsonResult<SystemConfigVO> fetchOne(SystemConfigQuery query) {
+        return this.queryOne(query);
     }
 
     /**
@@ -40,7 +51,7 @@ public class SystemConfigController extends BaseController<SystemConfig, ISystem
      * @return 系统配置分页数据
      */
     @GetMapping("/page")
-    public JsonResult<JsonPageResult.PageData<SystemConfigVO>> page(Pageable pageable, SystemConfigQuery query) {
+    public JsonResult<JsonPageResult.PageData<SystemConfigVO>> fetchPage(Pageable pageable, SystemConfigQuery query) {
         return this.queryPage(pageable, query);
     }
 
@@ -51,7 +62,7 @@ public class SystemConfigController extends BaseController<SystemConfig, ISystem
      * @return 系统配置列表
      */
     @GetMapping("/list")
-    public JsonResult<List<SystemConfigVO>> list(SystemConfigQuery query) {
+    public JsonResult<List<SystemConfigVO>> fetchList(SystemConfigQuery query) {
         return this.queryList(query);
     }
 

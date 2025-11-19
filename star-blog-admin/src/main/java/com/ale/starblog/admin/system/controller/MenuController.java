@@ -30,7 +30,7 @@ public class MenuController extends BaseController<Menu, IMenuService, MenuVO, M
      * @return 结果
      */
     @GetMapping("/{id}")
-    public JsonResult<MenuVO> fetchDetail(@PathVariable(name = "id") Long id) {
+    public JsonResult<MenuVO> fetchDetails(@PathVariable(name = "id") Long id) {
         return this.queryById(id);
     }
 

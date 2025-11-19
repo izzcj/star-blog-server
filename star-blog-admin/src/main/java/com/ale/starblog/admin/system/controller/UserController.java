@@ -44,7 +44,7 @@ public class UserController extends BaseController<User, IUserService, UserVO, U
      * @return 用户信息
      */
     @GetMapping("/{id}")
-    public JsonResult<UserVO> get(@PathVariable(name = "id") Long id) {
+    public JsonResult<UserVO> fetchDetails(@PathVariable(name = "id") Long id) {
         return this.queryById(id);
     }
 
@@ -55,7 +55,7 @@ public class UserController extends BaseController<User, IUserService, UserVO, U
      * @return 结果
      */
     @GetMapping("/role/{id}")
-    public JsonResult<List<Long>> getRoleIdsByUserId(@PathVariable(name = "id") Long id) {
+    public JsonResult<List<Long>> fetchRoleIdsByUserId(@PathVariable(name = "id") Long id) {
         if (id == null) {
             return JsonResult.fail("id不能为空");
         }
@@ -74,7 +74,7 @@ public class UserController extends BaseController<User, IUserService, UserVO, U
      * @return 用户分页数据
      */
     @GetMapping("/allocated")
-    public JsonResult<JsonPageResult.PageData<UserVO>> getAllocatedUser(Pageable pageable, UserQuery query) {
+    public JsonResult<JsonPageResult.PageData<UserVO>> fetchAllocatedUser(Pageable pageable, UserQuery query) {
         if (query.getRoleId() == null) {
             return JsonResult.fail("角色ID不能为空");
         }
@@ -95,7 +95,7 @@ public class UserController extends BaseController<User, IUserService, UserVO, U
      * @return 用户分页数据
      */
     @GetMapping("/unallocated")
-    public JsonResult<JsonPageResult.PageData<UserVO>> getUnallocatedUser(Pageable pageable, UserQuery query) {
+    public JsonResult<JsonPageResult.PageData<UserVO>> fetchUnallocatedUser(Pageable pageable, UserQuery query) {
         if (query.getRoleId() == null) {
             return JsonResult.fail("角色ID不能为空");
         }
@@ -140,7 +140,7 @@ public class UserController extends BaseController<User, IUserService, UserVO, U
      * @return 用户分页数据
      */
     @GetMapping("/page")
-    public JsonResult<JsonPageResult.PageData<UserVO>> page(Pageable pageable, UserQuery query) {
+    public JsonResult<JsonPageResult.PageData<UserVO>> fetchPage(Pageable pageable, UserQuery query) {
         return this.queryPage(pageable, query);
     }
 

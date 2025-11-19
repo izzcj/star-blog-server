@@ -45,7 +45,7 @@ public class UserProfileController {
      * @return 个人信息
      */
     @GetMapping
-    public JsonResult<UserProfileVO> profile() {
+    public JsonResult<UserProfileVO> fetchProfile() {
         Long userId = AuthenticationUtils.getLoginUserId();
         User user = this.userService.getById(userId);
         if (user == null) {
@@ -68,7 +68,7 @@ public class UserProfileController {
      * @return 站长信息
      */
     @GetMapping("/master")
-    public JsonResult<UserProfileVO> masterInfo() {
+    public JsonResult<UserProfileVO> fetchMasterInfo() {
         return JsonResult.success(BeanUtil.copyProperties(this.userService.getById(SystemConstants.MASTER_USER_ID), UserProfileVO.class));
     }
 }

@@ -39,7 +39,7 @@ public class RoleController extends BaseController<Role, IRoleService, RoleVO, R
      * @return 结果
      */
     @GetMapping("/{id}")
-    public JsonResult<RoleVO> get(@PathVariable(name = "id") Long id) {
+    public JsonResult<RoleVO> fetchDetails(@PathVariable(name = "id") Long id) {
         return this.queryById(id);
     }
 
@@ -51,7 +51,7 @@ public class RoleController extends BaseController<Role, IRoleService, RoleVO, R
      * @return 结果
      */
     @GetMapping("/page")
-    public JsonResult<JsonPageResult.PageData<RoleVO>> page(Pageable pageable, RoleQuery query) {
+    public JsonResult<JsonPageResult.PageData<RoleVO>> fetchPage(Pageable pageable, RoleQuery query) {
         return this.queryPage(pageable, query);
     }
 
@@ -62,7 +62,7 @@ public class RoleController extends BaseController<Role, IRoleService, RoleVO, R
      * @return 结果
      */
     @GetMapping("/list")
-    public JsonResult<List<RoleVO>> list(RoleQuery query) {
+    public JsonResult<List<RoleVO>> fetchList(RoleQuery query) {
         return this.queryList(query);
     }
 

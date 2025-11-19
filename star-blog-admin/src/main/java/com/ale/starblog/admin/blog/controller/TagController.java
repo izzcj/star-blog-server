@@ -30,7 +30,7 @@ public class TagController extends BaseController<Tag, ITagService, TagVO, TagBO
      * @return 标签信息
      */
     @GetMapping("/{id}")
-    public JsonResult<TagVO> get(@PathVariable(name = "id") Long id) {
+    public JsonResult<TagVO> fetchDetails(@PathVariable(name = "id") Long id) {
         return this.queryById(id);
     }
 
@@ -42,7 +42,7 @@ public class TagController extends BaseController<Tag, ITagService, TagVO, TagBO
      * @return 标签分页数据
      */
     @GetMapping("/page")
-    public JsonResult<JsonPageResult.PageData<TagVO>> page(Pageable pageable, TagQuery query) {
+    public JsonResult<JsonPageResult.PageData<TagVO>> fetchPage(Pageable pageable, TagQuery query) {
         return this.queryPage(pageable, query);
     }
 

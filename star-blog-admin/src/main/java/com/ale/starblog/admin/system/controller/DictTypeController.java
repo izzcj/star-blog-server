@@ -29,7 +29,7 @@ public class DictTypeController extends BaseController<DictType, IDictTypeServic
      * @return 字典类型VO
      */
     @GetMapping("/{id}")
-    public JsonResult<DictTypeVO> get(@PathVariable("id") Long id) {
+    public JsonResult<DictTypeVO> fetchDetails(@PathVariable("id") Long id) {
         return this.queryById(id);
     }
 
@@ -41,7 +41,7 @@ public class DictTypeController extends BaseController<DictType, IDictTypeServic
      * @return 字典类型分页数据
      */
     @GetMapping("/page")
-    public JsonResult<JsonPageResult.PageData<DictTypeVO>> page(Pageable pageable, DictTypeQuery query) {
+    public JsonResult<JsonPageResult.PageData<DictTypeVO>> fetchPage(Pageable pageable, DictTypeQuery query) {
         return this.queryPage(pageable, query);
     }
 
@@ -52,7 +52,7 @@ public class DictTypeController extends BaseController<DictType, IDictTypeServic
      * @return 字典类型列表
      */
     @GetMapping("/list")
-    public JsonResult<List<DictTypeVO>> list(DictTypeQuery query) {
+    public JsonResult<List<DictTypeVO>> fetchList(DictTypeQuery query) {
         return this.queryList(query);
     }
 

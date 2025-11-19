@@ -44,7 +44,7 @@ public class ArticleController extends BaseController<Article, IArticleService, 
      * @return 文章信息
      */
     @GetMapping("/{id}")
-    public JsonResult<ArticleDetailsVO> get(@PathVariable(name = "id") Long id) {
+    public JsonResult<ArticleDetailsVO> fetchDetails(@PathVariable(name = "id") Long id) {
         Article article = Optional.ofNullable(this.service.getById(id))
             .orElseThrow(() -> new ServiceException("文章不存在"));
         ArticleDetailsVO result = BeanUtil.copyProperties(article, ArticleDetailsVO.class);
@@ -72,7 +72,7 @@ public class ArticleController extends BaseController<Article, IArticleService, 
      * @return 文章分页数据
      */
     @GetMapping("/page")
-    public JsonResult<JsonPageResult.PageData<ArticleVO>> page(Pageable pageable, ArticleQuery query) {
+    public JsonResult<JsonPageResult.PageData<ArticleVO>> fetchPage(Pageable pageable, ArticleQuery query) {
         return this.queryPage(pageable, query);
     }
 
