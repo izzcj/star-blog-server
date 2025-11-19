@@ -1,5 +1,6 @@
 package com.ale.starblog.admin.system.controller;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.ale.starblog.admin.system.domain.entity.Menu;
 import com.ale.starblog.admin.system.domain.pojo.menu.*;
 import com.ale.starblog.admin.system.service.IMenuService;
@@ -9,7 +10,6 @@ import com.ale.starblog.framework.core.controller.BaseController;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -30,43 +30,20 @@ public class MenuController extends BaseController<Menu, IMenuService, MenuVO, M
      * @return 结果
      */
     @GetMapping("/{id}")
-    public JsonResult<MenuVO> get(@PathVariable(name = "id") Long id) {
+    public JsonResult<MenuVO> fetchDetail(@PathVariable(name = "id") Long id) {
         return this.queryById(id);
     }
 
     /**
-     * 获取菜单列表
-     *
-     * @param query 查询条件
-     * @return 结果
-     */
-    @GetMapping("/list")
-    public JsonResult<List<MenuVO>> list(MenuQuery query) {
-        return this.queryList(query);
-    }
-
-    /**
-     * 获取菜单下拉树列表
+     * 获取菜单树
      *
      * @return 菜单树
      */
-    @GetMapping("/tree-select")
-    public JsonResult<List<MenuBO>> treeSelect() {
-        return JsonResult.success(this.service.queryMenuTreeByUserId(SecurityUtils.getLoginUserId()));
-    }
-
-    /**
-     * 获取角色对应的菜单树
-     *
-     * @param roleId 角色id
-     * @return 菜单选择树
-     */
-    @GetMapping("/role/tree-select/{roleId}")
-    public JsonResult<?> getRoleMenuTreeSelect(@PathVariable("roleId") Long roleId) {
-        HashMap<String, Object> result = new HashMap<>(2);
-        result.put("checkedKeys", this.service.queryMenuIdsByRoleId(roleId));
-        result.put("menus", this.service.queryMenuTreeByUserId(SecurityUtils.getLoginUserId()));
-        return JsonResult.success(result);
+    @GetMapping("/tree")
+    public JsonResult<List<MenuVO>> fetchMenuTree() {
+        return JsonResult.success(
+            BeanUtil.copyToList(this.service.queryMenuTreeByUserId(SecurityUtils.getLoginUserId()), MenuVO.class)
+        );
     }
 
     /**
@@ -75,9 +52,11 @@ public class MenuController extends BaseController<Menu, IMenuService, MenuVO, M
      * @return 路由树
      */
     @GetMapping("/routers")
-    public JsonResult<List<MenuRouterVO>> getRouters() {
+    public JsonResult<List<MenuRouterVO>> fetchRouters() {
         List<MenuBO> menuBOList = this.service.queryMenuTreeByUserId(SecurityUtils.getLoginUserId());
-        return JsonResult.success(this.service.buildMenuRouter(menuBOList));
+        return JsonResult.success(
+            BeanUtil.copyToList(menuBOList, MenuRouterVO.class)
+        );
     }
 
     /**

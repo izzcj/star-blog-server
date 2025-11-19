@@ -1,22 +1,16 @@
 package com.ale.starblog.admin.system.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.core.util.StrUtil;
 import com.ale.starblog.admin.system.domain.entity.Menu;
 import com.ale.starblog.admin.system.domain.entity.RoleMenu;
 import com.ale.starblog.admin.system.domain.pojo.menu.*;
 import com.ale.starblog.admin.system.domain.pojo.role.RoleBO;
-import com.ale.starblog.admin.system.enums.MenuType;
 import com.ale.starblog.admin.system.mapper.MenuMapper;
 import com.ale.starblog.admin.system.service.IMenuService;
 import com.ale.starblog.admin.system.service.IRoleMenuService;
 import com.ale.starblog.admin.system.service.IUserRoleService;
-import com.ale.starblog.admin.system.support.MenuRouterHelper;
-import com.ale.starblog.framework.common.enumeration.SwitchStatus;
 import com.ale.starblog.framework.common.utils.TreeUtils;
 import com.ale.starblog.framework.core.service.AbstractCrudServiceImpl;
-import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -46,28 +40,6 @@ public class MenuServiceImpl extends AbstractCrudServiceImpl<MenuMapper, Menu, M
     private final IRoleMenuService roleMenuService;
 
     @Override
-    public List<Long> queryMenuIdsByRoleId(Long roleId) {
-        if (roleId == null) {
-            return Collections.emptyList();
-        }
-        if (this.userRoleService.judgeUserIsAdmin(roleId)) {
-            List<Menu> menuList = this.lambdaQuery()
-                .select(Menu::getId)
-                .eq(Menu::getStatus, SwitchStatus.ENABLE)
-                .list();
-            return menuList.stream()
-                .map(Menu::getId)
-                .collect(Collectors.toList());
-        }
-        return this.roleMenuService.lambdaQuery()
-            .eq(RoleMenu::getRoleId, roleId)
-            .list()
-            .stream()
-            .map(RoleMenu::getMenuId)
-            .toList();
-    }
-
-    @Override
     public List<MenuBO> queryMenuTreeByUserId(Long userId) {
         if (userId == null) {
             return null;
@@ -77,11 +49,8 @@ public class MenuServiceImpl extends AbstractCrudServiceImpl<MenuMapper, Menu, M
         boolean isAdmin = this.userRoleService.judgeUserIsAdmin(userId);
         if (isAdmin) {
             menuList = this.lambdaQuery()
-                .in(Menu::getMenuType, Arrays.asList(MenuType.CATALOGUE.getValue(), MenuType.MENU.getValue()))
-                .eq(Menu::getStatus, SwitchStatus.ENABLE.getValue())
                 .list();
         } else {
-            // 获取用户所属角色
             List<Long> menuIds = this.queryMenuIdsByUserId(userId);
             if (CollectionUtils.isEmpty(menuIds)) {
                 return Collections.emptyList();
@@ -92,69 +61,6 @@ public class MenuServiceImpl extends AbstractCrudServiceImpl<MenuMapper, Menu, M
         }
         List<MenuBO> menuBOList = BeanUtil.copyToList(menuList, MenuBO.class);
         return TreeUtils.buildTree(menuBOList);
-    }
-
-    @Override
-    public List<MenuRouterVO> buildMenuRouter(Collection<MenuBO> menus) {
-        List<MenuRouterVO> routers = Lists.newArrayListWithCapacity(menus.size());
-        for (MenuBO menu : menus) {
-            MenuRouterVO router = MenuRouterVO.builder()
-                .hidden(!menu.getVisible())
-                .name(MenuRouterHelper.getRouteName(menu))
-                .path(MenuRouterHelper.getRouterPath(menu))
-                .component(MenuRouterHelper.getComponent(menu))
-                .meta(MenuRouterHelper.buildMeta(menu))
-                .query(menu.getQuery())
-                .build();
-            Collection<MenuBO> menuChildren = menu.getChildren();
-            if (CollectionUtil.isNotEmpty(menuChildren) && Objects.equals(menu.getMenuType(), MenuType.CATALOGUE)) {
-                router.setAlwaysShow(true);
-                router.setRedirect("noRedirect");
-                router.setChildren(buildMenuRouter(menuChildren));
-            } else if (MenuRouterHelper.isMenuFrame(menu)) {
-                router.setMeta(null);
-                Collection<MenuRouterVO> childrenList = new ArrayList<>();
-                MenuRouterVO children = MenuRouterVO
-                    .builder()
-                    .path(menu.getPath())
-                    .component(menu.getComponent())
-                    .name(StrUtil.upperFirst(menu.getPath()))
-                    .meta(MenuRouterHelper.buildMeta(menu))
-                    .query(menu.getQuery())
-                    .build();
-                childrenList.add(children);
-                router.setChildren(childrenList);
-            } else if (Objects.equals(menu.getParentId(), 0L) && MenuRouterHelper.isInnerLink(menu)) {
-                router.setMeta(
-                    MenuRouterMeta
-                        .builder()
-                        .title(menu.getMenuName())
-                        .icon(menu.getIcon())
-                        .build()
-                );
-                router.setPath("/");
-                Collection<MenuRouterVO> childrenList = new ArrayList<>();
-                String routerPath = MenuRouterHelper.innerLinkReplaceEach(menu.getPath());
-                MenuRouterVO children = MenuRouterVO
-                    .builder()
-                    .path(routerPath)
-                    .component(MenuRouterHelper.INNER_LINK)
-                    .name(StrUtil.upperFirst(routerPath))
-                    .meta(
-                        MenuRouterMeta
-                            .builder()
-                            .title(menu.getMenuName())
-                            .icon(menu.getIcon())
-                            .link(menu.getPath())
-                            .build()
-                    )
-                    .build();
-                childrenList.add(children);
-                router.setChildren(childrenList);
-            }
-            routers.add(router);
-        }
-        return routers;
     }
 
     /**

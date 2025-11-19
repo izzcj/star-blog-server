@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * 菜单路由VO
@@ -21,44 +22,59 @@ import java.util.Collection;
 public class MenuRouterVO {
 
     /**
-     * 路由名字
+     * 菜单ID
      */
-    private String name;
+    private Long id;
 
     /**
-     * 路由地址
+     * 父菜单ID
      */
-    private String path;
+    private Long parentId;
 
     /**
-     * 是否隐藏路由，当设置 true 的时候该路由不会再侧边栏出现
-     */
-    private boolean hidden;
-
-    /**
-     * 重定向地址，当设置 noRedirect 的时候该路由在面包屑导航中不可被点击
-     */
-    private String redirect;
-
-    /**
-     * 组件地址
+     * 组件名
      */
     private String component;
 
     /**
-     * 路由参数：如 {"id": 1, "name": "ry"}
+     * 名称
      */
-    private String query;
+    private String name;
 
     /**
-     * 当你一个路由下面的 children 声明的路由大于1个时，自动会变成嵌套的模式--如组件页面
+     * uri
      */
-    private Boolean alwaysShow;
+    private String uri;
 
     /**
-     * 其他元素
+     * 重定向地址
      */
-    private MenuRouterMeta meta;
+    private String redirectUri;
+
+    /**
+     * 图标
+     */
+    private String icon;
+
+    /**
+     * 是否为一级菜单
+     */
+    private Boolean topLevel;
+
+    /**
+     * 是否keep-alive缓存
+     */
+    private Boolean keepAlive;
+
+    /**
+     * 是否隐藏
+     */
+    private Boolean hidden;
+
+    /**
+     * 路由参数
+     */
+    private List<String> params;
 
     /**
      * 子菜单
