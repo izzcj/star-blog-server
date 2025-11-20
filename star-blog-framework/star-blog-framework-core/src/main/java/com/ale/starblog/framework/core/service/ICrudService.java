@@ -2,8 +2,6 @@ package com.ale.starblog.framework.core.service;
 
 import com.ale.starblog.framework.common.domain.entity.BaseEntity;
 import com.ale.starblog.framework.core.pojo.BaseBO;
-import com.ale.starblog.framework.core.pojo.BaseCreateDTO;
-import com.ale.starblog.framework.core.pojo.BaseModifyDTO;
 import com.ale.starblog.framework.core.query.BaseQuery;
 import com.ale.starblog.framework.core.service.hook.HookContext;
 import com.ale.starblog.framework.core.service.hook.LocalServiceHook;
@@ -19,13 +17,11 @@ import java.util.List;
  *
  * @param <E> 实体类型
  * @param <B> 实体BO类型
- * @param <C> 创建实体DTO类型
- * @param <M> 修改实体DTO类型
  * @author Ale
  * @version 1.0.0
  * @since 2025/3/7
  */
-public interface ICrudService<E extends BaseEntity, B extends BaseBO, C extends BaseCreateDTO, M extends BaseModifyDTO> extends IService<E>, LocalServiceHook<E> {
+public interface ICrudService<E extends BaseEntity, B extends BaseBO> extends IService<E>, LocalServiceHook<E> {
 
     /**
      * 根据查询条件查询单个实体
@@ -94,62 +90,62 @@ public interface ICrudService<E extends BaseEntity, B extends BaseBO, C extends 
     /**
      * 创建实体
      *
-     * @param entity 实体
+     * @param entityBO 实体BO
      */
-    void create(C entity);
+    void create(B entityBO);
 
     /**
      * 创建实体
      *
-     * @param entity     实体
-     * @param context    上下文
+     * @param entityBO 实体
+     * @param context  上下文
      */
-    void create(C entity, HookContext context);
+    void create(B entityBO, HookContext context);
 
     /**
      * 批量创建实体
      *
-     * @param entityList 实体列表
+     * @param entityBOList 实体BO列表
      */
-    void batchCreate(List<C> entityList);
+    void batchCreate(List<B> entityBOList);
 
     /**
      * 批量创建实体
      *
-     * @param entityList 实体列表
-     * @param context    上下文
+     * @param entityBOList 实体列表
+     * @param context      上下文
      */
-    void batchCreate(List<C> entityList, HookContext context);
+    void batchCreate(List<B> entityBOList, HookContext context);
 
     /**
      * 修改实体
      *
-     * @param entity 实体
+     * @param entityBO 实体BO
      */
-    void modify(M entity);
+    void modify(B entityBO);
 
     /**
      * 修改实体
      *
-     * @param entity  实体
-     * @param context 上下文
+     * @param entityBO 实体BO
+     * @param context  上下文
      */
-    void modify(M entity, HookContext context);
+    void modify(B entityBO, HookContext context);
 
     /**
      * 批量修改实体
      *
-     * @param entityList 实体列表
+     * @param entityBOList 实体BO列表
      */
-    void batchModify(List<M> entityList);
+    void batchModify(List<B> entityBOList);
 
     /**
      * 批量修改实体
      *
-     * @param entityList 实体列表
-     * @param context    上下文
+     * @param entityBOList 实体BO列表
+     * @param context      上下文
      */
-    void batchModify(List<M> entityList, HookContext context);
+    void batchModify(List<B> entityBOList, HookContext context);
 
     /**
      * 根据id删除实体

@@ -8,8 +8,6 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-import java.util.List;
-
 /**
  * 修改角色DTO
  *
@@ -27,25 +25,16 @@ public class ModifyRoleDTO extends BaseModifyDTO {
     /**
      * 角色名称
      */
-    private String roleName;
+    private String name;
 
     /**
      * 角色类型
      */
-    private RoleType roleType;
+    private RoleType type;
 
     /**
      * 排序
      */
     private Integer sort;
 
-    /**
-     * 是否为默认角色
-     */
-    private Boolean defaultRole;
-
-    /**
-     * 菜单ID列表
-     */
-    private List<Long> menuIds;
 }

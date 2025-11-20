@@ -7,8 +7,6 @@ import com.ale.starblog.framework.common.utils.CastUtils;
 import com.ale.starblog.framework.common.utils.GenericTypeUtils;
 import com.ale.starblog.framework.core.constants.HookConstants;
 import com.ale.starblog.framework.core.pojo.BaseBO;
-import com.ale.starblog.framework.core.pojo.BaseCreateDTO;
-import com.ale.starblog.framework.core.pojo.BaseModifyDTO;
 import com.ale.starblog.framework.core.query.BaseQuery;
 import com.ale.starblog.framework.core.query.QueryConditionResolver;
 import com.ale.starblog.framework.core.service.hook.HookContext;
@@ -35,15 +33,11 @@ import java.util.stream.Collectors;
  * @param <Mapper> Mapper
  * @param <E>      实体类型
  * @param <B>      实体BO类型
- * @param <C>      创建实体DTO类型
- * @param <M>      修改实体DTO类型
  * @author Ale
  * @version 1.0.0
  * @since 2025/3/7
  */
-public abstract class AbstractCrudServiceImpl<Mapper extends BaseMapper<E>, E extends BaseEntity, B extends BaseBO, C extends BaseCreateDTO, M extends BaseModifyDTO>
-    extends AbstractMybatisPlusCrudServiceImpl<Mapper, E>
-    implements ICrudService<E, B, C, M> {
+public abstract class AbstractCrudServiceImpl<Mapper extends BaseMapper<E>, E extends BaseEntity, B extends BaseBO> extends AbstractMybatisPlusCrudServiceImpl<Mapper, E> implements ICrudService<E, B> {
 
     /**
      * 实体类型
@@ -99,15 +93,15 @@ public abstract class AbstractCrudServiceImpl<Mapper extends BaseMapper<E>, E ex
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void create(C createEntityDTO) {
-        this.create(createEntityDTO, HookContext.newContext());
+    public void create(B entityBO) {
+        this.create(entityBO, HookContext.newContext());
     }
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void create(C createEntityDTO, HookContext context) {
+    public void create(B entityBO, HookContext context) {
         HookContext hookContext = Objects.requireNonNullElse(context, this.createHookContext());
-        E entity = BeanUtil.copyProperties(createEntityDTO, this.entityClass);
+        E entity = BeanUtil.copyProperties(entityBO, this.entityClass);
         try {
             this.executeServiceHooks(entity, HookStage.BEFORE_CREATE, hookContext);
             this.executeServiceHooks(entity, HookStage.BEFORE_SAVE, hookContext);
@@ -124,15 +118,15 @@ public abstract class AbstractCrudServiceImpl<Mapper extends BaseMapper<E>, E ex
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void batchCreate(List<C> createEntityDTOList) {
-        this.batchCreate(createEntityDTOList, HookContext.newContext());
+    public void batchCreate(List<B> entityBOList) {
+        this.batchCreate(entityBOList, HookContext.newContext());
     }
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void batchCreate(List<C> createEntityDTOList, HookContext context) {
+    public void batchCreate(List<B> entityBOList, HookContext context) {
         HookContext hookContext = Objects.requireNonNullElse(context, this.createHookContext());
-        List<E> entityList = BeanUtil.copyToList(createEntityDTOList, this.entityClass);
+        List<E> entityList = BeanUtil.copyToList(entityBOList, this.entityClass);
         try {
             this.executeServiceHooks(entityList, HookStage.BEFORE_BATCH_CREATE, hookContext);
             this.executeServiceHooks(entityList, HookStage.BEFORE_BATCH_SAVE, hookContext);
@@ -149,15 +143,15 @@ public abstract class AbstractCrudServiceImpl<Mapper extends BaseMapper<E>, E ex
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void modify(M modifyEntityDTO) {
-        this.modify(modifyEntityDTO, HookContext.newContext());
+    public void modify(B entityBO) {
+        this.modify(entityBO, HookContext.newContext());
     }
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void modify(M modifyEntityDTO, HookContext context) {
+    public void modify(B entityBO, HookContext context) {
         HookContext hookContext = Objects.requireNonNullElse(context, this.createHookContext());
-        E entity = BeanUtil.copyProperties(modifyEntityDTO, this.entityClass);
+        E entity = BeanUtil.copyProperties(entityBO, this.entityClass);
 
         E oldEntity = this.getById(entity.getId());
         if (oldEntity == null) {
@@ -181,15 +175,15 @@ public abstract class AbstractCrudServiceImpl<Mapper extends BaseMapper<E>, E ex
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void batchModify(List<M> modifyEntityDTO) {
-        this.batchModify(modifyEntityDTO, HookContext.newContext());
+    public void batchModify(List<B> entityBOList) {
+        this.batchModify(entityBOList, HookContext.newContext());
     }
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void batchModify(List<M> modifyEntityDTO, HookContext context) {
+    public void batchModify(List<B> entityBOList, HookContext context) {
         HookContext hookContext = Objects.requireNonNullElse(context, this.createHookContext());
-        List<E> entityList = BeanUtil.copyToList(modifyEntityDTO, this.entityClass);
+        List<E> entityList = BeanUtil.copyToList(entityBOList, this.entityClass);
 
         List<Long> ids = entityList.stream()
             .map(E::getId)

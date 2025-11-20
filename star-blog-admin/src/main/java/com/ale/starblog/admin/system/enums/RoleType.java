@@ -16,19 +16,19 @@ public enum RoleType implements BaseEnum<String> {
     /**
      * 超级管理员
      */
-    ADMIN,
+    ADMIN("超级管理员"),
+
+    /**
+     * 普通管理员
+     */
+    COMMON_ADMIN("普通管理员"),
 
     /**
      * 普通用户
      */
-    COMMON_USER,
+    COMMON_USER("普通用户");
 
-    /**
-     * 网站用户
-     */
-    WEB_USER;
-
-    RoleType() {
-        this.init();
+    RoleType(String msg) {
+        this.init(this.toString(), msg);
     }
 }

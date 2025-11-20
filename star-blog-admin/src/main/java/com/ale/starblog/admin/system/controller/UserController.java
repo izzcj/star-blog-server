@@ -71,14 +71,15 @@ public class UserController extends BaseController<User, IUserService, UserVO, U
      *
      * @param pageable 分页信息
      * @param query    查询条件
+     * @param roleId   角色ID
      * @return 用户分页数据
      */
-    @GetMapping("/allocated")
-    public JsonResult<JsonPageResult.PageData<UserVO>> fetchAllocatedUser(Pageable pageable, UserQuery query) {
-        if (query.getRoleId() == null) {
+    @GetMapping("/authorized/{roleId}/page")
+    public JsonResult<JsonPageResult.PageData<UserVO>> fetchAuthorizedUser(Pageable pageable, UserQuery query, @PathVariable("roleId") Long roleId) {
+        if (roleId == null) {
             return JsonResult.fail("角色ID不能为空");
         }
-        IPage<UserBO> allocatedUserPage = this.userRoleService.queryAllocatedUserPage(pageable, query);
+        IPage<UserBO> allocatedUserPage = this.userRoleService.fetchAuthorizedUserPage(pageable, query, roleId);
         return JsonPageResult.of(
             pageable.getPageNumber(),
             pageable.getPageSize(),
@@ -92,14 +93,15 @@ public class UserController extends BaseController<User, IUserService, UserVO, U
      *
      * @param pageable 分页信息
      * @param query    查询条件
+     * @param roleId   角色ID
      * @return 用户分页数据
      */
-    @GetMapping("/unallocated")
-    public JsonResult<JsonPageResult.PageData<UserVO>> fetchUnallocatedUser(Pageable pageable, UserQuery query) {
-        if (query.getRoleId() == null) {
+    @GetMapping("/unauthorized/{roleId}/page")
+    public JsonResult<JsonPageResult.PageData<UserVO>> fetchUnauthorizedUser(Pageable pageable, UserQuery query, @PathVariable("roleId") Long roleId) {
+        if (roleId == null) {
             return JsonResult.fail("角色ID不能为空");
         }
-        IPage<UserBO> unallocatedUserPage = this.userRoleService.queryUnallocatedUserPage(pageable, query);
+        IPage<UserBO> unallocatedUserPage = this.userRoleService.fetchUnauthorizedUserPage(pageable, query, roleId);
         return JsonPageResult.of(
             pageable.getPageNumber(),
             pageable.getPageSize(),
@@ -114,7 +116,7 @@ public class UserController extends BaseController<User, IUserService, UserVO, U
      * @param authUserRoleDTO 授权用户角色信息
      * @return Void
      */
-    @PostMapping("/auth/cancel")
+    @PutMapping("/authorization/cancel")
     public JsonResult<Void> authUserCancel(@RequestBody @Validated AuthUserRoleDTO authUserRoleDTO) {
         this.userRoleService.changeAuthUser(authUserRoleDTO, true);
         return JsonResult.success();
@@ -126,7 +128,7 @@ public class UserController extends BaseController<User, IUserService, UserVO, U
      * @param authUserRoleDTO 授权用户角色信息
      * @return Void
      */
-    @PostMapping("/auth")
+    @PostMapping("/authorization")
     public JsonResult<Void> authUser(@RequestBody @Validated AuthUserRoleDTO authUserRoleDTO) {
         this.userRoleService.changeAuthUser(authUserRoleDTO, false);
         return JsonResult.success();

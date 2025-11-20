@@ -72,9 +72,9 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
     }
 
     @Override
-    public IPage<UserBO> queryAllocatedUserPage(Pageable pageable, UserQuery query) {
+    public IPage<UserBO> fetchAuthorizedUserPage(Pageable pageable, UserQuery query, Long roleId) {
         List<Long> userIds = this.lambdaQuery()
-            .eq(UserRole::getRoleId, query.getRoleId())
+            .eq(UserRole::getRoleId, roleId)
             .list()
             .stream()
             .map(UserRole::getUserId)
@@ -87,9 +87,9 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
     }
 
     @Override
-    public IPage<UserBO> queryUnallocatedUserPage(Pageable pageable, UserQuery query) {
+    public IPage<UserBO> fetchUnauthorizedUserPage(Pageable pageable, UserQuery query, Long roleId) {
         List<Long> userIds = this.lambdaQuery()
-            .eq(UserRole::getRoleId, query.getRoleId())
+            .eq(UserRole::getRoleId, roleId)
             .list()
             .stream()
             .map(UserRole::getUserId)
@@ -107,10 +107,17 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
     public void changeAuthUser(AuthUserRoleDTO authUserRoleDTO, boolean isCancel) {
         // 取消授权
         if (isCancel) {
-            this.remove(
-                this.lambdaQuery()
-                    .eq(UserRole::getRoleId, authUserRoleDTO.getRoleId())
-                    .in(UserRole::getUserId, authUserRoleDTO.getUserIds())
+            List<UserRole> userRoleList = this.lambdaQuery()
+                .eq(UserRole::getRoleId, authUserRoleDTO.getRoleId())
+                .in(UserRole::getUserId, authUserRoleDTO.getUserIds())
+                .list();
+            if (CollectionUtil.isEmpty(userRoleList)) {
+                return;
+            }
+            this.removeBatchByIds(
+                userRoleList.stream()
+                    .map(UserRole::getId)
+                    .toList()
             );
             return;
         }
@@ -155,7 +162,7 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
         }
         List<Long> adminRoleIds = this.roleService.lambdaQuery()
             .select(Role::getId)
-            .eq(Role::getRoleType, RoleType.ADMIN.getValue())
+            .eq(Role::getType, RoleType.ADMIN.getValue())
             .list()
             .stream()
             .map(Role::getId)

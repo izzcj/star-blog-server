@@ -1,6 +1,5 @@
 package com.ale.starblog.admin.system.controller;
 
-import cn.hutool.core.collection.CollectionUtil;
 import com.ale.starblog.admin.system.domain.entity.Role;
 import com.ale.starblog.admin.system.domain.pojo.role.*;
 import com.ale.starblog.admin.system.service.IRoleMenuService;
@@ -74,9 +73,6 @@ public class RoleController extends BaseController<Role, IRoleService, RoleVO, R
      */
     @PostMapping
     public JsonResult<Void> create(@RequestBody @Validated CreateRoleDTO createRoleDTO) {
-        if (CollectionUtil.isNotEmpty(createRoleDTO.getMenuIds())) {
-            this.roleMenuService.saveRoleMenu(createRoleDTO.getId(), createRoleDTO.getMenuIds());
-        }
         return this.createEntity(createRoleDTO);
     }
 
@@ -88,9 +84,6 @@ public class RoleController extends BaseController<Role, IRoleService, RoleVO, R
      */
     @PutMapping
     public JsonResult<Void> modify(@RequestBody @Validated ModifyRoleDTO modifyRoleDTO) {
-        if (CollectionUtil.isNotEmpty(modifyRoleDTO.getMenuIds())) {
-            this.roleMenuService.saveRoleMenu(modifyRoleDTO.getId(), modifyRoleDTO.getMenuIds());
-        }
         return this.modifyEntity(modifyRoleDTO);
     }
 

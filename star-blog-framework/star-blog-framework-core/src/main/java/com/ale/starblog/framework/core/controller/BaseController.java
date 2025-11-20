@@ -40,7 +40,7 @@ import java.util.stream.Collectors;
  * @since 2025/3/31
  */
 @Slf4j
-public abstract class BaseController<E extends BaseEntity, S extends ICrudService<E, B, C, M>, V extends BaseVO, B extends BaseBO, C extends BaseCreateDTO, M extends BaseModifyDTO> {
+public abstract class BaseController<E extends BaseEntity, S extends ICrudService<E, B>, V extends BaseVO, B extends BaseBO, C extends BaseCreateDTO, M extends BaseModifyDTO> {
 
     /**
      * Service
@@ -54,6 +54,11 @@ public abstract class BaseController<E extends BaseEntity, S extends ICrudServic
     }
 
     /**
+     * BO类型
+     */
+    private final Class<B> boClass = this.deduceBoClass();
+
+    /**
      * VO类型
      */
     private final Class<V> voClass = this.deduceVoClass();
@@ -65,6 +70,15 @@ public abstract class BaseController<E extends BaseEntity, S extends ICrudServic
      */
     private Class<V> deduceVoClass() {
         return CastUtils.cast(GenericTypeUtils.resolveTypeArguments(this.getClass(), BaseController.class, 2));
+    }
+
+    /**
+     * 推断BO类型
+     *
+     * @return BO类型
+     */
+    private Class<B> deduceBoClass() {
+        return CastUtils.cast(GenericTypeUtils.resolveTypeArguments(this.getClass(), BaseController.class, 3));
     }
 
     /**
@@ -148,7 +162,7 @@ public abstract class BaseController<E extends BaseEntity, S extends ICrudServic
     protected JsonResult<Void> createEntity(C createDTO) {
         HookContext hookContext = HookContext.newContext();
         hookContext.set(HookConstants.CREATE_DTO_KEY, createDTO);
-        this.service.create(createDTO, hookContext);
+        this.service.create(BeanUtil.copyProperties(createDTO, this.boClass), hookContext);
         return JsonResult.success();
     }
 
@@ -164,7 +178,7 @@ public abstract class BaseController<E extends BaseEntity, S extends ICrudServic
         }
         HookContext hookContext = HookContext.newContext();
         hookContext.set(HookConstants.CREATE_DTO_LIST_KEY, createDTOList);
-        this.service.batchCreate(createDTOList, hookContext);
+        this.service.batchCreate(BeanUtil.copyToList(createDTOList, this.boClass), hookContext);
         return JsonResult.success();
     }
 
@@ -180,7 +194,7 @@ public abstract class BaseController<E extends BaseEntity, S extends ICrudServic
         }
         HookContext hookContext = HookContext.newContext();
         hookContext.set(HookConstants.MODIFY_DTO_KEY, modifyDTO);
-        this.service.modify(modifyDTO, hookContext);
+        this.service.modify(BeanUtil.copyProperties(modifyDTO, this.boClass), hookContext);
         return JsonResult.success();
     }
 
@@ -199,7 +213,7 @@ public abstract class BaseController<E extends BaseEntity, S extends ICrudServic
             .collect(Collectors.toMap(M::getId, Function.identity()));
         HookContext hookContext = HookContext.newContext();
         hookContext.set(HookConstants.MODIFY_DTO_MAP_KEY, mapping);
-        this.service.batchModify(modifyDTOList, hookContext);
+        this.service.batchModify(BeanUtil.copyToList(modifyDTOList, this.boClass), hookContext);
         return JsonResult.success();
     }
 

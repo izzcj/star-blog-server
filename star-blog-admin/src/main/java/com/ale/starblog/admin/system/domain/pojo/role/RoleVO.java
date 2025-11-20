@@ -25,12 +25,12 @@ public class RoleVO extends BaseVO {
     /**
      * 角色名称
      */
-    private String roleName;
+    private String name;
 
     /**
      * 角色类型
      */
-    private RoleType roleType;
+    private RoleType type;
 
     /**
      * 排序

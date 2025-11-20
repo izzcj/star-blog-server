@@ -25,12 +25,12 @@ public class Role extends BaseAuditEntity {
     /**
      * 角色名称
      */
-    private String roleName;
+    private String name;
 
     /**
      * 角色编码
      */
-    private RoleType roleType;
+    private RoleType type;
 
     /**
      * 排序

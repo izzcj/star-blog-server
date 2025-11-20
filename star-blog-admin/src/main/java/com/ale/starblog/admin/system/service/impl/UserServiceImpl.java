@@ -3,8 +3,6 @@ package com.ale.starblog.admin.system.service.impl;
 import cn.hutool.core.util.StrUtil;
 import com.ale.starblog.admin.common.constants.SystemConstants;
 import com.ale.starblog.admin.system.domain.entity.User;
-import com.ale.starblog.admin.system.domain.pojo.user.CreateUserDTO;
-import com.ale.starblog.admin.system.domain.pojo.user.ModifyUserDTO;
 import com.ale.starblog.admin.system.domain.pojo.user.UserBO;
 import com.ale.starblog.admin.system.mapper.UserMapper;
 import com.ale.starblog.admin.system.service.IUserService;
@@ -24,7 +22,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl extends AbstractCrudServiceImpl<UserMapper, User, UserBO, CreateUserDTO, ModifyUserDTO> implements IUserService {
+public class UserServiceImpl extends AbstractCrudServiceImpl<UserMapper, User, UserBO> implements IUserService {
 
     /**
      * 密码编码器
@@ -35,6 +33,8 @@ public class UserServiceImpl extends AbstractCrudServiceImpl<UserMapper, User, U
     public void beforeCreate(User entity, HookContext context) {
         if (StrUtil.isBlank(entity.getPassword())) {
             entity.setPassword(this.passwordEncoder.encode(SystemConstants.DEFAULT_PASSWORD));
+        } else {
+            entity.setPassword(this.passwordEncoder.encode(entity.getPassword()));
         }
     }
 

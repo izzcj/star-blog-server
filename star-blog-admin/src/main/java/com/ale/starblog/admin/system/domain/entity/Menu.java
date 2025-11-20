@@ -71,6 +71,11 @@ public class Menu extends BaseAuditEntity {
     private Boolean enabled;
 
     /**
+     * 是否公共菜单(无需鉴权)
+     */
+    private Boolean common;
+
+    /**
      * 排序
      */
     private Integer sort;

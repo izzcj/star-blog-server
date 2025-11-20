@@ -2,8 +2,6 @@ package com.ale.starblog.admin.blog.service;
 
 import com.ale.starblog.admin.blog.domain.entity.Article;
 import com.ale.starblog.admin.blog.domain.pojo.article.ArticleBO;
-import com.ale.starblog.admin.blog.domain.pojo.article.CreateArticleDTO;
-import com.ale.starblog.admin.blog.domain.pojo.article.ModifyArticleDTO;
 import com.ale.starblog.framework.core.service.ICrudService;
 
 import java.util.List;
@@ -15,7 +13,7 @@ import java.util.List;
  * @version 1.0.0
  * @since 2025/8/12
  */
-public interface IArticleService extends ICrudService<Article, ArticleBO, CreateArticleDTO, ModifyArticleDTO> {
+public interface IArticleService extends ICrudService<Article, ArticleBO> {
 
     /**
      * 增加文章浏览量

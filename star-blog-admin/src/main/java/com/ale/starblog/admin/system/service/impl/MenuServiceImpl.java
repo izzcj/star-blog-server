@@ -1,6 +1,7 @@
 package com.ale.starblog.admin.system.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollectionUtil;
 import com.ale.starblog.admin.system.domain.entity.Menu;
 import com.ale.starblog.admin.system.domain.entity.RoleMenu;
 import com.ale.starblog.admin.system.domain.pojo.menu.*;
@@ -27,7 +28,7 @@ import java.util.stream.Collectors;
  */
 @Service
 @RequiredArgsConstructor
-public class MenuServiceImpl extends AbstractCrudServiceImpl<MenuMapper, Menu, MenuBO, CreateMenuDTO, ModifyMenuDTO> implements IMenuService {
+public class MenuServiceImpl extends AbstractCrudServiceImpl<MenuMapper, Menu, MenuBO> implements IMenuService {
 
     /**
      * 用户角色服务
@@ -41,23 +42,30 @@ public class MenuServiceImpl extends AbstractCrudServiceImpl<MenuMapper, Menu, M
 
     @Override
     public List<MenuBO> queryMenuTreeByUserId(Long userId) {
-        if (userId == null) {
-            return null;
-        }
         List<Menu> menuList;
-        // 超级管理员能查看所有菜单
-        boolean isAdmin = this.userRoleService.judgeUserIsAdmin(userId);
-        if (isAdmin) {
+        // 未登录只获取公共菜单
+        if (userId == null) {
             menuList = this.lambdaQuery()
+                .eq(Menu::getEnabled, true)
+                .eq(Menu::getCommon, true)
                 .list();
         } else {
-            List<Long> menuIds = this.queryMenuIdsByUserId(userId);
-            if (CollectionUtils.isEmpty(menuIds)) {
-                return Collections.emptyList();
+            // 超级管理员能查看所有菜单
+            boolean isAdmin = this.userRoleService.judgeUserIsAdmin(userId);
+            if (isAdmin) {
+                menuList = this.lambdaQuery()
+                    .list();
+            } else {
+                List<Long> menuIds = this.queryMenuIdsByUserId(userId);
+                menuList = this.lambdaQuery()
+                    .eq(Menu::getEnabled, true)
+                    .and(
+                        q -> q.in(CollectionUtil.isNotEmpty(menuIds), Menu::getId, menuIds)
+                            .or()
+                            .eq(Menu::getCommon, true)
+                    )
+                    .list();
             }
-            menuList = this.lambdaQuery()
-                .in(Menu::getId, menuIds)
-                .list();
         }
         List<MenuBO> menuBOList = BeanUtil.copyToList(menuList, MenuBO.class);
         return TreeUtils.buildTree(menuBOList);

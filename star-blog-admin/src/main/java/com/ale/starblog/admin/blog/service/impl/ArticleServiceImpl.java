@@ -27,7 +27,7 @@ import java.util.List;
  */
 @Service
 @RequiredArgsConstructor
-public class ArticleServiceImpl extends AbstractCrudServiceImpl<ArticleMapper, Article, ArticleBO, CreateArticleDTO, ModifyArticleDTO> implements IArticleService {
+public class ArticleServiceImpl extends AbstractCrudServiceImpl<ArticleMapper, Article, ArticleBO> implements IArticleService {
 
     /**
      * 文章标签关联服务

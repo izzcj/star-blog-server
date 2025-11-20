@@ -23,17 +23,22 @@ import lombok.experimental.SuperBuilder;
 public class RoleBO extends BaseBO {
 
     /**
-     * 角色ID
-     */
-    private Long id;
-
-    /**
      * 角色名称
      */
-    private String roleName;
+    private String name;
 
     /**
-     * 角色编码
+     * 角色类型
      */
-    private RoleType roleType;
+    private RoleType type;
+
+    /**
+     * 排序
+     */
+    private Integer sort;
+
+    /**
+     * 是否为默认角色
+     */
+    private Boolean defaultRole;
 }

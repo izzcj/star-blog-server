@@ -34,18 +34,20 @@ public interface IUserRoleService extends IService<UserRole>, ProxyResolvable<IU
      *
      * @param pageable 分页参数
      * @param query    查询参数
+     * @param roleId   角色ID
      * @return 用户分页数据
      */
-    IPage<UserBO> queryAllocatedUserPage(Pageable pageable, UserQuery query);
+    IPage<UserBO> fetchAuthorizedUserPage(Pageable pageable, UserQuery query, Long roleId);
 
     /**
      * 分页查询未授权角色的用户
      *
      * @param pageable 分页参数
      * @param query    查询参数
+     * @param roleId   角色ID
      * @return 用户分页数据
      */
-    IPage<UserBO> queryUnallocatedUserPage(Pageable pageable, UserQuery query);
+    IPage<UserBO> fetchUnauthorizedUserPage(Pageable pageable, UserQuery query, Long roleId);
 
     /**
      * 改变授权用户

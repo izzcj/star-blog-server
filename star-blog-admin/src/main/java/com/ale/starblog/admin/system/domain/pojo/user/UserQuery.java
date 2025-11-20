@@ -46,13 +46,4 @@ public class UserQuery extends BaseQuery {
     @Query
     private SwitchStatus status;
 
-    /**
-     * 角色ID
-     */
-    private String roleId;
-
-    /**
-     * 是否已分配角色
-     */
-    private Boolean allocated;
 }
