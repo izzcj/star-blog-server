@@ -3,14 +3,13 @@ package com.ale.starblog.admin.system.controller;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import com.ale.starblog.admin.system.domain.entity.User;
-import com.ale.starblog.admin.system.domain.pojo.role.AuthUserRoleDTO;
+import com.ale.starblog.admin.system.domain.pojo.user.AuthUserRoleDTO;
 import com.ale.starblog.admin.system.domain.pojo.role.RoleBO;
 import com.ale.starblog.admin.system.domain.pojo.user.*;
 import com.ale.starblog.admin.system.service.IUserRoleService;
 import com.ale.starblog.admin.system.service.IUserService;
 import com.ale.starblog.framework.common.domain.JsonPageResult;
 import com.ale.starblog.framework.common.domain.JsonResult;
-import com.ale.starblog.framework.common.utils.SecurityUtils;
 import com.ale.starblog.framework.core.controller.BaseController;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.RequiredArgsConstructor;
@@ -177,12 +176,12 @@ public class UserController extends BaseController<User, IUserService, UserVO, U
     /**
      * 重置密码
      *
-     * @param changeUserPasswordDTO 修改用户密码dto
+     * @param id 用户id
      * @return Void
      */
-    @PutMapping("/password")
-    public JsonResult<Void> restPassword(@RequestBody ChangeUserPasswordDTO changeUserPasswordDTO) {
-        this.service.changePassword(SecurityUtils.getLoginUserId(), changeUserPasswordDTO.getNewPassword(), changeUserPasswordDTO.getOldPassword());
+    @PutMapping("/{id}/password")
+    public JsonResult<Void> restPassword(@PathVariable Long id) {
+        this.service.resetPassword(id);
         return JsonResult.success();
     }
 

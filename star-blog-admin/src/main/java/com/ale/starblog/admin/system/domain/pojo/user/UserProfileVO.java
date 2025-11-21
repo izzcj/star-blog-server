@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 /**
@@ -24,7 +24,7 @@ public class UserProfileVO {
     /**
      * id
      */
-    private String id;
+    private Long id;
 
     /**
      * 账号
@@ -69,7 +69,7 @@ public class UserProfileVO {
     /**
      * 上次登录时间
      */
-    private Date lastLoginTime;
+    private LocalDateTime lastLoginTime;
 
     /**
      * 是否为管理员

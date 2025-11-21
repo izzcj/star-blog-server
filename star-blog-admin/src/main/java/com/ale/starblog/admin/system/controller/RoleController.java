@@ -6,6 +6,7 @@ import com.ale.starblog.admin.system.service.IRoleMenuService;
 import com.ale.starblog.admin.system.service.IRoleService;
 import com.ale.starblog.framework.common.domain.JsonPageResult;
 import com.ale.starblog.framework.common.domain.JsonResult;
+import com.ale.starblog.framework.common.support.Option;
 import com.ale.starblog.framework.core.controller.BaseController;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -66,6 +67,22 @@ public class RoleController extends BaseController<Role, IRoleService, RoleVO, R
     }
 
     /**
+     * 获取角色选项
+     *
+     * @param query 查询条件
+     * @return 角色选项
+     */
+    @GetMapping("/options")
+    public JsonResult<List<Option>> fetchOptions(RoleQuery query) {
+        List<RoleBO> result = this.service.queryList(query);
+        return JsonResult.success(
+            result.stream()
+                .map(roleBO -> Option.of(roleBO.getName(), roleBO.getId(), roleBO.getRemark()))
+                .toList()
+        );
+    }
+
+    /**
      * 新增角色
      *
      * @param createRoleDTO 创建角色dto
@@ -85,6 +102,19 @@ public class RoleController extends BaseController<Role, IRoleService, RoleVO, R
     @PutMapping
     public JsonResult<Void> modify(@RequestBody @Validated ModifyRoleDTO modifyRoleDTO) {
         return this.modifyEntity(modifyRoleDTO);
+    }
+
+    /**
+     * 保存角色菜单
+     *
+     * @param id      角色id
+     * @param menuIds 菜单id
+     * @return 结果
+     */
+    @PostMapping("/{id}/menu")
+    public JsonResult<Void> saveRoleMenu(@PathVariable(name = "id") Long id, @RequestBody List<Long> menuIds) {
+        this.roleMenuService.saveRoleMenu(id, menuIds);
+        return JsonResult.success();
     }
 
     /**

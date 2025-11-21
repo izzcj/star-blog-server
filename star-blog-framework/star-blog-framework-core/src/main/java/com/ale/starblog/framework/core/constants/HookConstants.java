@@ -19,24 +19,19 @@ public class HookConstants {
     public static final String QUERY_KEY = "query";
 
     /**
-     * 创建实体DTO-key
+     * 实体BO-key
      */
-    public static final String CREATE_DTO_KEY = "createDTO";
+    public static final String ENTITY_BO_KEY = "entityBO";
 
     /**
-     * 创建实体DTO列表-key
+     * 实体BO列表-key
      */
-    public static final String CREATE_DTO_LIST_KEY = "createDTOList";
+    public static final String ENTITY_BO_LIST_KEY = "entityBOList";
 
     /**
-     * 修改实体DTO-key
+     * 实体BO映射关系-key
      */
-    public static final String MODIFY_DTO_KEY = "modifyDTO";
-
-    /**
-     * 修改实体DTO映射关系-key
-     */
-    public static final String MODIFY_DTO_MAP_KEY = "modifyDTOMap";
+    public static final String ENTITY_BO_MAP_KEY = "entityBOMap";
 
     /**
      * 旧实体-key

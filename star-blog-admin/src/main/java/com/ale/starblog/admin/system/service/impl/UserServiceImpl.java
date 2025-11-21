@@ -50,4 +50,12 @@ public class UserServiceImpl extends AbstractCrudServiceImpl<UserMapper, User, U
         user.setPassword(this.passwordEncoder.encode(newPassword));
         this.updateById(user);
     }
+
+    @Override
+    public void resetPassword(Long id) {
+        User user = this.getOptById(id)
+            .orElseThrow(() -> new ServiceException("重置密码失败！用户[{}]不存在！", id));
+        user.setPassword(this.passwordEncoder.encode(SystemConstants.DEFAULT_PASSWORD));
+        this.updateById(user);
+    }
 }

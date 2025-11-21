@@ -5,7 +5,7 @@ import cn.hutool.core.collection.CollectionUtil;
 import com.ale.starblog.admin.system.domain.entity.Role;
 import com.ale.starblog.admin.system.domain.entity.User;
 import com.ale.starblog.admin.system.domain.entity.UserRole;
-import com.ale.starblog.admin.system.domain.pojo.role.AuthUserRoleDTO;
+import com.ale.starblog.admin.system.domain.pojo.user.AuthUserRoleDTO;
 import com.ale.starblog.admin.system.domain.pojo.role.RoleBO;
 import com.ale.starblog.admin.system.domain.pojo.user.UserBO;
 import com.ale.starblog.admin.system.domain.pojo.user.UserQuery;

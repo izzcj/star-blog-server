@@ -8,6 +8,8 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.util.List;
+
 /**
  * 角色BO
  *
@@ -41,4 +43,9 @@ public class RoleBO extends BaseBO {
      * 是否为默认角色
      */
     private Boolean defaultRole;
+
+    /**
+     * 菜单ID列表
+     */
+    private List<Long> menuIds;
 }

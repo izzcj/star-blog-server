@@ -54,6 +54,11 @@ public class ModifyUserDTO extends BaseModifyDTO {
     private String remark;
 
     /**
+     * 排序
+     */
+    private Integer sort;
+
+    /**
      * 角色id
      */
     private List<Long> roleIds;

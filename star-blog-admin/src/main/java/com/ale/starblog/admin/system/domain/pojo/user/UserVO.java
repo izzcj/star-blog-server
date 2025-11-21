@@ -68,6 +68,11 @@ public class UserVO extends BaseVO {
     private SwitchStatus status;
 
     /**
+     * 排序
+     */
+    private Integer sort;
+
+    /**
      * 上次登录ip
      */
     private String lastLoginIp;

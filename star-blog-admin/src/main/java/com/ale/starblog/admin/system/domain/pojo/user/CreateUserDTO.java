@@ -57,4 +57,9 @@ public class CreateUserDTO extends BaseCreateDTO {
      * 备注
      */
     private String remark;
+
+    /**
+     * 排序
+     */
+    private Integer sort;
 }

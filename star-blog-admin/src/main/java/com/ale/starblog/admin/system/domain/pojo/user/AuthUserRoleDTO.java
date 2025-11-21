@@ -1,4 +1,4 @@
-package com.ale.starblog.admin.system.domain.pojo.role;
+package com.ale.starblog.admin.system.domain.pojo.user;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;

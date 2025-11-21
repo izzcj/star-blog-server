@@ -22,9 +22,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
  * Controller基类
@@ -122,12 +119,18 @@ public abstract class BaseController<E extends BaseEntity, S extends ICrudServic
     protected JsonResult<List<V>> queryList(BaseQuery query) {
         HookContext hookContext = HookContext.newContext();
         hookContext.set(HookConstants.QUERY_KEY, query);
-        List<B> boList = this.service.queryList(query, hookContext);
-        List<V> result = BeanUtil.copyToList(boList, this.voClass);
-        if (CollectionUtil.isNotEmpty(result)) {
-            result.forEach(this::translation);
+        try {
+            List<B> boList = this.service.queryList(query, hookContext);
+            List<V> result = BeanUtil.copyToList(boList, this.voClass);
+            if (CollectionUtil.isNotEmpty(result)) {
+                result.forEach(this::translation);
+            }
+            return JsonResult.success(result);
+        } catch (Exception e) {
+            return JsonResult.fail(e.getMessage());
+        } finally {
+            hookContext.clear();
         }
-        return JsonResult.success(result);
     }
 
     /**
@@ -140,17 +143,23 @@ public abstract class BaseController<E extends BaseEntity, S extends ICrudServic
     protected JsonResult<JsonPageResult.PageData<V>> queryPage(@PageableDefault(page = 1, size = 20) Pageable pageable, BaseQuery query) {
         HookContext hookContext = HookContext.newContext();
         hookContext.set(HookConstants.QUERY_KEY, query);
-        IPage<B> pageData = this.service.queryPage(pageable, query, hookContext);
-        List<V> data = BeanUtil.copyToList(pageData.getRecords(), this.voClass);
-        if (CollectionUtil.isNotEmpty(data)) {
-            data.forEach(this::translation);
+        try {
+            IPage<B> pageData = this.service.queryPage(pageable, query, hookContext);
+            List<V> data = BeanUtil.copyToList(pageData.getRecords(), this.voClass);
+            if (CollectionUtil.isNotEmpty(data)) {
+                data.forEach(this::translation);
+            }
+            return JsonPageResult.of(
+                pageable.getPageNumber(),
+                pageable.getPageSize(),
+                pageData.getTotal(),
+                data
+            );
+        } catch (Exception e) {
+            return JsonPageResult.fail(e.getMessage());
+        } finally {
+            hookContext.clear();
         }
-        return JsonPageResult.of(
-            pageable.getPageNumber(),
-            pageable.getPageSize(),
-            pageData.getTotal(),
-            data
-        );
     }
 
     /**
@@ -160,9 +169,7 @@ public abstract class BaseController<E extends BaseEntity, S extends ICrudServic
      * @return 结果
      */
     protected JsonResult<Void> createEntity(C createDTO) {
-        HookContext hookContext = HookContext.newContext();
-        hookContext.set(HookConstants.CREATE_DTO_KEY, createDTO);
-        this.service.create(BeanUtil.copyProperties(createDTO, this.boClass), hookContext);
+        this.service.create(BeanUtil.copyProperties(createDTO, this.boClass));
         return JsonResult.success();
     }
 
@@ -176,9 +183,7 @@ public abstract class BaseController<E extends BaseEntity, S extends ICrudServic
         if (createDTOList == null || createDTOList.isEmpty()) {
             return JsonResult.fail("批量新增失败！新增实体列表为空！");
         }
-        HookContext hookContext = HookContext.newContext();
-        hookContext.set(HookConstants.CREATE_DTO_LIST_KEY, createDTOList);
-        this.service.batchCreate(BeanUtil.copyToList(createDTOList, this.boClass), hookContext);
+        this.service.batchCreate(BeanUtil.copyToList(createDTOList, this.boClass));
         return JsonResult.success();
     }
 
@@ -192,9 +197,7 @@ public abstract class BaseController<E extends BaseEntity, S extends ICrudServic
         if (modifyDTO.getId() == null) {
             return JsonResult.fail("修改实体失败！实体ID为空！");
         }
-        HookContext hookContext = HookContext.newContext();
-        hookContext.set(HookConstants.MODIFY_DTO_KEY, modifyDTO);
-        this.service.modify(BeanUtil.copyProperties(modifyDTO, this.boClass), hookContext);
+        this.service.modify(BeanUtil.copyProperties(modifyDTO, this.boClass));
         return JsonResult.success();
     }
 
@@ -208,12 +211,7 @@ public abstract class BaseController<E extends BaseEntity, S extends ICrudServic
         if (modifyDTOList == null || modifyDTOList.isEmpty()) {
             return JsonResult.fail("批量修改失败！修改实体列表为空！");
         }
-        Map<Long, M> mapping = modifyDTOList
-            .stream()
-            .collect(Collectors.toMap(M::getId, Function.identity()));
-        HookContext hookContext = HookContext.newContext();
-        hookContext.set(HookConstants.MODIFY_DTO_MAP_KEY, mapping);
-        this.service.batchModify(BeanUtil.copyToList(modifyDTOList, this.boClass), hookContext);
+        this.service.batchModify(BeanUtil.copyToList(modifyDTOList, this.boClass));
         return JsonResult.success();
     }
 

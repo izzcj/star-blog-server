@@ -3,8 +3,6 @@ package com.ale.starblog.admin.blog.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import com.ale.starblog.admin.blog.domain.entity.Article;
 import com.ale.starblog.admin.blog.domain.pojo.article.ArticleBO;
-import com.ale.starblog.admin.blog.domain.pojo.article.CreateArticleDTO;
-import com.ale.starblog.admin.blog.domain.pojo.article.ModifyArticleDTO;
 import com.ale.starblog.admin.blog.enums.ArticleStatus;
 import com.ale.starblog.admin.blog.mapper.ArticleMapper;
 import com.ale.starblog.admin.blog.service.IArticleService;
@@ -43,18 +41,18 @@ public class ArticleServiceImpl extends AbstractCrudServiceImpl<ArticleMapper, A
 
     @Override
     public void afterCreate(Article entity, HookContext context) {
-        CreateArticleDTO createDTO = CastUtils.cast(context.get(HookConstants.CREATE_DTO_KEY));
+        ArticleBO articleBO = CastUtils.cast(context.get(HookConstants.ENTITY_BO_KEY));
         // 保存文章标签关联关系
-        if (createDTO.getTagIds() != null && !createDTO.getTagIds().isEmpty()) {
-            this.articleTagService.updateArticleTags(entity.getId(), createDTO.getTagIds());
+        if (articleBO.getTagIds() != null && !articleBO.getTagIds().isEmpty()) {
+            this.articleTagService.updateArticleTags(entity.getId(), articleBO.getTagIds());
         }
     }
 
     @Override
     public void afterModify(Article entity, HookContext context) {
-        ModifyArticleDTO modifyArticleDTO = CastUtils.cast(context.get(HookConstants.MODIFY_DTO_KEY));
+        ArticleBO articleBO = CastUtils.cast(context.get(HookConstants.ENTITY_BO_KEY));
         // 更新文章标签关联关系
-        this.articleTagService.updateArticleTags(entity.getId(), modifyArticleDTO.getTagIds());
+        this.articleTagService.updateArticleTags(entity.getId(), articleBO.getTagIds());
     }
 
     @Override

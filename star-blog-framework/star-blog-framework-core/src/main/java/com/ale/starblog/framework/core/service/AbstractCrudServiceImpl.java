@@ -101,6 +101,7 @@ public abstract class AbstractCrudServiceImpl<Mapper extends BaseMapper<E>, E ex
     @Override
     public void create(B entityBO, HookContext context) {
         HookContext hookContext = Objects.requireNonNullElse(context, this.createHookContext());
+        hookContext.set(HookConstants.ENTITY_BO_KEY, entityBO);
         E entity = BeanUtil.copyProperties(entityBO, this.entityClass);
         try {
             this.executeServiceHooks(entity, HookStage.BEFORE_CREATE, hookContext);
@@ -126,6 +127,7 @@ public abstract class AbstractCrudServiceImpl<Mapper extends BaseMapper<E>, E ex
     @Override
     public void batchCreate(List<B> entityBOList, HookContext context) {
         HookContext hookContext = Objects.requireNonNullElse(context, this.createHookContext());
+        hookContext.set(HookConstants.ENTITY_BO_LIST_KEY, entityBOList);
         List<E> entityList = BeanUtil.copyToList(entityBOList, this.entityClass);
         try {
             this.executeServiceHooks(entityList, HookStage.BEFORE_BATCH_CREATE, hookContext);
@@ -157,6 +159,7 @@ public abstract class AbstractCrudServiceImpl<Mapper extends BaseMapper<E>, E ex
         if (oldEntity == null) {
             throw new ServiceException("修改实体失败！实体不存在：{}", entity.getId());
         }
+        hookContext.set(HookConstants.ENTITY_BO_KEY, entityBO);
         hookContext.set(HookConstants.OLD_ENTITY_KEY, oldEntity);
 
         try {
@@ -183,6 +186,9 @@ public abstract class AbstractCrudServiceImpl<Mapper extends BaseMapper<E>, E ex
     @Override
     public void batchModify(List<B> entityBOList, HookContext context) {
         HookContext hookContext = Objects.requireNonNullElse(context, this.createHookContext());
+        Map<Long, B> entityBOMapping = entityBOList.stream()
+            .collect(Collectors.toMap(B::getId, Function.identity()));
+        hookContext.set(HookConstants.ENTITY_BO_MAP_KEY, entityBOMapping);
         List<E> entityList = BeanUtil.copyToList(entityBOList, this.entityClass);
 
         List<Long> ids = entityList.stream()

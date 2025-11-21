@@ -22,4 +22,11 @@ public interface IUserService extends ICrudService<User, UserBO> {
      */
     void changePassword(Long id, String newPassword, String oldPassword);
 
+    /**
+     * 重置用户密码
+     *
+     * @param id 用户ID
+     */
+    void resetPassword(Long id);
+
 }
