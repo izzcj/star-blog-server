@@ -19,16 +19,6 @@ import java.util.Objects;
 public class DruidDataSourceConfigurer implements DataSourceConfigurer {
 
     @Override
-    public boolean supports(VenusDataBaseProperties.PoolType poolType) {
-        return Objects.equals(VenusDataBaseProperties.PoolType.Druid, poolType);
-    }
-
-    @Override
-    public int getOrder() {
-        return 0;
-    }
-
-    @Override
     public DataSource config(VenusDataBaseProperties venusDataBaseProperties) {
         DatabaseType databaseType = venusDataBaseProperties.getType();
         DruidDataSource druidDataSource = new DruidDataSource();
@@ -47,5 +37,15 @@ public class DruidDataSourceConfigurer implements DataSourceConfigurer {
         druidDataSource.setTestOnBorrow(false);
         druidDataSource.setTestOnReturn(false);
         return druidDataSource;
+    }
+
+    @Override
+    public boolean supports(VenusDataBaseProperties.PoolType poolType) {
+        return Objects.equals(VenusDataBaseProperties.PoolType.Druid, poolType);
+    }
+
+    @Override
+    public int getOrder() {
+        return 100;
     }
 }

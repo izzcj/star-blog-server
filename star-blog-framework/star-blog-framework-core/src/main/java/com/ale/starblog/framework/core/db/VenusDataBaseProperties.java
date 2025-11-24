@@ -17,7 +17,7 @@ public class VenusDataBaseProperties {
     /**
      * 数据库类型
      */
-    private DatabaseType type = DatabaseType.MYSQL;
+    private DatabaseType type = DatabaseType.POSTGRESQL;
 
     /**
      * 数据库连接地址
