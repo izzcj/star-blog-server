@@ -2,6 +2,7 @@ package com.ale.starblog.admin.system.domain.entity;
 
 import com.ale.starblog.framework.common.domain.entity.BaseAuditEntity;
 import com.ale.starblog.framework.common.enumeration.SwitchStatus;
+import com.ale.starblog.framework.core.oss.OssUpload;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -36,6 +37,7 @@ public class User extends BaseAuditEntity {
     /**
      * 头像
      */
+    @OssUpload
     private String avatar;
 
     /**

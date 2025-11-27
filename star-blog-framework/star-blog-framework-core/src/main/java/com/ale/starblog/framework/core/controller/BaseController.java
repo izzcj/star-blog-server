@@ -126,8 +126,6 @@ public abstract class BaseController<E extends BaseEntity, S extends ICrudServic
                 result.forEach(this::translation);
             }
             return JsonResult.success(result);
-        } catch (Exception e) {
-            return JsonResult.fail(e.getMessage());
         } finally {
             hookContext.clear();
         }
@@ -140,7 +138,7 @@ public abstract class BaseController<E extends BaseEntity, S extends ICrudServic
      * @param query    查询条件
      * @return 结果
      */
-    protected JsonResult<JsonPageResult.PageData<V>> queryPage(@PageableDefault(page = 1, size = 20) Pageable pageable, BaseQuery query) {
+    protected JsonPageResult<V> queryPage(@PageableDefault(page = 1, size = 20) Pageable pageable, BaseQuery query) {
         HookContext hookContext = HookContext.newContext();
         hookContext.set(HookConstants.QUERY_KEY, query);
         try {
@@ -155,8 +153,6 @@ public abstract class BaseController<E extends BaseEntity, S extends ICrudServic
                 pageData.getTotal(),
                 data
             );
-        } catch (Exception e) {
-            return JsonPageResult.fail(e.getMessage());
         } finally {
             hookContext.clear();
         }

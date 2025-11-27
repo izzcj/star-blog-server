@@ -46,9 +46,9 @@ public class DictDataBO extends BaseBO {
     private String listClass;
 
     /**
-     * 是否默认
+     * 是否可删除
      */
-    private Boolean defaultFlag;
+    private Boolean deletable;
 
     /**
      * 排序

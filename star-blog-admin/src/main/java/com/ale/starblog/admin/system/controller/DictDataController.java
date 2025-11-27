@@ -43,7 +43,7 @@ public class DictDataController extends BaseController<DictData, IDictDataServic
      * @return 字典数据分页数据
      */
     @GetMapping("/page")
-    public JsonResult<JsonPageResult.PageData<DictDataVO>> fetchPage(Pageable pageable, DictDataQuery query) {
+    public JsonPageResult<DictDataVO> fetchPage(Pageable pageable, DictDataQuery query) {
         return this.queryPage(pageable, query);
     }
 

@@ -72,7 +72,7 @@ public class ArticleController extends BaseController<Article, IArticleService, 
      * @return 文章分页数据
      */
     @GetMapping("/page")
-    public JsonResult<JsonPageResult.PageData<ArticleVO>> fetchPage(Pageable pageable, ArticleQuery query) {
+    public JsonPageResult<ArticleVO> fetchPage(Pageable pageable, ArticleQuery query) {
         return this.queryPage(pageable, query);
     }
 

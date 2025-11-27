@@ -42,7 +42,7 @@ public class TagController extends BaseController<Tag, ITagService, TagVO, TagBO
      * @return 标签分页数据
      */
     @GetMapping("/page")
-    public JsonResult<JsonPageResult.PageData<TagVO>> fetchPage(Pageable pageable, TagQuery query) {
+    public JsonPageResult<TagVO> fetchPage(Pageable pageable, TagQuery query) {
         return this.queryPage(pageable, query);
     }
 

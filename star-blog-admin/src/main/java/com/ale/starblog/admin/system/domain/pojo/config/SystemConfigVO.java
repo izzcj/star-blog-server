@@ -69,4 +69,9 @@ public class SystemConfigVO extends BaseVO {
      * 数据源配置
      */
     private String dataSourceConfig;
+
+    /**
+     * 是否可删除
+     */
+    private Boolean deletable;
 }

@@ -51,7 +51,7 @@ public class RoleController extends BaseController<Role, IRoleService, RoleVO, R
      * @return 结果
      */
     @GetMapping("/page")
-    public JsonResult<JsonPageResult.PageData<RoleVO>> fetchPage(Pageable pageable, RoleQuery query) {
+    public JsonPageResult<RoleVO> fetchPage(Pageable pageable, RoleQuery query) {
         return this.queryPage(pageable, query);
     }
 

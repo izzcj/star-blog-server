@@ -61,4 +61,9 @@ public class SystemConfig extends BaseAuditEntity {
      * 数据源配置
      */
     private String dataSourceConfig;
+
+    /**
+     * 是否可删除
+     */
+    private Boolean deletable;
 }

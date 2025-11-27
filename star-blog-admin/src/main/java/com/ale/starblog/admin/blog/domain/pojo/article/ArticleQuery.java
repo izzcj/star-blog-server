@@ -3,6 +3,7 @@ package com.ale.starblog.admin.blog.domain.pojo.article;
 import com.ale.starblog.admin.blog.enums.ArticleStatus;
 import com.ale.starblog.framework.core.query.BaseQuery;
 import com.ale.starblog.framework.core.query.Query;
+import com.ale.starblog.framework.core.query.QueryParameter;
 import com.ale.starblog.framework.core.query.QueryType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -45,4 +46,10 @@ public class ArticleQuery extends BaseQuery {
      */
     @Query
     private Boolean isTop;
+
+    /**
+     * 排序字段
+     */
+    @Query(type = QueryType.SORT, parameters = @QueryParameter(name = "order", value = "desc"))
+    private String sort = "create_time";
 }

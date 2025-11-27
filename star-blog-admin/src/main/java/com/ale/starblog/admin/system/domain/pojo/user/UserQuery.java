@@ -46,4 +46,10 @@ public class UserQuery extends BaseQuery {
     @Query
     private SwitchStatus status;
 
+    /**
+     * 排序字段
+     */
+    @Query(type = QueryType.SORT)
+    private String sort = "sort";
+
 }

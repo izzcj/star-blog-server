@@ -41,11 +41,6 @@ public class ModifyDictDataDTO extends BaseModifyDTO {
     private String listClass;
 
     /**
-     * 是否默认
-     */
-    private Boolean defaultFlag;
-
-    /**
      * 排序
      */
     private Integer sort;

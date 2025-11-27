@@ -51,7 +51,7 @@ public class SystemConfigController extends BaseController<SystemConfig, ISystem
      * @return 系统配置分页数据
      */
     @GetMapping("/page")
-    public JsonResult<JsonPageResult.PageData<SystemConfigVO>> fetchPage(Pageable pageable, SystemConfigQuery query) {
+    public JsonPageResult<SystemConfigVO> fetchPage(Pageable pageable, SystemConfigQuery query) {
         return this.queryPage(pageable, query);
     }
 
