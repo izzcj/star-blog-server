@@ -1,13 +1,18 @@
 package com.ale.starblog.admin.system.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.ale.starblog.admin.system.domain.entity.RoleMenu;
 import com.ale.starblog.admin.system.mapper.RoleMenuMapper;
 import com.ale.starblog.admin.system.service.IRoleMenuService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -21,12 +26,31 @@ import java.util.stream.Collectors;
 public class RoleMenuServiceImpl extends ServiceImpl<RoleMenuMapper, RoleMenu> implements IRoleMenuService {
 
     @Override
+    public Set<Long> fetchMenuIdsByRoleIds(Collection<Long> roleIds) {
+        if (CollectionUtil.isEmpty(roleIds)) {
+            return Collections.emptySet();
+        }
+        List<RoleMenu> roleMenus = this.lambdaQuery()
+            .in(RoleMenu::getRoleId, roleIds)
+            .list();
+        if (CollectionUtils.isEmpty(roleMenus)) {
+            return Collections.emptySet();
+        }
+        return roleMenus.stream()
+            .map(RoleMenu::getMenuId)
+            .collect(Collectors.toSet());
+    }
+
+    @Override
     public void saveRoleMenu(Long roleId, List<Long> menuIds) {
         // 删除旧角色菜单
         this.remove(
             new LambdaQueryWrapper<RoleMenu>()
                 .eq(RoleMenu::getRoleId, roleId)
         );
+        if (CollectionUtil.isEmpty(menuIds)) {
+            return;
+        }
         List<RoleMenu> newRoleMenu = menuIds.stream()
             .map(menuId ->
                 RoleMenu.builder()

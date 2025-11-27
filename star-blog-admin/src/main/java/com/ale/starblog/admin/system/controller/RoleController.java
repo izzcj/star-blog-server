@@ -13,7 +13,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 系统管理/角色管理
@@ -83,6 +85,19 @@ public class RoleController extends BaseController<Role, IRoleService, RoleVO, R
     }
 
     /**
+     * 获取角色菜单权限
+     *
+     * @param id 角色id
+     * @return 菜单id
+     */
+    @GetMapping("/{id}/menu")
+    public JsonResult<Set<Long>> fetchRoleMenuPermissions(@PathVariable(name = "id") Long id) {
+        return JsonResult.success(
+            this.roleMenuService.fetchMenuIdsByRoleIds(Collections.singleton(id))
+        );
+    }
+
+    /**
      * 新增角色
      *
      * @param createRoleDTO 创建角色dto
@@ -105,14 +120,14 @@ public class RoleController extends BaseController<Role, IRoleService, RoleVO, R
     }
 
     /**
-     * 保存角色菜单
+     * 保存角色菜单权限
      *
      * @param id      角色id
      * @param menuIds 菜单id
      * @return 结果
      */
     @PostMapping("/{id}/menu")
-    public JsonResult<Void> saveRoleMenu(@PathVariable(name = "id") Long id, @RequestBody List<Long> menuIds) {
+    public JsonResult<Void> saveRoleMenuPermissions(@PathVariable(name = "id") Long id, @RequestBody List<Long> menuIds) {
         this.roleMenuService.saveRoleMenu(id, menuIds);
         return JsonResult.success();
     }

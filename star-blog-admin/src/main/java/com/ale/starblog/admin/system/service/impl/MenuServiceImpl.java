@@ -3,7 +3,6 @@ package com.ale.starblog.admin.system.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import com.ale.starblog.admin.system.domain.entity.Menu;
-import com.ale.starblog.admin.system.domain.entity.RoleMenu;
 import com.ale.starblog.admin.system.domain.pojo.menu.*;
 import com.ale.starblog.admin.system.domain.pojo.role.RoleBO;
 import com.ale.starblog.admin.system.mapper.MenuMapper;
@@ -56,7 +55,7 @@ public class MenuServiceImpl extends AbstractCrudServiceImpl<MenuMapper, Menu, M
                 menuList = this.lambdaQuery()
                     .list();
             } else {
-                List<Long> menuIds = this.queryMenuIdsByUserId(userId);
+                Set<Long> menuIds = this.queryMenuIdsByUserId(userId);
                 menuList = this.lambdaQuery()
                     .eq(Menu::getEnabled, true)
                     .and(
@@ -77,24 +76,15 @@ public class MenuServiceImpl extends AbstractCrudServiceImpl<MenuMapper, Menu, M
      * @param userId 用户id
      * @return 系统菜单id集合
      */
-    private List<Long> queryMenuIdsByUserId(Long userId) {
+    private Set<Long> queryMenuIdsByUserId(Long userId) {
         List<RoleBO> userRoles = this.userRoleService.queryRoleByUserId(userId);
         if (CollectionUtils.isEmpty(userRoles)) {
-            return Collections.emptyList();
+            return Collections.emptySet();
         }
         List<Long> roleIds = userRoles.stream()
             .map(RoleBO::getId)
             .collect(Collectors.toList());
-        List<RoleMenu> roleMenus = this.roleMenuService
-            .lambdaQuery()
-            .in(RoleMenu::getRoleId, roleIds)
-            .list();
-        if (CollectionUtils.isEmpty(roleMenus)) {
-            return Collections.emptyList();
-        }
-        return roleMenus.stream()
-            .map(RoleMenu::getMenuId)
-            .collect(Collectors.toList());
+        return this.roleMenuService.fetchMenuIdsByRoleIds(roleIds);
     }
 
 }
