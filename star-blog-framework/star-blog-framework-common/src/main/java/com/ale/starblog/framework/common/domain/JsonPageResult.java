@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * json分页返回结果
@@ -47,6 +48,18 @@ public final class JsonPageResult<T> extends JsonResult<JsonPageResult.PageData<
     /**
      * 创建一个分页结果对象
      *
+     * @param page   MybatisPlus分页对象
+     * @param mapper 数据映射函数
+     * @param <T>    数据类型
+     * @return 分页结果对象
+     */
+    public static <T> JsonPageResult<T> of(IPage<?> page, Function<List<?>, List<T>> mapper) {
+        return of(page.getCurrent(), page.getSize(), page.getTotal(), mapper.apply(page.getRecords()));
+    }
+
+    /**
+     * 创建一个分页结果对象
+     *
      * @param page 标准分页对象
      * @param <T>  数据类型
      * @return 分页结果对象
@@ -54,6 +67,19 @@ public final class JsonPageResult<T> extends JsonResult<JsonPageResult.PageData<
     public static <T> JsonPageResult<T> of(Page<T> page) {
         Pageable pageable = page.getPageable();
         return of(pageable.getPageNumber(), pageable.getPageSize(), page.getTotalElements(), page.getContent());
+    }
+
+    /**
+     * 创建一个分页结果对象
+     *
+     * @param page   标准分页对象
+     * @param mapper 数据映射函数
+     * @param <T>    数据类型
+     * @return 分页结果对象
+     */
+    public static <T> JsonPageResult<T> of(Page<?> page, Function<List<?>, List<T>> mapper) {
+        Pageable pageable = page.getPageable();
+        return of(pageable.getPageNumber(), pageable.getPageSize(), page.getTotalElements(), mapper.apply(page.getContent()));
     }
 
     private JsonPageResult(long page, long size, long total, List<T> data) {

@@ -4,7 +4,7 @@ import com.ale.starblog.framework.common.enumeration.BaseEnum;
 import lombok.Getter;
 
 /**
- * 文章状态枚举
+ * 文章状态
  *
  * @author Ale
  * @version 1.0.0

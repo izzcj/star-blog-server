@@ -1,0 +1,153 @@
+package com.ale.starblog.admin.blog.controller;
+
+import cn.hutool.core.bean.BeanUtil;
+import com.ale.starblog.admin.blog.domain.entity.Comment;
+import com.ale.starblog.admin.blog.domain.pojo.comment.*;
+import com.ale.starblog.admin.blog.enums.CommentStatus;
+import com.ale.starblog.admin.blog.service.ICommentService;
+import com.ale.starblog.framework.common.domain.JsonPageResult;
+import com.ale.starblog.framework.common.domain.JsonResult;
+import com.ale.starblog.framework.common.utils.SecurityUtils;
+import com.ale.starblog.framework.core.controller.BaseController;
+import com.ale.starblog.framework.core.translation.GenericTranslationSupport;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+/**
+ * /博客管理/评论管理
+ *
+ * @author Ale
+ * @version 1.0.0 2025/11/27 16:55
+ */
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/blog/comment")
+public class CommentController extends BaseController<Comment, ICommentService, CommentVO, CommentBO, CreateCommentDTO, ModifyCommentDTO> {
+
+    /**
+     * 查询单条评论详情
+     *
+     * @param id 评论ID
+     * @return 评论详情
+     */
+    @GetMapping("/{id}")
+    public JsonResult<CommentVO> fetchDetails(@PathVariable Long id) {
+        return this.queryById(id);
+    }
+
+    /**
+     * 查询子评论
+     *
+     * @param pageable 分页参数
+     * @param id       评论ID
+     * @return 子评论列表
+     */
+    @GetMapping("/{id}/children")
+    public JsonPageResult<CommentVO> fetchChildren(Pageable pageable, @PathVariable Long id) {
+        return JsonPageResult.of(
+            this.service.fetchChildren(pageable, id),
+            children -> {
+                List<CommentVO> result = BeanUtil.copyToList(children, CommentVO.class);
+                GenericTranslationSupport.translate(result);
+                return result;
+            }
+        );
+    }
+
+    /**
+     * 创建评论
+     *
+     * @param createDTO 创建DTO
+     * @return 结果
+     */
+    @PostMapping
+    public JsonResult<Void> create(@RequestBody @Validated CreateCommentDTO createDTO) {
+        return this.createEntity(createDTO);
+    }
+
+    /**
+     * 修改评论
+     *
+     * @param modifyDTO 修改DTO
+     * @return 结果
+     */
+    @PutMapping
+    public JsonResult<Void> modify(@RequestBody @Validated ModifyCommentDTO modifyDTO) {
+        return this.modifyEntity(modifyDTO);
+    }
+
+    /**
+     * 删除评论
+     *
+     * @param id 评论ID
+     * @return 结果
+     */
+    @DeleteMapping("/{id}")
+    public JsonResult<Void> delete(@PathVariable Long id) {
+        return this.deleteEntity(id);
+    }
+
+    /**
+     * 点赞评论
+     *
+     * @param id 评论ID
+     * @return 结果
+     */
+    @PostMapping("/{id}/like")
+    public JsonResult<Void> like(@PathVariable Long id) {
+        this.service.likeComment(id, SecurityUtils.getLoginUserId());
+        return JsonResult.success();
+    }
+
+    /**
+     * 取消点赞
+     *
+     * @param id 评论ID
+     * @return 结果
+     */
+    @DeleteMapping("/{id}/like")
+    public JsonResult<Void> unlike(@PathVariable Long id) {
+        this.service.unlikeComment(id, SecurityUtils.getLoginUserId());
+        return JsonResult.success();
+    }
+
+    /**
+     * 审核通过
+     *
+     * @param id 评论ID
+     * @return 结果
+     */
+    @PutMapping("/{id}/audit/pass")
+    public JsonResult<Void> auditPass(@PathVariable Long id) {
+        this.service.auditComment(id, CommentStatus.PASS);
+        return JsonResult.success();
+    }
+
+    /**
+     * 审核拒绝
+     *
+     * @param id 评论ID
+     * @return 结果
+     */
+    @PutMapping("/{id}/audit/reject")
+    public JsonResult<Void> auditReject(@PathVariable Long id) {
+        this.service.auditComment(id, CommentStatus.REJECT);
+        return JsonResult.success();
+    }
+
+    /**
+     * 批量审核
+     *
+     * @param batchAuditDTO 批量审核DTO
+     * @return 结果
+     */
+    @PutMapping("/audit/batch")
+    public JsonResult<Void> batchAudit(@RequestBody @Validated BatchAuditDTO batchAuditDTO) {
+        this.service.batchAuditComments(batchAuditDTO.getIds(), batchAuditDTO.getStatus());
+        return JsonResult.success();
+    }
+}

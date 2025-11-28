@@ -5,11 +5,14 @@ import com.ale.starblog.admin.blog.domain.pojo.tag.*;
 import com.ale.starblog.admin.blog.service.ITagService;
 import com.ale.starblog.framework.common.domain.JsonPageResult;
 import com.ale.starblog.framework.common.domain.JsonResult;
+import com.ale.starblog.framework.common.support.Option;
 import com.ale.starblog.framework.core.controller.BaseController;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * /博客管理/标签管理
@@ -44,6 +47,22 @@ public class TagController extends BaseController<Tag, ITagService, TagVO, TagBO
     @GetMapping("/page")
     public JsonPageResult<TagVO> fetchPage(Pageable pageable, TagQuery query) {
         return this.queryPage(pageable, query);
+    }
+
+    /**
+     * 获取标签选项
+     *
+     * @param query 查询条件
+     * @return 标签选项
+     */
+    @GetMapping("/options")
+    public JsonResult<List<Option>> fetchOptions(TagQuery query) {
+        List<TagBO> result = this.service.queryList(query);
+        return JsonResult.success(
+            result.stream()
+                .map(tag -> Option.of(tag.getName(), tag.getId(), tag.getColor()))
+                .toList()
+        );
     }
 
     /**

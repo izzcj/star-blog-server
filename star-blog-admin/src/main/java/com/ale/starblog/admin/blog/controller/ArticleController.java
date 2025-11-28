@@ -54,8 +54,8 @@ public class ArticleController extends BaseController<Article, IArticleService, 
             .stream()
             .map(tagBO ->
                 ArticleTagVO.builder()
+                    .id(tagBO.getId())
                     .name(tagBO.getName())
-                    .description(tagBO.getDescription())
                     .color(tagBO.getColor())
                     .build()
             )

@@ -32,11 +32,6 @@ public class ArticleTagBO extends BaseBO {
     private String name;
 
     /**
-     * 标签描述
-     */
-    private String description;
-
-    /**
      * 标签颜色
      */
     private String color;

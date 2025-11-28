@@ -23,7 +23,7 @@ public class DictTypeQuery extends BaseQuery {
     /**
      * 字典名称
      */
-    @Query
+    @Query(type = QueryType.LIKE_ANYWHERE)
     private String dictName;
 
     /**

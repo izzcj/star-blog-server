@@ -1,0 +1,89 @@
+package com.ale.starblog.admin.blog.domain.pojo.comment;
+
+import com.ale.starblog.admin.blog.enums.CommentStatus;
+import com.ale.starblog.admin.common.constants.TranslationConstants;
+import com.ale.starblog.framework.core.pojo.BaseVO;
+import com.ale.starblog.framework.core.translation.TranslationField;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
+
+import java.time.LocalDateTime;
+
+/**
+ * 评论VO
+ *
+ * @author Ale
+ * @version 1.0.0 2025/11/27 16:35
+ */
+@Data
+@SuperBuilder
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
+public class CommentVO extends BaseVO {
+
+    /**
+     * 文章ID
+     */
+    private Long articleId;
+
+    /**
+     * 父级评论ID
+     */
+    private Long parentId;
+
+    /**
+     * 根评论ID
+     */
+    private Long rootId;
+
+    /**
+     * 评论内容
+     */
+    private String content;
+
+    /**
+     * 点赞数
+     */
+    private Integer likeCount;
+
+    /**
+     * 状态
+     */
+    private CommentStatus status;
+
+    /**
+     * 评论用户ID
+     */
+    @TranslationField(type = TranslationConstants.TRANSLATION_USER)
+    private Long userId;
+
+    /**
+     * 评论用户名
+     */
+    private String userName;
+
+    /**
+     * 回复目标用户ID
+     */
+    @TranslationField(type = TranslationConstants.TRANSLATION_USER)
+    private Long replyUserId;
+
+    /**
+     * 回复目标用户名
+     */
+    private String replyUserName;
+
+    /**
+     * 当前用户是否已点赞
+     */
+    private Boolean isLiked;
+
+    /**
+     * 创建时间
+     */
+    private LocalDateTime createTime;
+}
