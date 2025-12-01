@@ -2,6 +2,7 @@ package com.ale.starblog.admin.blog.service;
 
 import com.ale.starblog.admin.blog.domain.entity.Comment;
 import com.ale.starblog.admin.blog.domain.pojo.comment.CommentBO;
+import com.ale.starblog.admin.blog.domain.pojo.comment.CommentQuery;
 import com.ale.starblog.admin.blog.enums.CommentStatus;
 import com.ale.starblog.framework.core.service.ICrudService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -18,13 +19,13 @@ import java.util.List;
 public interface ICommentService extends ICrudService<Comment, CommentBO> {
 
     /**
-     * 查询子评论
+     * 分页查询评论列表
      *
      * @param pageable 分页参数
-     * @param parentId 父评论ID
-     * @return 子评论分页数据
+     * @param query    查询条件
+     * @return 评论分页数据
      */
-    IPage<CommentBO> fetchChildren(Pageable pageable, Long parentId);
+    IPage<CommentBO> fetchPage(Pageable pageable, CommentQuery query);
 
     /**
      * 点赞评论

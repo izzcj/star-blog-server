@@ -18,9 +18,14 @@ public class TranslationConstants {
     public static final String TRANSLATION_DICT = "dict";
 
     /**
-     * 翻译用户
+     * 翻译用户昵称
      */
-    public static final String TRANSLATION_USER = "user-name";
+    public static final String TRANSLATION_USER_NICKNAME = "user-nickname";
+
+    /**
+     * 翻译用户头像
+     */
+    public static final String TRANSLATION_USER_AVATAR = "user-avatar";
 
     /**
      * 翻译字典的key

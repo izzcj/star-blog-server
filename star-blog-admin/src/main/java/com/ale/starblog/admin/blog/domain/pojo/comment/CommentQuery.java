@@ -3,7 +3,6 @@ package com.ale.starblog.admin.blog.domain.pojo.comment;
 import com.ale.starblog.admin.blog.enums.CommentStatus;
 import com.ale.starblog.framework.core.query.BaseQuery;
 import com.ale.starblog.framework.core.query.Query;
-import com.ale.starblog.framework.core.query.QueryParameter;
 import com.ale.starblog.framework.core.query.QueryType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -21,6 +20,18 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class CommentQuery extends BaseQuery {
+
+    /**
+     * 根评论ID
+     */
+    @Query
+    private Long rootId;
+
+    /**
+     * 父评论ID
+     */
+    @Query
+    private Long parentId;
 
     /**
      * 文章ID
@@ -43,6 +54,6 @@ public class CommentQuery extends BaseQuery {
     /**
      * 排序字段
      */
-    @Query(type = QueryType.SORT, parameters = @QueryParameter(name = "order", value = "desc"))
+    @Query(type = QueryType.SORT)
     private String sort = "create_time";
 }

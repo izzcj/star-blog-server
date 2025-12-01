@@ -77,7 +77,7 @@ public class ArticleVO extends BaseVO {
     /**
      * 创建人
      */
-    @TranslationField(type = TranslationConstants.TRANSLATION_USER)
+    @TranslationField(type = TranslationConstants.TRANSLATION_USER_NICKNAME)
     private Long createBy;
 
     /**

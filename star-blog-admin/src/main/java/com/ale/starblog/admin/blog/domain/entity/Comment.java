@@ -47,11 +47,6 @@ public class Comment extends BaseEntity {
     private Integer likeCount;
 
     /**
-     * 排序权重
-     */
-    private Integer sort;
-
-    /**
      * 状态
      */
     private CommentStatus status;

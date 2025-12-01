@@ -1,12 +1,14 @@
 package com.ale.starblog.admin.blog.enums;
 
+import com.ale.starblog.framework.common.enumeration.BaseEnum;
+
 /**
  * 评论状态
  *
  * @author Ale
  * @version 1.0.0 2025/11/27 15:01
  */
-public enum CommentStatus {
+public enum CommentStatus implements BaseEnum<String> {
 
     /**
      * 待审核
@@ -21,5 +23,9 @@ public enum CommentStatus {
     /**
      * 审核未通过
      */
-    REJECT
+    REJECT;
+
+    CommentStatus() {
+        this.init();
+    }
 }

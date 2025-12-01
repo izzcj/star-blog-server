@@ -40,19 +40,19 @@ public class CommentController extends BaseController<Comment, ICommentService, 
     }
 
     /**
-     * 查询子评论
+     * 查询评论列表
      *
      * @param pageable 分页参数
-     * @param id       评论ID
-     * @return 子评论列表
+     * @param query    查询参数
+     * @return 评论列表
      */
-    @GetMapping("/{id}/children")
-    public JsonPageResult<CommentVO> fetchChildren(Pageable pageable, @PathVariable Long id) {
+    @GetMapping("/page")
+    public JsonPageResult<CommentVO> fetchPage(Pageable pageable, CommentQuery query) {
         return JsonPageResult.of(
-            this.service.fetchChildren(pageable, id),
-            children -> {
-                List<CommentVO> result = BeanUtil.copyToList(children, CommentVO.class);
-                GenericTranslationSupport.translate(result);
+            this.service.fetchPage(pageable, query),
+            comments -> {
+                List<CommentVO> result = BeanUtil.copyToList(comments, CommentVO.class);
+                result.forEach(GenericTranslationSupport::translate);
                 return result;
             }
         );
@@ -145,7 +145,7 @@ public class CommentController extends BaseController<Comment, ICommentService, 
      * @param batchAuditDTO 批量审核DTO
      * @return 结果
      */
-    @PutMapping("/audit/batch")
+    @PutMapping("/batch/audit")
     public JsonResult<Void> batchAudit(@RequestBody @Validated BatchAuditDTO batchAuditDTO) {
         this.service.batchAuditComments(batchAuditDTO.getIds(), batchAuditDTO.getStatus());
         return JsonResult.success();

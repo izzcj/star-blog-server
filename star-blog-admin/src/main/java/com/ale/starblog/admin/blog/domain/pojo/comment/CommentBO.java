@@ -52,11 +52,6 @@ public class CommentBO extends BaseBO {
     private Integer likeCount;
 
     /**
-     * 排序权重
-     */
-    private Integer sort;
-
-    /**
      * 状态
      */
     private CommentStatus status;
@@ -75,4 +70,9 @@ public class CommentBO extends BaseBO {
      * 回复目标用户ID
      */
     private Long replyUserId;
+
+    /**
+     * 回复数
+     */
+    private Integer replyCount;
 }

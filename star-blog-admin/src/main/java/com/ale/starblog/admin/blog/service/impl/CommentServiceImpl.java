@@ -3,12 +3,14 @@ package com.ale.starblog.admin.blog.service.impl;
 import com.ale.starblog.admin.blog.domain.entity.Comment;
 import com.ale.starblog.admin.blog.domain.entity.CommentLike;
 import com.ale.starblog.admin.blog.domain.pojo.comment.CommentBO;
+import com.ale.starblog.admin.blog.domain.pojo.comment.CommentQuery;
 import com.ale.starblog.admin.blog.enums.CommentStatus;
 import com.ale.starblog.admin.blog.mapper.CommentMapper;
 import com.ale.starblog.admin.blog.service.ICommentLikeService;
 import com.ale.starblog.admin.blog.service.ICommentService;
 import com.ale.starblog.framework.common.exception.ServiceException;
 import com.ale.starblog.framework.common.utils.SecurityUtils;
+import com.ale.starblog.framework.core.query.QueryConditionResolver;
 import com.ale.starblog.framework.core.service.AbstractCrudServiceImpl;
 import com.ale.starblog.framework.core.service.hook.HookContext;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -45,7 +47,10 @@ public class CommentServiceImpl extends AbstractCrudServiceImpl<CommentMapper, C
                 throw new ServiceException("父评论不存在");
             }
             // 如果父评论是顶级评论，rootId = parentId；否则继承父评论的rootId
-            entity.setRootId(parent.getRootId() != null ? parent.getRootId() : parent.getId());
+            entity.setRootId(parent.getRootId() != 0L ? parent.getRootId() : parent.getId());
+        } else {
+            entity.setParentId(0L);
+            entity.setRootId(0L);
         }
 
         if (entity.getStatus() == null) {
@@ -54,21 +59,28 @@ public class CommentServiceImpl extends AbstractCrudServiceImpl<CommentMapper, C
         if (entity.getLikeCount() == null) {
             entity.setLikeCount(0);
         }
-        if (entity.getSort() == null) {
-            entity.setSort(0);
-        }
 
         entity.setUserId(SecurityUtils.getLoginUserId());
     }
 
     @Override
-    public IPage<CommentBO> fetchChildren(Pageable pageable, Long parentId) {
-        LambdaQueryWrapper<Comment> queryWrapper = Wrappers.<Comment>lambdaQuery()
-            .eq(Comment::getId, parentId)
-            .eq(Comment::getStatus, CommentStatus.PASS)
-            .orderByDesc(Comment::getCreateTime);
+    public void beforeDelete(Comment entity, HookContext context) {
+        // 删除关联评论
+        this.remove(
+            Wrappers.<Comment>lambdaQuery()
+                .eq(Comment::getRootId, entity.getId())
+                .or()
+                .eq(Comment::getReplyUserId, entity.getUserId())
+        );
+    }
+
+    @Override
+    public IPage<CommentBO> fetchPage(Pageable pageable, CommentQuery query) {
+        LambdaQueryWrapper<Comment> queryWrapper = QueryConditionResolver.resolveLambda(query);
+
         IPage<CommentBO> result = this.executeQueryPage(pageable, queryWrapper, CommentBO.class);
         List<CommentBO> records = result.getRecords();
+
         Long loginUserId = SecurityUtils.getLoginUserId();
         // 未登录不判断是否点赞
         if (records.isEmpty() || loginUserId == null) {
@@ -77,6 +89,7 @@ public class CommentServiceImpl extends AbstractCrudServiceImpl<CommentMapper, C
         Set<Long> commentIds = records.stream()
             .map(CommentBO::getId)
             .collect(Collectors.toSet());
+
         Set<Long> loginUserLikedCommentIds = this.commentLikeService.lambdaQuery()
             .eq(CommentLike::getUserId, loginUserId)
             .in(CommentLike::getCommentId, commentIds)
@@ -84,7 +97,18 @@ public class CommentServiceImpl extends AbstractCrudServiceImpl<CommentMapper, C
             .stream()
             .map(CommentLike::getCommentId)
             .collect(Collectors.toSet());
-        records.forEach(comment -> comment.setLiked(loginUserLikedCommentIds.contains(comment.getId())));
+
+        Map<Long, Long> replyCountMapping = this.lambdaQuery()
+            .select(Comment::getId, Comment::getRootId)
+            .in(Comment::getRootId, commentIds)
+            .list()
+            .stream()
+            .collect(Collectors.groupingBy(Comment::getRootId, Collectors.counting()));
+
+        records.forEach(comment -> {
+            comment.setLiked(loginUserLikedCommentIds.contains(comment.getId()));
+            comment.setReplyCount(replyCountMapping.getOrDefault(comment.getId(), 0L).intValue());
+        });
         return result;
     }
 
@@ -115,7 +139,7 @@ public class CommentServiceImpl extends AbstractCrudServiceImpl<CommentMapper, C
 
         // 4. 更新点赞数
         this.lambdaUpdate()
-            .setSql("like_count = like_count + 1")
+            .set(Comment::getLikeCount, comment.getLikeCount() + 1)
             .eq(Comment::getId, commentId)
             .update();
     }
@@ -123,7 +147,13 @@ public class CommentServiceImpl extends AbstractCrudServiceImpl<CommentMapper, C
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void unlikeComment(Long commentId, Long userId) {
-        // 1. 删除点赞记录
+        // 1. 检查评论是否存在
+        Comment comment = this.getById(commentId);
+        if (comment == null) {
+            throw new ServiceException("评论不存在");
+        }
+
+        // 2. 删除点赞记录
         boolean deleted = this.commentLikeService.remove(
             Wrappers.<CommentLike>lambdaQuery()
                 .eq(CommentLike::getCommentId, commentId)
@@ -134,9 +164,11 @@ public class CommentServiceImpl extends AbstractCrudServiceImpl<CommentMapper, C
             throw new ServiceException("未点赞，无法取消");
         }
 
-        // 2. 更新点赞数（防止负数）
+        int likeCount = Math.max(comment.getLikeCount() - 1, 0);
+
+        // 3. 更新点赞数
         this.lambdaUpdate()
-            .setSql("like_count = GREATEST(like_count - 1, 0)")
+            .set(Comment::getLikeCount, likeCount)
             .eq(Comment::getId, commentId)
             .update();
     }

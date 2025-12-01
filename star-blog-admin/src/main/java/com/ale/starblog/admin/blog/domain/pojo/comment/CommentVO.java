@@ -4,13 +4,12 @@ import com.ale.starblog.admin.blog.enums.CommentStatus;
 import com.ale.starblog.admin.common.constants.TranslationConstants;
 import com.ale.starblog.framework.core.pojo.BaseVO;
 import com.ale.starblog.framework.core.translation.TranslationField;
+import com.ale.starblog.framework.core.translation.TranslationFields;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-
-import java.time.LocalDateTime;
 
 /**
  * 评论VO
@@ -51,6 +50,11 @@ public class CommentVO extends BaseVO {
     private Integer likeCount;
 
     /**
+     * 当前用户是否已点赞
+     */
+    private Boolean liked;
+
+    /**
      * 状态
      */
     private CommentStatus status;
@@ -58,7 +62,10 @@ public class CommentVO extends BaseVO {
     /**
      * 评论用户ID
      */
-    @TranslationField(type = TranslationConstants.TRANSLATION_USER)
+    @TranslationFields({
+        @TranslationField(type = TranslationConstants.TRANSLATION_USER_NICKNAME),
+        @TranslationField(type = TranslationConstants.TRANSLATION_USER_AVATAR, field = "userAvatar")
+    })
     private Long userId;
 
     /**
@@ -67,9 +74,14 @@ public class CommentVO extends BaseVO {
     private String userName;
 
     /**
+     * 评论用户头像
+     */
+    private String userAvatar;
+
+    /**
      * 回复目标用户ID
      */
-    @TranslationField(type = TranslationConstants.TRANSLATION_USER)
+    @TranslationField(type = TranslationConstants.TRANSLATION_USER_NICKNAME)
     private Long replyUserId;
 
     /**
@@ -78,12 +90,8 @@ public class CommentVO extends BaseVO {
     private String replyUserName;
 
     /**
-     * 当前用户是否已点赞
+     * 回复数
      */
-    private Boolean isLiked;
+    private Integer replyCount;
 
-    /**
-     * 创建时间
-     */
-    private LocalDateTime createTime;
 }

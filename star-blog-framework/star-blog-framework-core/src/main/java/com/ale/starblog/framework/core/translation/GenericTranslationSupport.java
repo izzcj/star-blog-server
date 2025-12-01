@@ -58,13 +58,13 @@ public class GenericTranslationSupport {
             return;
         }
 
-        List<ReflectionField> reflectionFields = ReflectionUtils.getClassAnnotatedFields(instance.getClass(), Set.of(TranslationField.class));
+        List<ReflectionField> translationFields = ReflectionUtils.getClassAnnotatedFields(instance.getClass(), Set.of(TranslationField.class, TranslationFields.class));
 
-        if (CollectionUtil.isEmpty(reflectionFields)) {
+        if (CollectionUtil.isEmpty(translationFields)) {
             return;
         }
 
-        for (ReflectionField reflectionField : reflectionFields) {
+        for (ReflectionField reflectionField : translationFields) {
             translate(reflectionField, instance);
         }
     }
@@ -124,9 +124,40 @@ public class GenericTranslationSupport {
             }
         }
 
-        TranslationField annotation = field.field().getAnnotation(TranslationField.class);
+        TranslationFields translationFields = field.field().getAnnotation(TranslationFields.class);
+        if (translationFields != null) {
+            for (TranslationField translationField : translationFields.value()) {
+                processTranslate(
+                    instance,
+                    translationField.type(),
+                    mergeParams(Maps.newHashMap(), translationField.params()),
+                    parseTranslateFieldName(field, translationField),
+                    values
+                );
+            }
+            return;
+        }
+
+        TranslationField translationField = field.field().getAnnotation(TranslationField.class);
+        processTranslate(
+            instance,
+            translationField.type(),
+            mergeParams(Maps.newHashMap(), translationField.params()),
+            parseTranslateFieldName(field, translationField),
+            values
+        );
+    }
+
+    /**
+     * 解析通用数据翻译字段名称
+     *
+     * @param field            反射字段对象
+     * @param translationField 通用数据翻译字段注解
+     * @return 通用数据翻译字段名称
+     */
+    private static String parseTranslateFieldName(ReflectionField field, TranslationField translationField) {
         String fieldName = field.field().getName();
-        String translatedValueFieldName = annotation.field();
+        String translatedValueFieldName = translationField.field();
         if (StrUtil.isBlank(translatedValueFieldName)) {
             if (fieldName.endsWith("Id")) {
                 translatedValueFieldName = StrUtil.strip(fieldName, null, "Id");
@@ -135,13 +166,7 @@ public class GenericTranslationSupport {
             }
             translatedValueFieldName += VenusConstants.GENERIC_TRANSLATION_NAME_PROPERTY_SUFFIX;
         }
-        processTranslate(
-            instance,
-            annotation.type(),
-            mergeParams(Maps.newHashMap(), annotation.params()),
-            translatedValueFieldName,
-            values
-        );
+        return translatedValueFieldName;
     }
 
     /**
