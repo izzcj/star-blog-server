@@ -21,7 +21,14 @@ public interface IArticleTagService extends IService<ArticleTag> {
      * @param article 文章id
      * @return 标签列表
      */
-    List<TagBO> getTagsByArticleId(Long article);
+    List<TagBO> fetchTagsByArticleId(Long article);
+
+    /**
+     * 获取热门标签
+     *
+     * @return 热门标签列表
+     */
+    List<TagBO> fetchHotTags();
 
     /**
      * 更新文章标签

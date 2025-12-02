@@ -22,17 +22,22 @@ import lombok.experimental.SuperBuilder;
 public class Tag extends BaseAuditEntity {
 
     /**
-     * 标签名称
+     * 名称
      */
     private String name;
 
     /**
-     * 标签描述
+     * 图标
+     */
+    private String icon;
+
+    /**
+     * 描述
      */
     private String description;
 
     /**
-     * 标签颜色
+     * 颜色
      */
     private String color;
 }

@@ -50,7 +50,7 @@ public class ArticleController extends BaseController<Article, IArticleService, 
         ArticleDetailsVO result = BeanUtil.copyProperties(article, ArticleDetailsVO.class);
         GenericTranslationSupport.translate(result);
         // 获取文章关联的标签
-        List<ArticleTagVO> tags = this.articleTagService.getTagsByArticleId(id)
+        List<ArticleTagVO> tags = this.articleTagService.fetchTagsByArticleId(id)
             .stream()
             .map(tagBO ->
                 ArticleTagVO.builder()

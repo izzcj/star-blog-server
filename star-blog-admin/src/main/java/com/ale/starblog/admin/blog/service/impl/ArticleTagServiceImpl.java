@@ -1,6 +1,8 @@
 package com.ale.starblog.admin.blog.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.ale.starblog.admin.blog.domain.entity.ArticleTag;
+import com.ale.starblog.admin.blog.domain.entity.Tag;
 import com.ale.starblog.admin.blog.domain.pojo.tag.TagBO;
 import com.ale.starblog.admin.blog.mapper.ArticleTagMapper;
 import com.ale.starblog.admin.blog.service.IArticleTagService;
@@ -31,7 +33,7 @@ public class ArticleTagServiceImpl extends ServiceImpl<ArticleTagMapper, Article
     private final ITagService tagService;
 
     @Override
-    public List<TagBO> getTagsByArticleId(Long articleId) {
+    public List<TagBO> fetchTagsByArticleId(Long articleId) {
         // 查询文章关联的标签ID列表
         List<Long> tagIds = this.lambdaQuery()
             .eq(ArticleTag::getArticleId, articleId)
@@ -56,6 +58,25 @@ public class ArticleTagServiceImpl extends ServiceImpl<ArticleTagMapper, Article
         }
 
         return List.of();
+    }
+
+    @Override
+    public List<TagBO> fetchHotTags() {
+        // 获取使用量前十的标签
+        List<Long> tagIds = this.lambdaQuery()
+            .select(ArticleTag::getTagId)
+            .groupBy(ArticleTag::getTagId)
+            .last("order by count(*) limit 10")
+            .list()
+            .stream()
+            .map(ArticleTag::getTagId)
+            .toList();
+        return BeanUtil.copyToList(
+            this.tagService.lambdaQuery()
+                .in(Tag::getId, tagIds)
+                .list(),
+            TagBO.class
+        );
     }
 
     @Override

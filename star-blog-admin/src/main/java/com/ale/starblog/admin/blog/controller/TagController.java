@@ -1,7 +1,9 @@
 package com.ale.starblog.admin.blog.controller;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.ale.starblog.admin.blog.domain.entity.Tag;
 import com.ale.starblog.admin.blog.domain.pojo.tag.*;
+import com.ale.starblog.admin.blog.service.IArticleTagService;
 import com.ale.starblog.admin.blog.service.ITagService;
 import com.ale.starblog.framework.common.domain.JsonPageResult;
 import com.ale.starblog.framework.common.domain.JsonResult;
@@ -25,6 +27,11 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/blog/tag")
 public class TagController extends BaseController<Tag, ITagService, TagVO, TagBO, CreateTagDTO, ModifyTagDTO> {
+
+    /**
+     * 文章标签服务接口
+     */
+    private final IArticleTagService articleTagService;
 
     /**
      * 通过id获取标签
@@ -63,6 +70,17 @@ public class TagController extends BaseController<Tag, ITagService, TagVO, TagBO
                 .map(tag -> Option.of(tag.getName(), tag.getId(), tag.getColor()))
                 .toList()
         );
+    }
+
+    /**
+     * 获取热门标签
+     *
+     * @return 热门标签
+     */
+    @GetMapping("/hot")
+    public JsonResult<List<TagVO>> fetchHotTags() {
+        List<TagBO> hotTags = this.articleTagService.fetchHotTags();
+        return JsonResult.success(BeanUtil.copyToList(hotTags, TagVO.class));
     }
 
     /**
