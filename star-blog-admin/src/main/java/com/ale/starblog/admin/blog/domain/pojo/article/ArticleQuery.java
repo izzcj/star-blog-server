@@ -5,6 +5,7 @@ import com.ale.starblog.framework.core.query.BaseQuery;
 import com.ale.starblog.framework.core.query.Query;
 import com.ale.starblog.framework.core.query.QueryParameter;
 import com.ale.starblog.framework.core.query.QueryType;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -50,6 +51,7 @@ public class ArticleQuery extends BaseQuery {
     /**
      * 排序字段
      */
+    @Builder.Default
     @Query(type = QueryType.SORT, parameters = @QueryParameter(name = "order", value = "desc"))
-    private String sort = "create_time";
+    private String sort = "createTime";
 }

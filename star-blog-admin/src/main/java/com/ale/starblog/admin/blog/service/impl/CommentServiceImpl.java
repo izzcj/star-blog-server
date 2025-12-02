@@ -1,5 +1,7 @@
 package com.ale.starblog.admin.blog.service.impl;
 
+import cn.hutool.core.util.BooleanUtil;
+import cn.hutool.core.util.StrUtil;
 import com.ale.starblog.admin.blog.domain.entity.Comment;
 import com.ale.starblog.admin.blog.domain.entity.CommentLike;
 import com.ale.starblog.admin.blog.domain.pojo.comment.CommentBO;
@@ -8,7 +10,10 @@ import com.ale.starblog.admin.blog.enums.CommentStatus;
 import com.ale.starblog.admin.blog.mapper.CommentMapper;
 import com.ale.starblog.admin.blog.service.ICommentLikeService;
 import com.ale.starblog.admin.blog.service.ICommentService;
+import com.ale.starblog.admin.system.constants.SystemConfigConstants;
+import com.ale.starblog.admin.system.service.ISystemConfigService;
 import com.ale.starblog.framework.common.exception.ServiceException;
+import com.ale.starblog.framework.common.utils.CastUtils;
 import com.ale.starblog.framework.common.utils.SecurityUtils;
 import com.ale.starblog.framework.core.query.QueryConditionResolver;
 import com.ale.starblog.framework.core.service.AbstractCrudServiceImpl;
@@ -39,6 +44,11 @@ public class CommentServiceImpl extends AbstractCrudServiceImpl<CommentMapper, C
      */
     private final ICommentLikeService commentLikeService;
 
+    /**
+     * 系统配置服务
+     */
+    private final ISystemConfigService systemConfigService;
+
     @Override
     public void beforeCreate(Comment entity, HookContext context) {
         if (entity.getParentId() != null) {
@@ -54,7 +64,12 @@ public class CommentServiceImpl extends AbstractCrudServiceImpl<CommentMapper, C
         }
 
         if (entity.getStatus() == null) {
-            entity.setStatus(CommentStatus.WAIT_AUDIT);
+            Boolean enableCommentAudit = CastUtils.cast(this.systemConfigService.fetchValueByKey(SystemConfigConstants.ENABLE_COMMENT_AUDIT));
+            if (BooleanUtil.isTrue(enableCommentAudit)) {
+                entity.setStatus(CommentStatus.PENDING);
+            } else {
+                entity.setStatus(CommentStatus.PASS);
+            }
         }
         if (entity.getLikeCount() == null) {
             entity.setLikeCount(0);
@@ -174,25 +189,7 @@ public class CommentServiceImpl extends AbstractCrudServiceImpl<CommentMapper, C
     }
 
     @Override
-    public void auditComment(Long commentId, CommentStatus status) {
-        if (status != CommentStatus.PASS && status != CommentStatus.REJECT) {
-            throw new ServiceException("审核状态只能是通过或拒绝");
-        }
-
-        Comment comment = this.getById(commentId);
-        if (comment == null) {
-            throw new ServiceException("评论不存在");
-        }
-
-        this.lambdaUpdate()
-            .set(Comment::getStatus, status)
-            .eq(Comment::getId, commentId)
-            .update();
-    }
-
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void batchAuditComments(List<Long> ids, CommentStatus status) {
+    public void batchAuditComments(List<Long> ids, CommentStatus status, String rejectReason) {
         if (status != CommentStatus.PASS && status != CommentStatus.REJECT) {
             throw new ServiceException("审核状态只能是通过或拒绝");
         }
@@ -203,6 +200,7 @@ public class CommentServiceImpl extends AbstractCrudServiceImpl<CommentMapper, C
 
         this.lambdaUpdate()
             .set(Comment::getStatus, status)
+            .set(StrUtil.isNotBlank(rejectReason), Comment::getRejectReason, rejectReason)
             .in(Comment::getId, ids)
             .update();
     }

@@ -1,6 +1,7 @@
 package com.ale.starblog.admin.blog.enums;
 
 import com.ale.starblog.framework.common.enumeration.BaseEnum;
+import com.ale.starblog.framework.common.support.Comment;
 import lombok.Getter;
 
 /**
@@ -11,6 +12,7 @@ import lombok.Getter;
  * @since 2025/8/12
  */
 @Getter
+@Comment("文章状态")
 public enum ArticleStatus implements BaseEnum<String> {
 
     /**

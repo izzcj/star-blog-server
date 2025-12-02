@@ -4,10 +4,13 @@ import com.ale.starblog.admin.blog.enums.CommentStatus;
 import com.ale.starblog.framework.core.query.BaseQuery;
 import com.ale.starblog.framework.core.query.Query;
 import com.ale.starblog.framework.core.query.QueryType;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+
+import java.time.LocalDateTime;
 
 /**
  * 评论查询条件
@@ -52,8 +55,21 @@ public class CommentQuery extends BaseQuery {
     private Long userId;
 
     /**
+     * 创建时间开始
+     */
+    @Query(column = "createTime", type = QueryType.GE)
+    private LocalDateTime createTimeBegin;
+
+    /**
+     * 创建时间结束
+     */
+    @Query(column = "createTime", type = QueryType.LE)
+    private LocalDateTime createTimeEnd;
+
+    /**
      * 排序字段
      */
+    @Builder.Default
     @Query(type = QueryType.SORT)
-    private String sort = "create_time";
+    private String sort = "createTime";
 }

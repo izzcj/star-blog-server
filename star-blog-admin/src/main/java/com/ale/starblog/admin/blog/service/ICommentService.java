@@ -44,18 +44,11 @@ public interface ICommentService extends ICrudService<Comment, CommentBO> {
     void unlikeComment(Long commentId, Long userId);
 
     /**
-     * 审核评论
-     *
-     * @param commentId 评论ID
-     * @param status    审核状态
-     */
-    void auditComment(Long commentId, CommentStatus status);
-
-    /**
      * 批量审核评论
      *
-     * @param ids    评论ID列表
-     * @param status 审核状态
+     * @param ids          评论ID列表
+     * @param status       审核状态
+     * @param rejectReason 驳回原因
      */
-    void batchAuditComments(List<Long> ids, CommentStatus status);
+    void batchAuditComments(List<Long> ids, CommentStatus status, String rejectReason);
 }

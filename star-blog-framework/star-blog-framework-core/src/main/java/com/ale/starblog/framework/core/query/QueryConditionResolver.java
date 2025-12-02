@@ -60,13 +60,13 @@ public final class QueryConditionResolver {
             if (StrUtil.isNotBlank(annotation.column())) {
                 fieldName = annotation.column();
             } else {
-                fieldName = StrUtil.toUnderlineCase(queryField.field().getName());
+                fieldName = queryField.field().getName();
             }
             QueryCondition queryCondition = queryConditionMap.get(annotation.type());
             if (queryCondition == null) {
                 continue;
             }
-            queryCondition.build(fieldName, fieldValue, queryWrapper, annotation.parameters());
+            queryCondition.build(StrUtil.toUnderlineCase(fieldName), fieldValue, queryWrapper, annotation.parameters());
         }
         return queryWrapper;
     }

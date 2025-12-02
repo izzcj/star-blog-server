@@ -4,6 +4,7 @@ import com.ale.starblog.framework.common.enumeration.SwitchStatus;
 import com.ale.starblog.framework.core.query.BaseQuery;
 import com.ale.starblog.framework.core.query.Query;
 import com.ale.starblog.framework.core.query.QueryType;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -49,6 +50,7 @@ public class UserQuery extends BaseQuery {
     /**
      * 排序字段
      */
+    @Builder.Default
     @Query(type = QueryType.SORT)
     private String sort = "sort";
 

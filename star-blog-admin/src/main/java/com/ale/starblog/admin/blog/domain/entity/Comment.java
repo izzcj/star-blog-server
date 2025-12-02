@@ -61,4 +61,8 @@ public class Comment extends BaseEntity {
      */
     private Long replyUserId;
 
+    /**
+     * 驳回理由
+     */
+    private String rejectReason;
 }

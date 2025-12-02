@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 /**
- * 批量审核DTO
+ * 批量审核评论DTO
  *
  * @author Ale
  * @version 1.0.0 2025/11/27 16:40
@@ -18,7 +18,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class BatchAuditDTO {
+public class BatchAuditCommentDTO {
 
     /**
      * 评论ID列表
@@ -31,4 +31,9 @@ public class BatchAuditDTO {
      */
     @NotNull(message = "审核状态不能为空")
     private CommentStatus status;
+
+    /**
+     * 驳回原因
+     */
+    private String rejectReason;
 }

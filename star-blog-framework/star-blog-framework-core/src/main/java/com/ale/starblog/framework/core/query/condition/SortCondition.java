@@ -1,6 +1,7 @@
 package com.ale.starblog.framework.core.query.condition;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.StrUtil;
 import com.ale.starblog.framework.core.constants.DataBaseConstants;
 import com.ale.starblog.framework.core.query.QueryParameter;
 import com.ale.starblog.framework.core.query.QueryType;
@@ -33,9 +34,14 @@ public class SortCondition implements QueryCondition {
         }
         List<String> sortFields = new ArrayList<>();
         if (fieldValue instanceof String stringValue) {
-            sortFields.add(stringValue);
+            sortFields.add(StrUtil.toUnderlineCase(stringValue));
         } else if (fieldValue instanceof Collection collection) {
-            sortFields.addAll(collection);
+            sortFields.addAll(
+                collection
+                    .stream()
+                    .map(item -> StrUtil.toUnderlineCase(item.toString()))
+                    .toList()
+            );
         } else {
             throw new IllegalArgumentException("排序字段必须为String或Collection");
         }

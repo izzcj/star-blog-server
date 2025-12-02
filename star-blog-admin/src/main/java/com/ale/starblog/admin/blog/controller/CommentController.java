@@ -3,7 +3,6 @@ package com.ale.starblog.admin.blog.controller;
 import cn.hutool.core.bean.BeanUtil;
 import com.ale.starblog.admin.blog.domain.entity.Comment;
 import com.ale.starblog.admin.blog.domain.pojo.comment.*;
-import com.ale.starblog.admin.blog.enums.CommentStatus;
 import com.ale.starblog.admin.blog.service.ICommentService;
 import com.ale.starblog.framework.common.domain.JsonPageResult;
 import com.ale.starblog.framework.common.domain.JsonResult;
@@ -70,17 +69,6 @@ public class CommentController extends BaseController<Comment, ICommentService, 
     }
 
     /**
-     * 修改评论
-     *
-     * @param modifyDTO 修改DTO
-     * @return 结果
-     */
-    @PutMapping
-    public JsonResult<Void> modify(@RequestBody @Validated ModifyCommentDTO modifyDTO) {
-        return this.modifyEntity(modifyDTO);
-    }
-
-    /**
      * 删除评论
      *
      * @param id 评论ID
@@ -116,38 +104,18 @@ public class CommentController extends BaseController<Comment, ICommentService, 
     }
 
     /**
-     * 审核通过
-     *
-     * @param id 评论ID
-     * @return 结果
-     */
-    @PutMapping("/{id}/audit/pass")
-    public JsonResult<Void> auditPass(@PathVariable Long id) {
-        this.service.auditComment(id, CommentStatus.PASS);
-        return JsonResult.success();
-    }
-
-    /**
-     * 审核拒绝
-     *
-     * @param id 评论ID
-     * @return 结果
-     */
-    @PutMapping("/{id}/audit/reject")
-    public JsonResult<Void> auditReject(@PathVariable Long id) {
-        this.service.auditComment(id, CommentStatus.REJECT);
-        return JsonResult.success();
-    }
-
-    /**
      * 批量审核
      *
-     * @param batchAuditDTO 批量审核DTO
+     * @param batchAuditCommentDTO 批量审核DTO
      * @return 结果
      */
     @PutMapping("/batch/audit")
-    public JsonResult<Void> batchAudit(@RequestBody @Validated BatchAuditDTO batchAuditDTO) {
-        this.service.batchAuditComments(batchAuditDTO.getIds(), batchAuditDTO.getStatus());
+    public JsonResult<Void> batchAudit(@RequestBody @Validated BatchAuditCommentDTO batchAuditCommentDTO) {
+        this.service.batchAuditComments(
+            batchAuditCommentDTO.getIds(),
+            batchAuditCommentDTO.getStatus(),
+            batchAuditCommentDTO.getRejectReason()
+        );
         return JsonResult.success();
     }
 }

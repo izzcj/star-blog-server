@@ -3,6 +3,7 @@ package com.ale.starblog.admin.system.domain.pojo.config;
 import com.ale.starblog.framework.core.query.BaseQuery;
 import com.ale.starblog.framework.core.query.Query;
 import com.ale.starblog.framework.core.query.QueryType;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -41,6 +42,7 @@ public class SystemConfigQuery extends BaseQuery {
     /**
      * 排序
      */
+    @Builder.Default
     @Query(type = QueryType.SORT)
     private String sortField = "sort";
 }

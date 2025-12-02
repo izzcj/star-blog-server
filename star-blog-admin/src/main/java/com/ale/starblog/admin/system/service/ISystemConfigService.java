@@ -11,4 +11,13 @@ import com.ale.starblog.framework.core.service.ICrudService;
  * @version 1.0.0 2025/10/31 11:31
  */
 public interface ISystemConfigService extends ICrudService<SystemConfig, SystemConfigBO> {
+
+    /**
+     * 获取配置值
+     *
+     * @param key 配置键
+     * @return 配置值
+     */
+    Object fetchValueByKey(String key);
+
 }
