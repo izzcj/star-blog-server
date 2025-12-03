@@ -71,11 +71,11 @@ public class ArticleServiceImpl extends AbstractCrudServiceImpl<ArticleMapper, A
 
     @Override
     public List<ArticleBO> fetchHotArticles() {
-        // 按照浏览量排序取前10
+        // 按照浏览量排序
         return this.lambdaQuery()
             .eq(Article::getStatus, ArticleStatus.PUBLISHED)
             .orderByDesc(Article::getViewCount)
-            .last("limit 10")
+            .last("limit 6")
             .list()
             .stream()
             .map(article -> BeanUtil.copyProperties(article, ArticleBO.class))

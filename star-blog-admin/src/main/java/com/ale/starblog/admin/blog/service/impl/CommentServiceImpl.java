@@ -21,6 +21,7 @@ import com.ale.starblog.framework.core.service.hook.HookContext;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.google.common.collect.Sets;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -98,20 +99,24 @@ public class CommentServiceImpl extends AbstractCrudServiceImpl<CommentMapper, C
 
         Long loginUserId = SecurityUtils.getLoginUserId();
         // 未登录不判断是否点赞
-        if (records.isEmpty() || loginUserId == null) {
+        if (records.isEmpty()) {
             return result;
         }
         Set<Long> commentIds = records.stream()
             .map(CommentBO::getId)
             .collect(Collectors.toSet());
 
-        Set<Long> loginUserLikedCommentIds = this.commentLikeService.lambdaQuery()
-            .eq(CommentLike::getUserId, loginUserId)
-            .in(CommentLike::getCommentId, commentIds)
-            .list()
-            .stream()
-            .map(CommentLike::getCommentId)
-            .collect(Collectors.toSet());
+        Set<Long> loginUserLikedCommentIds = Sets.newHashSet();
+        if (loginUserId != null) {
+            loginUserLikedCommentIds.addAll(this.commentLikeService.lambdaQuery()
+                .eq(CommentLike::getUserId, loginUserId)
+                .in(CommentLike::getCommentId, commentIds)
+                .list()
+                .stream()
+                .map(CommentLike::getCommentId)
+                .collect(Collectors.toSet())
+            );
+        }
 
         Map<Long, Long> replyCountMapping = this.lambdaQuery()
             .select(Comment::getId, Comment::getRootId)
