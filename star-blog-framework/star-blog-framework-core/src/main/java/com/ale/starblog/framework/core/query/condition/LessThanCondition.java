@@ -18,7 +18,6 @@ public class LessThanCondition implements QueryCondition {
     @Override
     public void build(String fieldName, Object fieldValue, QueryWrapper<?> queryWrapper, QueryParameter[] parameters) {
         queryWrapper.lt(
-            fieldValue instanceof Number,
             fieldName,
             fieldValue
         );

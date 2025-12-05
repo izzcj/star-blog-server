@@ -18,7 +18,6 @@ public class GreaterThanOrEqualCondition implements QueryCondition {
     @Override
     public void build(String fieldName, Object fieldValue, QueryWrapper<?> queryWrapper, QueryParameter[] parameters) {
         queryWrapper.ge(
-            fieldValue instanceof Number,
             fieldName,
             fieldValue
         );
