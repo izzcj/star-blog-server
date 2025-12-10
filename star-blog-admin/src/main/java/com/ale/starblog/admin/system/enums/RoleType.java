@@ -1,6 +1,7 @@
 package com.ale.starblog.admin.system.enums;
 
 import com.ale.starblog.framework.common.enumeration.BaseEnum;
+import com.ale.starblog.framework.common.support.Comment;
 import lombok.Getter;
 
 /**
@@ -11,6 +12,7 @@ import lombok.Getter;
  * @since 2025/4/8
  */
 @Getter
+@Comment("角色类型")
 public enum RoleType implements BaseEnum<String> {
 
     /**

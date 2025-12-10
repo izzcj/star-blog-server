@@ -10,5 +10,5 @@ import com.ale.starblog.framework.common.support.TriConsumer;
  * @author Ale
  * @version 1.0.0 2025/10/15 15:35
  */
-public interface ServiceHookInvokerHolder<E extends BaseEntity> extends HookInvokerHolder<TriConsumer<GlobalServiceHook<E>, ?, HookContext>, TriConsumer<LocalServiceHook<E>, ?, HookContext>> {
+public interface ServiceHookInvokerHolder<E extends BaseEntity> extends HookInvokerHolder<TriConsumer<GlobalServiceHook, ?, HookContext>, TriConsumer<LocalServiceHook<E>, ?, HookContext>> {
 }

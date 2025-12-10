@@ -21,10 +21,10 @@ public abstract class ServiceHookExecutorSupport<E extends BaseEntity, H extends
     /**
      * 全局service钩子
      */
-    private ObjectProvider<GlobalServiceHook<E>> globalServiceHooks;
+    private ObjectProvider<GlobalServiceHook> globalServiceHooks;
 
     @Resource
-    public void setGlobalServiceHooks(ObjectProvider<GlobalServiceHook<E>> globalServiceHooks) {
+    public void setGlobalServiceHooks(ObjectProvider<GlobalServiceHook> globalServiceHooks) {
         this.globalServiceHooks = globalServiceHooks;
     }
 
@@ -33,7 +33,7 @@ public abstract class ServiceHookExecutorSupport<E extends BaseEntity, H extends
         if (hookContext == null) {
             hookContext = this.createHookContext();
         }
-        for (GlobalServiceHook<E> globalServiceHook : this.globalServiceHooks) {
+        for (GlobalServiceHook globalServiceHook : this.globalServiceHooks) {
             this.getGlobalHookInvoker(hookStage).accept(globalServiceHook, param, hookContext);
         }
     }
@@ -53,7 +53,7 @@ public abstract class ServiceHookExecutorSupport<E extends BaseEntity, H extends
     }
 
     @Override
-    public TriConsumer<GlobalServiceHook<E>, Object, HookContext> getGlobalHookInvoker(HookStage hookStage) {
+    public TriConsumer<GlobalServiceHook, Object, HookContext> getGlobalHookInvoker(HookStage hookStage) {
         return getServiceHookInvoker(hookStage);
     }
 
@@ -70,7 +70,7 @@ public abstract class ServiceHookExecutorSupport<E extends BaseEntity, H extends
      * @return 钩子调用器
      */
     @NotNull
-    private <T extends ServiceHook<E>> TriConsumer<T, Object, HookContext> getServiceHookInvoker(HookStage hookStage) {
+    private <T extends ServiceHook<?>> TriConsumer<T, Object, HookContext> getServiceHookInvoker(HookStage hookStage) {
         return switch (hookStage) {
             case BEFORE_QUERY -> (hook, param, context) -> hook.beforeQuery(CastUtils.cast(param), context);
             case BEFORE_CREATE -> (hook, param, context) -> hook.beforeCreate(CastUtils.cast(param), context);

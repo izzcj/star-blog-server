@@ -1,6 +1,7 @@
 package com.ale.starblog.admin.system.domain.pojo.user;
 
 import com.ale.starblog.admin.common.constants.TranslationConstants;
+import com.ale.starblog.admin.system.constants.DictTypeConstants;
 import com.ale.starblog.framework.common.enumeration.SwitchStatus;
 import com.ale.starblog.framework.core.pojo.BaseVO;
 import com.ale.starblog.framework.core.translation.TranslationField;
@@ -44,7 +45,7 @@ public class UserVO extends BaseVO {
     /**
      * 性别
      */
-    @TranslationField(type = TranslationConstants.TRANSLATION_DICT, params = "type=sex")
+    @TranslationField(type = TranslationConstants.TRANSLATION_DICT, params = "type=" + DictTypeConstants.DICT_TYPE_SEX)
     private String sex;
 
     /**

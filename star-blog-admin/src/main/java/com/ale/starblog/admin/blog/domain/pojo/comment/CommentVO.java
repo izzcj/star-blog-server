@@ -63,15 +63,15 @@ public class CommentVO extends BaseVO {
      * 评论用户ID
      */
     @TranslationFields({
-        @TranslationField(type = TranslationConstants.TRANSLATION_USER_NICKNAME),
+        @TranslationField(type = TranslationConstants.TRANSLATION_USER_NICKNAME, field = "userNickname"),
         @TranslationField(type = TranslationConstants.TRANSLATION_USER_AVATAR, field = "userAvatar")
     })
     private Long userId;
 
     /**
-     * 评论用户名
+     * 评论用户昵称
      */
-    private String userName;
+    private String userNickname;
 
     /**
      * 评论用户头像
@@ -81,13 +81,13 @@ public class CommentVO extends BaseVO {
     /**
      * 回复目标用户ID
      */
-    @TranslationField(type = TranslationConstants.TRANSLATION_USER_NICKNAME)
+    @TranslationField(type = TranslationConstants.TRANSLATION_USER_NICKNAME, field = "replyUserNickname")
     private Long replyUserId;
 
     /**
-     * 回复目标用户名
+     * 回复目标用户昵称
      */
-    private String replyUserName;
+    private String replyUserNickname;
 
     /**
      * 回复数

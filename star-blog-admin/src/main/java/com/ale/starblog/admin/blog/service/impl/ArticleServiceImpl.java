@@ -1,12 +1,17 @@
 package com.ale.starblog.admin.blog.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.extra.spring.SpringUtil;
 import com.ale.starblog.admin.blog.domain.entity.Article;
+import com.ale.starblog.admin.blog.domain.pojo.activity.ActivityBO;
 import com.ale.starblog.admin.blog.domain.pojo.article.ArticleBO;
 import com.ale.starblog.admin.blog.enums.ArticleStatus;
+import com.ale.starblog.admin.blog.listener.ActivityPublishedEvent;
 import com.ale.starblog.admin.blog.mapper.ArticleMapper;
 import com.ale.starblog.admin.blog.service.IArticleService;
 import com.ale.starblog.admin.blog.service.IArticleTagService;
+import com.ale.starblog.framework.common.exception.ServiceException;
 import com.ale.starblog.framework.common.utils.CastUtils;
 import com.ale.starblog.framework.core.constants.HookConstants;
 import com.ale.starblog.framework.core.service.AbstractCrudServiceImpl;
@@ -14,7 +19,12 @@ import com.ale.starblog.framework.core.service.hook.HookContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 文章服务实现类
@@ -80,5 +90,47 @@ public class ArticleServiceImpl extends AbstractCrudServiceImpl<ArticleMapper, A
             .stream()
             .map(article -> BeanUtil.copyProperties(article, ArticleBO.class))
             .toList();
+    }
+
+    @Override
+    public Map<Long, String> fetchTitleMapping(Collection<Long> ids) {
+        if (CollectionUtil.isEmpty(ids)) {
+            return Collections.emptyMap();
+        }
+        return this.lambdaQuery()
+            .select(Article::getId, Article::getTitle)
+            .in(Article::getId, ids)
+            .list()
+            .stream()
+            .collect(Collectors.toMap(Article::getId, Article::getTitle));
+    }
+
+    @Override
+    public Map<String, Long> fetchCategoryCountMapping(Collection<String> categories) {
+        if (CollectionUtil.isEmpty(categories)) {
+            return Collections.emptyMap();
+        }
+        return this.lambdaQuery()
+            .select(Article::getCategory, Article::getId)
+            .in(Article::getCategory, categories)
+            .list()
+            .stream()
+            .collect(Collectors.groupingBy(Article::getCategory, Collectors.counting()));
+    }
+
+    @Override
+    public void publish(Long id) {
+        Article article = this.getOptById(id)
+            .orElseThrow(() -> new ServiceException("发布文章失败！文章[{}]不存在！", id));
+        if (article.getStatus() == ArticleStatus.PUBLISHED) {
+            throw new ServiceException("发布文章失败！文章[{}]已发布！", id);
+        }
+        this.lambdaUpdate()
+            .set(Article::getStatus, ArticleStatus.PUBLISHED)
+            .set(Article::getPublishTime, LocalDateTime.now())
+            .eq(Article::getId, id)
+            .update();
+        // 发布动态
+        SpringUtil.publishEvent(new ActivityPublishedEvent(this, ActivityBO.convertFromArticle(article)));
     }
 }

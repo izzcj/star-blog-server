@@ -15,9 +15,22 @@ public interface ISystemConfigService extends ICrudService<SystemConfig, SystemC
     /**
      * 获取配置值
      *
-     * @param key 配置键
+     * @param key       配置键
+     * @param parseJson 是否解析json
+     * @param <T>       值类型
      * @return 配置值
      */
-    Object fetchValueByKey(String key);
+    <T> T fetchValueByKey(String key, boolean parseJson);
+
+    /**
+     * 获取配置值
+     *
+     * @param key 配置键
+     * @param <T>       值类型
+     * @return 配置值
+     */
+    default <T> T fetchValueByKey(String key) {
+        return fetchValueByKey(key, true);
+    }
 
 }

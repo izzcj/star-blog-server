@@ -33,7 +33,7 @@ public class ArticleBO extends BaseBO {
     /**
      * 分类
      */
-    private String type;
+    private String category;
 
     /**
      * 标题
@@ -69,6 +69,11 @@ public class ArticleBO extends BaseBO {
      * 是否置顶
      */
     private Boolean top;
+
+    /**
+     * 是否推荐
+     */
+    private Boolean recommended;
 
     /**
      * 发布时间

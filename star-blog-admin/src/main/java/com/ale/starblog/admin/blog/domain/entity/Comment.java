@@ -1,6 +1,8 @@
 package com.ale.starblog.admin.blog.domain.entity;
 
 import com.ale.starblog.admin.blog.enums.CommentStatus;
+import com.ale.starblog.admin.common.annotations.StatInfo;
+import com.ale.starblog.admin.system.constants.StatInfoConstants;
 import com.ale.starblog.framework.common.domain.entity.BaseEntity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.*;
@@ -19,6 +21,7 @@ import lombok.experimental.SuperBuilder;
 @ToString(callSuper = true)
 @TableName("blog_comment")
 @EqualsAndHashCode(callSuper = true)
+@StatInfo(type = StatInfoConstants.STAT_INFO_TYPE_COMMENT_COUNT)
 public class Comment extends BaseEntity {
 
     /**

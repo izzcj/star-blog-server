@@ -18,14 +18,14 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * 字典翻译数据初始化器
+ * 字典翻译数据加载器
  *
  * @author Ale
  * @version 1.0.0 2025/5/30 15:03
  */
 @Component
 @RequiredArgsConstructor
-public class DictTranslationMappingDataInitializer implements GenericTranslationMappingDataLoader {
+public class DictTranslationMappingDataLoader implements GenericTranslationMappingDataLoader {
 
     /**
      * 字典数据服务

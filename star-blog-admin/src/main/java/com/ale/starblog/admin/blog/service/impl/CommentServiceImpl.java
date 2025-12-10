@@ -2,18 +2,20 @@ package com.ale.starblog.admin.blog.service.impl;
 
 import cn.hutool.core.util.BooleanUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.extra.spring.SpringUtil;
 import com.ale.starblog.admin.blog.domain.entity.Comment;
 import com.ale.starblog.admin.blog.domain.entity.CommentLike;
+import com.ale.starblog.admin.blog.domain.pojo.activity.ActivityBO;
 import com.ale.starblog.admin.blog.domain.pojo.comment.CommentBO;
 import com.ale.starblog.admin.blog.domain.pojo.comment.CommentQuery;
 import com.ale.starblog.admin.blog.enums.CommentStatus;
+import com.ale.starblog.admin.blog.listener.ActivityPublishedEvent;
 import com.ale.starblog.admin.blog.mapper.CommentMapper;
 import com.ale.starblog.admin.blog.service.ICommentLikeService;
 import com.ale.starblog.admin.blog.service.ICommentService;
 import com.ale.starblog.admin.system.constants.SystemConfigConstants;
 import com.ale.starblog.admin.system.service.ISystemConfigService;
 import com.ale.starblog.framework.common.exception.ServiceException;
-import com.ale.starblog.framework.common.utils.CastUtils;
 import com.ale.starblog.framework.common.utils.SecurityUtils;
 import com.ale.starblog.framework.core.query.QueryConditionResolver;
 import com.ale.starblog.framework.core.service.AbstractCrudServiceImpl;
@@ -65,7 +67,7 @@ public class CommentServiceImpl extends AbstractCrudServiceImpl<CommentMapper, C
         }
 
         if (entity.getStatus() == null) {
-            Boolean enableCommentAudit = CastUtils.cast(this.systemConfigService.fetchValueByKey(SystemConfigConstants.ENABLE_COMMENT_AUDIT));
+            Boolean enableCommentAudit = this.systemConfigService.fetchValueByKey(SystemConfigConstants.ENABLE_COMMENT_AUDIT);
             if (BooleanUtil.isTrue(enableCommentAudit)) {
                 entity.setStatus(CommentStatus.PENDING);
             } else {
@@ -77,6 +79,12 @@ public class CommentServiceImpl extends AbstractCrudServiceImpl<CommentMapper, C
         }
 
         entity.setUserId(SecurityUtils.getLoginUserId());
+    }
+
+    @Override
+    public void afterCreate(Comment entity, HookContext context) {
+        // 发布动态
+        SpringUtil.publishEvent(new ActivityPublishedEvent(this, ActivityBO.convertFromComment(entity)));
     }
 
     @Override

@@ -29,6 +29,11 @@ public class SharedDataContextFactory implements SmartLifecycle {
     private final boolean clearOnLifecycle;
 
     /**
+     * phase
+     */
+    public static final int PHASE = 10;
+
+    /**
      * 创建Redis共享数据上下文
      *
      * @param sharedContextKey 共享上下文Key
@@ -66,5 +71,10 @@ public class SharedDataContextFactory implements SmartLifecycle {
     @Override
     public boolean isRunning() {
         return true;
+    }
+
+    @Override
+    public int getPhase() {
+        return PHASE;
     }
 }

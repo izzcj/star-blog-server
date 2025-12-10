@@ -19,4 +19,8 @@ public class SystemConstants {
      */
     public static final String DEFAULT_PASSWORD = "venus123456";
 
+    /**
+     * 访问IP缓存键
+     */
+    public static final String ACCESS_IP_CACHE_KEY = "accessIPCacheKey";
 }

@@ -1,17 +1,18 @@
 package com.ale.starblog.admin.system.service.impl;
 
-import cn.hutool.json.JSONObject;
 import com.ale.starblog.admin.system.domain.entity.SystemConfig;
 import com.ale.starblog.admin.system.domain.pojo.config.SystemConfigBO;
 import com.ale.starblog.admin.system.enums.SystemConfigType;
 import com.ale.starblog.admin.system.mapper.SystemConfigMapper;
 import com.ale.starblog.admin.system.service.ISystemConfigService;
 import com.ale.starblog.framework.common.exception.ServiceException;
+import com.ale.starblog.framework.common.utils.CastUtils;
 import com.ale.starblog.framework.common.utils.JsonUtils;
 import com.ale.starblog.framework.core.constants.HookConstants;
 import com.ale.starblog.framework.core.oss.OssSupport;
 import com.ale.starblog.framework.core.service.AbstractCrudServiceImpl;
 import com.ale.starblog.framework.core.service.hook.HookContext;
+import com.alibaba.fastjson2.JSONObject;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -53,17 +54,29 @@ public class SystemConfigServiceImpl extends AbstractCrudServiceImpl<SystemConfi
     }
 
     @Override
-    public Object fetchValueByKey(String key) {
+    public <T> T fetchValueByKey(String key, boolean parseJson) {
         SystemConfig systemConfig = this.lambdaQuery()
             .eq(SystemConfig::getKey, key)
             .oneOpt()
             .orElseThrow(() -> new ServiceException("配置[{}]不存在！", key));
+        return CastUtils.cast(parseValue(systemConfig, parseJson));
+    }
+
+    /**
+     * 解析值
+     *
+     * @param systemConfig 系统配置
+     * @param parseJson    是否解析JSON
+     * @return 解析后的值
+     */
+    private Object parseValue(SystemConfig systemConfig, boolean parseJson) {
+        String value = systemConfig.getValue();
         return switch (systemConfig.getType()) {
-            case SystemConfigType.CHECKBOX, SystemConfigType.MULTI_SELECT -> JsonUtils.fromJsonList(systemConfig.getValue(), String.class);
-            case SystemConfigType.BOOLEAN -> Boolean.parseBoolean(systemConfig.getValue());
-            case SystemConfigType.NUMBER -> new BigDecimal(systemConfig.getValue());
-            case SystemConfigType.JSON -> JsonUtils.fromJson(systemConfig.getValue(), JSONObject.class);
-            default -> systemConfig.getValue();
+            case SystemConfigType.CHECKBOX, SystemConfigType.MULTI_SELECT -> JsonUtils.fromJsonList(value, String.class);
+            case SystemConfigType.BOOLEAN -> Boolean.parseBoolean(value);
+            case SystemConfigType.NUMBER -> new BigDecimal(value);
+            case SystemConfigType.JSON -> parseJson ? JsonUtils.fromJson(value, JSONObject.class) : value;
+            default -> value;
         };
     }
 }

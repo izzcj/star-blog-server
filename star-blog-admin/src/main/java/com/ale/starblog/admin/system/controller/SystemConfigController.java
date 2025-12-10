@@ -55,6 +55,8 @@ public class SystemConfigController extends BaseController<SystemConfig, ISystem
         return this.queryPage(pageable, query);
     }
 
+
+
     /**
      * 获取系统配置列表
      *

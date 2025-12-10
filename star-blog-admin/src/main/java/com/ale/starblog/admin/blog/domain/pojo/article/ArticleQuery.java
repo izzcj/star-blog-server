@@ -46,12 +46,24 @@ public class ArticleQuery extends BaseQuery {
      * 是否置顶
      */
     @Query
-    private Boolean isTop;
+    private Boolean top;
 
     /**
-     * 排序字段
+     * 是否推荐
+     */
+    @Query
+    private Boolean recommended;
+
+    /**
+     * 倒叙排序字段
      */
     @Builder.Default
     @Query(type = QueryType.SORT, parameters = @QueryParameter(name = "order", value = "desc"))
-    private String sort = "createTime";
+    private String sortDesc = "createTime";
+
+    /**
+     * 正序排序字段
+     */
+    @Query(type = QueryType.SORT, parameters = @QueryParameter(name = "order", value = "desc"))
+    private String sortAsc;
 }

@@ -3,6 +3,7 @@ package com.ale.starblog.admin.blog.domain.pojo.article;
 import com.ale.starblog.admin.blog.domain.pojo.tag.ArticleTagVO;
 import com.ale.starblog.admin.blog.enums.ArticleStatus;
 import com.ale.starblog.admin.common.constants.TranslationConstants;
+import com.ale.starblog.admin.system.constants.DictTypeConstants;
 import com.ale.starblog.framework.core.pojo.BaseVO;
 import com.ale.starblog.framework.core.translation.TranslationField;
 import lombok.AllArgsConstructor;
@@ -31,13 +32,13 @@ public class ArticleVO extends BaseVO {
     /**
      * 分类
      */
-    @TranslationField(type = TranslationConstants.TRANSLATION_DICT, params = "type=article-type")
-    private String type;
+    @TranslationField(type = TranslationConstants.TRANSLATION_DICT, params = "type=" + DictTypeConstants.DICT_TYPE_ARTICLE_CATEGORY)
+    private String category;
 
     /**
      * 分类名称
      */
-    private String typeName;
+    private String categoryName;
 
     /**
      * 标题
@@ -68,6 +69,11 @@ public class ArticleVO extends BaseVO {
      * 是否置顶
      */
     private Boolean top;
+
+    /**
+     * 是否推荐
+     */
+    private Boolean recommended;
 
     /**
      * 发布时间

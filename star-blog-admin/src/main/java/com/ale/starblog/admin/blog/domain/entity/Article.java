@@ -1,6 +1,8 @@
 package com.ale.starblog.admin.blog.domain.entity;
 
 import com.ale.starblog.admin.blog.enums.ArticleStatus;
+import com.ale.starblog.admin.common.annotations.StatInfo;
+import com.ale.starblog.admin.system.constants.StatInfoConstants;
 import com.ale.starblog.framework.common.domain.entity.BaseAuditEntity;
 import com.ale.starblog.framework.core.oss.OssUpload;
 import com.ale.starblog.framework.core.oss.RichText;
@@ -26,12 +28,13 @@ import java.time.LocalDateTime;
 @ToString(callSuper = true)
 @TableName("blog_article")
 @EqualsAndHashCode(callSuper = true)
+@StatInfo(type = StatInfoConstants.STAT_INFO_TYPE_ARTICLE_COUNT)
 public class Article extends BaseAuditEntity {
 
     /**
      * 分类
      */
-    private String type;
+    private String category;
 
     /**
      * 标题
@@ -71,6 +74,11 @@ public class Article extends BaseAuditEntity {
      * 是否置顶
      */
     private Boolean top;
+
+    /**
+     * 是否推荐
+     */
+    private Boolean recommended;
 
     /**
      * 发布时间

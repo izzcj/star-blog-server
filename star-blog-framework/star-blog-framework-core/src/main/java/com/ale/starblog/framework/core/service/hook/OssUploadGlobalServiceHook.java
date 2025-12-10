@@ -33,7 +33,7 @@ import java.util.*;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class OssUploadGlobalServiceHook implements GlobalServiceHook<BaseEntity> {
+public class OssUploadGlobalServiceHook implements GlobalServiceHook {
 
     /**
      * OSS上传字段解析器

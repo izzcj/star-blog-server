@@ -1,5 +1,6 @@
 package com.ale.starblog.admin.system.domain.pojo.config;
 
+import com.ale.starblog.admin.system.constants.DictTypeConstants;
 import com.ale.starblog.admin.system.enums.SystemConfigDataSourceType;
 import com.ale.starblog.admin.system.enums.SystemConfigType;
 import com.ale.starblog.framework.core.pojo.BaseVO;
@@ -27,7 +28,7 @@ public class SystemConfigVO extends BaseVO {
     /**
      * 分类
      */
-    @TranslationField(type = TranslationConstants.TRANSLATION_DICT, params = "type=system-config-category")
+    @TranslationField(type = TranslationConstants.TRANSLATION_DICT, params = "type=" + DictTypeConstants.DICT_TYPE_SYSTEM_CONFIG_CATEGORY)
     private String category;
 
     /**

@@ -16,4 +16,8 @@ public final class SystemConfigConstants {
      */
     public static final String ENABLE_COMMENT_AUDIT = "enable-comment-audit";
 
+    /**
+     * 首页文章分类导航栏配置
+     */
+    public static final String HOME_ARTICLE_CATEGORY_NAVBAR = "home-article-category-navbar";
 }

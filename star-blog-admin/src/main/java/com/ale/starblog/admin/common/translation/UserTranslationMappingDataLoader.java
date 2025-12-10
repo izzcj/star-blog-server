@@ -18,14 +18,14 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * 用户翻译映射数据初始化器
+ * 用户翻译映射数据加载器
  *
  * @author Ale
  * @version 1.0.0 2025/6/3 11:49
  */
 @Component
 @RequiredArgsConstructor
-public class UserTranslationMappingDataInitializer implements GenericTranslationMappingDataLoader {
+public class UserTranslationMappingDataLoader implements GenericTranslationMappingDataLoader {
 
     /**
      * 用户服务

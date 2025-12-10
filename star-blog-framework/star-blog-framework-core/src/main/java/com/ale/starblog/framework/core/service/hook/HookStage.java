@@ -1,7 +1,7 @@
 package com.ale.starblog.framework.core.service.hook;
 
+import com.ale.starblog.framework.common.enumeration.BaseEnum;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 /**
  * 钩子阶段
@@ -10,8 +10,7 @@ import lombok.RequiredArgsConstructor;
  * @version 1.0.0 2025/10/15 15:20
  */
 @Getter
-@RequiredArgsConstructor
-public enum HookStage {
+public enum HookStage implements BaseEnum<String> {
 
     /**
      * 查询之前
@@ -107,5 +106,10 @@ public enum HookStage {
      * 方法名称
      */
     private final String methodName;
+
+    HookStage(String methodName) {
+        this.methodName = methodName;
+        this.init(methodName);
+    }
 
 }

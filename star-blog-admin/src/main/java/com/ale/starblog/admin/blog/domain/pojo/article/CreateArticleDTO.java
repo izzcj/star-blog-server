@@ -29,7 +29,7 @@ public class CreateArticleDTO extends BaseCreateDTO {
      * 分类
      */
     @NotBlank(message = "分类不能为空")
-    private String type;
+    private String category;
 
     /**
      * 标题
@@ -62,6 +62,11 @@ public class CreateArticleDTO extends BaseCreateDTO {
      * 是否置顶
      */
     private Boolean top;
+
+    /**
+     * 是否推荐
+     */
+    private Boolean recommended;
 
     /**
      * 标签ID列表
