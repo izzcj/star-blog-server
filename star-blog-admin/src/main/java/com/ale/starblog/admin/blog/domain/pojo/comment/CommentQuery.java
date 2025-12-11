@@ -3,6 +3,7 @@ package com.ale.starblog.admin.blog.domain.pojo.comment;
 import com.ale.starblog.admin.blog.enums.CommentStatus;
 import com.ale.starblog.framework.core.query.BaseQuery;
 import com.ale.starblog.framework.core.query.Query;
+import com.ale.starblog.framework.core.query.QueryParameter;
 import com.ale.starblog.framework.core.query.QueryType;
 import lombok.Builder;
 import lombok.Data;
@@ -70,6 +71,6 @@ public class CommentQuery extends BaseQuery {
      * 排序字段
      */
     @Builder.Default
-    @Query(type = QueryType.SORT)
+    @Query(type = QueryType.SORT, parameters = @QueryParameter(name = "order", value = "desc"))
     private String sort = "createTime";
 }
