@@ -120,8 +120,11 @@ public class ArticleServiceImpl extends AbstractCrudServiceImpl<ArticleMapper, A
 
     @Override
     public void publish(Long id) {
-        Article article = this.getOptById(id)
-            .orElseThrow(() -> new ServiceException("发布文章失败！文章[{}]不存在！", id));
+        Article article = this.lambdaQuery()
+            .select(Article::getId, Article::getStatus)
+            .eq(Article::getId, id)
+            .oneOpt()
+            .orElseThrow(() -> new ServiceException("发布失败！文章[{}]不存在！", id));
         if (article.getStatus() == ArticleStatus.PUBLISHED) {
             throw new ServiceException("发布文章失败！文章[{}]已发布！", id);
         }
@@ -132,5 +135,31 @@ public class ArticleServiceImpl extends AbstractCrudServiceImpl<ArticleMapper, A
             .update();
         // 发布动态
         SpringUtil.publishEvent(new ActivityPublishedEvent(this, ActivityBO.convertFromArticle(article)));
+    }
+
+    @Override
+    public void toggleTop(Long id) {
+        Article article = this.lambdaQuery()
+            .select(Article::getId, Article::getTop)
+            .eq(Article::getId, id)
+            .oneOpt()
+            .orElseThrow(() -> new ServiceException("切换置顶状态失败！文章[{}]不存在！", id));
+        this.lambdaUpdate()
+            .set(Article::getTop, !article.getTop())
+            .eq(Article::getId, id)
+            .update();
+    }
+
+    @Override
+    public void toggleRecommend(Long id) {
+        Article article = this.lambdaQuery()
+            .select(Article::getId, Article::getRecommended)
+            .eq(Article::getId, id)
+            .oneOpt()
+            .orElseThrow(() -> new ServiceException("切换推荐状态失败！文章[{}]不存在！", id));
+        this.lambdaUpdate()
+            .set(Article::getRecommended, !article.getRecommended())
+            .eq(Article::getId, id)
+            .update();
     }
 }

@@ -54,4 +54,18 @@ public interface IArticleService extends ICrudService<Article, ArticleBO> {
      * @param id 文章ID
      */
     void publish(Long id);
+
+    /**
+     * 切换置顶状态
+     *
+     * @param id 文章ID
+     */
+    void toggleTop(Long id);
+
+    /**
+     * 切换推荐状态
+     *
+     * @param id 文章ID
+     */
+    void toggleRecommend(Long id);
 }

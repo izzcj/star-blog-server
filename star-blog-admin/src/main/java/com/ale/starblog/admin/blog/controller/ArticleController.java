@@ -199,4 +199,28 @@ public class ArticleController extends BaseController<Article, IArticleService, 
         this.service.publish(id);
         return JsonResult.success();
     }
+
+    /**
+     * 切换置顶状态
+     *
+     * @param id 文章id
+     * @return Void
+     */
+    @PutMapping("/{id}/toggle-top")
+    public JsonResult<Void> toggleTop(@PathVariable(name = "id") Long id) {
+        this.service.toggleTop(id);
+        return JsonResult.success();
+    }
+
+    /**
+     * 切换推荐状态
+     *
+     * @param id 文章id
+     * @return Void
+     */
+    @PutMapping("/{id}/toggle-recommend")
+    public JsonResult<Void> toggleRecommend(@PathVariable(name = "id") Long id) {
+        this.service.toggleRecommend(id);
+        return JsonResult.success();
+    }
 }
