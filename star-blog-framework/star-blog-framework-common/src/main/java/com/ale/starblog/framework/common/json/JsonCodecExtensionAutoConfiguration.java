@@ -7,7 +7,6 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.json.JsonReadFeature;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
@@ -47,9 +46,6 @@ public class JsonCodecExtensionAutoConfiguration {
             .visibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY)
             // 存在未知属性时，不抛出异常
             .failOnUnknownProperties(false)
-            // 将Long类型转换为String，否则前端会丢失精度
-            .serializerByType(Long.class, ToStringSerializer.instance)
-            .serializerByType(Long.TYPE, ToStringSerializer.instance)
             // 允许对任何字符进行反斜杠转义
             .featuresToEnable(JsonReadFeature.ALLOW_BACKSLASH_ESCAPING_ANY_CHARACTER.mappedFeature())
             // 将自引用写为 NULL

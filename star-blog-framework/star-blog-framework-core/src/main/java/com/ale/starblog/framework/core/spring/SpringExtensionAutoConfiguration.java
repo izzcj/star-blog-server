@@ -1,5 +1,6 @@
 package com.ale.starblog.framework.core.spring;
 
+import com.ale.starblog.framework.core.spring.converter.ComponentScanMark;
 import com.google.common.collect.Lists;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.ObjectProvider;
@@ -13,6 +14,7 @@ import org.springframework.boot.autoconfigure.web.reactive.WebFluxAutoConfigurat
 import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.core.convert.converter.ConverterFactory;
 import org.springframework.core.task.TaskDecorator;
@@ -45,6 +47,7 @@ import java.util.Map;
 @EnableScheduling
 @EnableAspectJAutoProxy(exposeProxy = true)
 @AutoConfiguration
+@ComponentScan(basePackageClasses = ComponentScanMark.class)
 @AutoConfigureBefore({HttpMessageConvertersAutoConfiguration.class, WebMvcAutoConfiguration.class, WebFluxAutoConfiguration.class, TaskExecutionAutoConfiguration.class})
 public class SpringExtensionAutoConfiguration {
 

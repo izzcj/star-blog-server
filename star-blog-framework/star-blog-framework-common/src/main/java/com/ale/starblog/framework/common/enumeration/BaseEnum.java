@@ -1,17 +1,13 @@
 package com.ale.starblog.framework.common.enumeration;
 
 import com.ale.starblog.framework.common.exception.ServiceException;
-import com.ale.starblog.framework.common.support.Option;
-import com.ale.starblog.framework.common.utils.CastUtils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -22,6 +18,7 @@ import java.util.stream.Stream;
  * @version 1.0.0
  * @since 2024/6/26
  **/
+@SuppressWarnings({"unchecked", "rawtypes"})
 public interface BaseEnum<T extends Serializable> {
 
     /**
@@ -80,13 +77,12 @@ public interface BaseEnum<T extends Serializable> {
     /**
      * 通过枚举类型和枚举名称获取枚举
      *
-     * @param <T>   枚举值泛型
      * @param <R>   枚举泛型
      * @param clazz 枚举类型
      * @param name  枚举名称
      * @return 枚举
      */
-    static <T extends Serializable, R extends BaseEnum<T>> R getByName(Class<R> clazz, String name) {
+    static <R extends BaseEnum> R getByName(Class<R> clazz, String name) {
         return Stream.of(clazz.getEnumConstants())
             .filter(baseEnum -> baseEnum.getName().equals(name))
             .findAny()
@@ -96,27 +92,25 @@ public interface BaseEnum<T extends Serializable> {
     /**
      * 通过枚举类型和枚举值获取枚举
      *
-     * @param <T>   枚举值泛型
      * @param <R>   枚举泛型
      * @param clazz 枚举类型
      * @param value 枚举值
      * @return 枚举
      */
-    static <T extends Serializable, R extends BaseEnum<T>> R getByValue(Class<R> clazz, T value) {
+    static <R extends BaseEnum> R getByValue(Class<R> clazz, Object value) {
         return getByValue(clazz, value, "枚举值不存在！");
     }
 
     /**
      * 通过枚举类型和枚举值获取枚举
      *
-     * @param <T>           枚举值泛型
      * @param <R>           枚举泛型
      * @param clazz         枚举类型
      * @param value         枚举值
      * @param errorMessage  枚举值
      * @return 枚举
      */
-    static <T extends Serializable, R extends BaseEnum<T>> R getByValue(Class<R> clazz, T value, String errorMessage) {
+    static <R extends BaseEnum> R getByValue(Class<R> clazz, Object value, String errorMessage) {
         return Stream.of(clazz.getEnumConstants())
             .filter(baseEnum -> {
                 if (value instanceof Enum<?>) {
@@ -126,19 +120,6 @@ public interface BaseEnum<T extends Serializable> {
             })
             .findAny()
             .orElseThrow(() -> new ServiceException(errorMessage));
-    }
-
-    /**
-     * 将枚举转换为枚举选项
-     *
-     * @param <T>   枚举值泛型
-     * @param clazz 枚举类型
-     * @return 枚举字典列表
-     */
-    static <T extends Serializable> List<Option> convertToSelection(Class<? extends BaseEnum<T>> clazz) {
-        return Stream.of(clazz.getEnumConstants())
-            .map(baseEnum -> Option.of(baseEnum.getMsg(), CastUtils.cast(baseEnum.getValue()), baseEnum.getName()))
-            .collect(Collectors.toList());
     }
 
     /**
