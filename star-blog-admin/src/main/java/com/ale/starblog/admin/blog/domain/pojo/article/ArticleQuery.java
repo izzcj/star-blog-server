@@ -28,7 +28,7 @@ public class ArticleQuery extends BaseQuery {
      * 分类
      */
     @Query
-    private String type;
+    private String category;
 
     /**
      * 标题
@@ -64,6 +64,6 @@ public class ArticleQuery extends BaseQuery {
     /**
      * 正序排序字段
      */
-    @Query(type = QueryType.SORT, parameters = @QueryParameter(name = "order", value = "desc"))
+    @Query(type = QueryType.SORT)
     private String sortAsc;
 }
