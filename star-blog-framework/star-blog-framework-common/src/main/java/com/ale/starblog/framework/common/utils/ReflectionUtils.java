@@ -3,6 +3,7 @@ package com.ale.starblog.framework.common.utils;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ReflectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.ale.starblog.framework.common.cache.CacheManager;
 import com.ale.starblog.framework.common.exception.ReflectionException;
 import com.ale.starblog.framework.common.support.ReflectionField;
@@ -264,6 +265,9 @@ public final class ReflectionUtils {
      * @return 字段对象
      */
     public static ReflectionField getField(Class<?> clazz, String fieldName) {
+        if (StrUtil.isBlank(fieldName)) {
+            return null;
+        }
         return CLASS_FIELD_CACHE.computeIfAbsent(new ClassFieldCacheKey(clazz, fieldName), __ -> {
             Field field = ReflectUtil.getField(clazz, fieldName);
 

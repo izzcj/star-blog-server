@@ -5,7 +5,6 @@ import com.ale.starblog.admin.blog.domain.pojo.article.ArticleBO;
 import com.ale.starblog.framework.core.service.ICrudService;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -24,13 +23,6 @@ public interface IArticleService extends ICrudService<Article, ArticleBO> {
      * @param id 文章ID
      */
     void incrementViewCount(Long id);
-
-    /**
-     * 获取热门文章
-     *
-     * @return 热门文章
-     */
-    List<ArticleBO> fetchHotArticles();
 
     /**
      * 获取文章标题映射

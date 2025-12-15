@@ -6,6 +6,8 @@ import com.ale.starblog.framework.common.support.ReflectionField;
 import com.ale.starblog.framework.common.utils.ReflectionUtils;
 import com.ale.starblog.framework.common.utils.ServletUtils;
 
+import java.io.Serializable;
+
 /**
  * Option转换接口
  *
@@ -27,9 +29,13 @@ public interface OptionConvertible {
         if (valueField == null || labelField == null) {
             return null;
         }
+        Serializable value = valueField.getValue(this);
+        if (value instanceof Long) {
+            value = value.toString();
+        }
         return Option.of(
             labelField.getValue(this),
-            valueField.getValue(this),
+            value,
             descriptionField == null ? null : descriptionField.getValue(this)
         );
     }

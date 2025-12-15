@@ -94,22 +94,6 @@ public class ArticleController extends BaseController<Article, IArticleService, 
     }
 
     /**
-     * 获取热门文章
-     *
-     * @return 热门文章
-     */
-    @GetMapping("/hot")
-    public JsonResult<List<ArticleVO>> fetchHotBlogs() {
-        return JsonResult.success(
-            this.service.fetchHotArticles()
-                .stream()
-                .map(articleBO -> BeanUtil.copyProperties(articleBO, ArticleVO.class))
-                .peek(GenericTranslationSupport::translate)
-                .collect(Collectors.toList())
-        );
-    }
-
-    /**
      * 获取文章分类导航栏
      *
      * @return 文章分类导航栏

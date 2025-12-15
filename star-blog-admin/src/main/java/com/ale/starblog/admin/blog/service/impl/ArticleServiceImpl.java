@@ -1,6 +1,5 @@
 package com.ale.starblog.admin.blog.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import com.ale.starblog.admin.blog.domain.entity.Article;
@@ -22,7 +21,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -77,19 +75,6 @@ public class ArticleServiceImpl extends AbstractCrudServiceImpl<ArticleMapper, A
                 .eq(Article::getId, id)
                 .update();
         }
-    }
-
-    @Override
-    public List<ArticleBO> fetchHotArticles() {
-        // 按照浏览量排序
-        return this.lambdaQuery()
-            .eq(Article::getStatus, ArticleStatus.PUBLISHED)
-            .orderByDesc(Article::getViewCount)
-            .last("limit 6")
-            .list()
-            .stream()
-            .map(article -> BeanUtil.copyProperties(article, ArticleBO.class))
-            .toList();
     }
 
     @Override

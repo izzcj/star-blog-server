@@ -6,9 +6,11 @@ import com.ale.starblog.framework.core.constants.DataBaseConstants;
 import com.ale.starblog.framework.core.query.QueryParameter;
 import com.ale.starblog.framework.core.query.QueryType;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -34,7 +36,16 @@ public class SortCondition implements QueryCondition {
         }
         List<String> sortFields = new ArrayList<>();
         if (fieldValue instanceof String stringValue) {
-            sortFields.add(StrUtil.toUnderlineCase(stringValue));
+            if (stringValue.contains(StringPool.COMMA)) {
+                String[] split = stringValue.split(StringPool.COMMA);
+                sortFields.addAll(
+                    Arrays.stream(split)
+                        .map(StrUtil::toUnderlineCase)
+                        .toList()
+                );
+            } else {
+                sortFields.add(StrUtil.toUnderlineCase(stringValue));
+            }
         } else if (fieldValue instanceof Collection collection) {
             sortFields.addAll(
                 collection
