@@ -6,6 +6,7 @@ import com.ale.starblog.admin.system.service.IDictDataService;
 import com.ale.starblog.framework.common.domain.JsonPageResult;
 import com.ale.starblog.framework.common.domain.JsonResult;
 import com.ale.starblog.framework.common.support.Option;
+import com.ale.starblog.framework.core.convert.OptionConvertible;
 import com.ale.starblog.framework.core.controller.BaseController;
 import org.springframework.data.domain.Pageable;
 import org.springframework.validation.annotation.Validated;
@@ -69,7 +70,7 @@ public class DictDataController extends BaseController<DictData, IDictDataServic
         List<DictDataBO> result = this.service.queryList(query);
         return JsonResult.success(
             result.stream()
-                .map(dictDataBO -> Option.of(dictDataBO.getDictLabel(), dictDataBO.getDictValue(), dictDataBO.getDictKey()))
+                .map(OptionConvertible::convert)
                 .collect(Collectors.toList())
         );
     }

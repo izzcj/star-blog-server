@@ -1,5 +1,6 @@
 package com.ale.starblog.admin.blog.domain.pojo.tag;
 
+import com.ale.starblog.framework.core.convert.OptionConvertible;
 import com.ale.starblog.framework.core.pojo.BaseBO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,12 +20,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class TagBO extends BaseBO {
-
-    /**
-     * ID
-     */
-    private Long id;
+public class TagBO extends BaseBO implements OptionConvertible {
 
     /**
      * 标签名称

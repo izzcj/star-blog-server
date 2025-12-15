@@ -1,5 +1,6 @@
 package com.ale.starblog.admin.system.domain.pojo.dict.data;
 
+import com.ale.starblog.framework.core.convert.OptionConvertible;
 import com.ale.starblog.framework.core.pojo.BaseBO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,7 +19,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class DictDataBO extends BaseBO {
+public class DictDataBO extends BaseBO implements OptionConvertible {
 
     /**
      * 字典标签
@@ -60,4 +61,18 @@ public class DictDataBO extends BaseBO {
      */
     private Boolean enabled;
 
+    @Override
+    public String providerValueField() {
+        return "dictValue";
+    }
+
+    @Override
+    public String providerLabelField() {
+        return "dictLabel";
+    }
+
+    @Override
+    public String providerDescriptionField() {
+        return "dictKey";
+    }
 }

@@ -1,6 +1,7 @@
 package com.ale.starblog.admin.system.domain.pojo.role;
 
 import com.ale.starblog.admin.system.enums.RoleType;
+import com.ale.starblog.framework.core.convert.OptionConvertible;
 import com.ale.starblog.framework.core.pojo.BaseBO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,7 +23,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class RoleBO extends BaseBO {
+public class RoleBO extends BaseBO implements OptionConvertible {
 
     /**
      * 角色名称

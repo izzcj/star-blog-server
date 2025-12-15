@@ -9,6 +9,7 @@ import com.ale.starblog.framework.common.domain.JsonPageResult;
 import com.ale.starblog.framework.common.domain.JsonResult;
 import com.ale.starblog.framework.common.support.Option;
 import com.ale.starblog.framework.core.controller.BaseController;
+import com.ale.starblog.framework.core.convert.OptionConvertible;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.validation.annotation.Validated;
@@ -67,7 +68,7 @@ public class TagController extends BaseController<Tag, ITagService, TagVO, TagBO
         List<TagBO> result = this.service.queryList(query);
         return JsonResult.success(
             result.stream()
-                .map(tag -> Option.of(tag.getName(), tag.getId(), tag.getColor()))
+                .map(OptionConvertible::convert)
                 .toList()
         );
     }
