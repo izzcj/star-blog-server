@@ -184,7 +184,7 @@ public class MinioOssService implements OssService {
             );
         } catch (ErrorResponseException e) {
             if (StrUtil.equals(e.errorResponse().code(), OBJECT_NOT_EXISTS_CODE)) {
-                throw new OssException("对象文件[{}]不存在", objectKey);
+                throw new OssException("[Minio]获取对象文件出现异常， 对象文件[{}]不存在", objectKey);
             }
 
             throw new OssException("[Minio]获取对象文件出现异常：{}", e, e.errorResponse().message());
@@ -279,7 +279,7 @@ public class MinioOssService implements OssService {
             this.remove(sourceObjectKey);
         } catch (ErrorResponseException e) {
             if (StrUtil.equals(e.errorResponse().code(), OBJECT_NOT_EXISTS_CODE)) {
-                throw new OssException("对象文件[{}]不存在", sourceObjectKey);
+                throw new OssException("[Minio]移动对象文件出现异常，对象文件[{}]不存在", sourceObjectKey);
             }
 
             throw new OssException("[Minio]移动对象文件出现异常：{}", e, e.errorResponse().message());

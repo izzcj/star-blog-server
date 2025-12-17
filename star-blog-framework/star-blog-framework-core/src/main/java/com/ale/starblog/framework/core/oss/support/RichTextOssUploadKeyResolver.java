@@ -39,6 +39,7 @@ public class RichTextOssUploadKeyResolver extends RichTextOssUploadKeySupport im
     private Collection<String> extractKeys(String value) {
         return this.parseUrls(value).stream()
             .map(this::trimDomain)
+            .filter(StrUtil::isNotBlank)
             .toList();
     }
 }

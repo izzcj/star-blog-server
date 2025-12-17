@@ -45,10 +45,17 @@ public class RichTextOssUploadKeyReplacer extends RichTextOssUploadKeySupport im
      */
     private Object doReplace(String content, Collection<String> processedKeys) {
         for (String url : parseUrls(content)) {
+            if (StrUtil.isBlank(url)) {
+                continue;
+            }
+            String trimDomainUrl = trimDomain(url);
+            if (StrUtil.isBlank(trimDomainUrl)) {
+                continue;
+            }
             var name = FilenameUtils.getName(URI.create(url).getPath());
             for (String processedKey : processedKeys) {
                 if (StringUtils.equals(name, FilenameUtils.getName(processedKey))) {
-                    content = content.replace(url, url.replace(trimDomain(url), processedKey));
+                    content = content.replace(url, url.replace(trimDomainUrl, processedKey));
                     break;
                 }
             }

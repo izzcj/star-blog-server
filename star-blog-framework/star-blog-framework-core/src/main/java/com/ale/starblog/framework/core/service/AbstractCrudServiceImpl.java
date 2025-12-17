@@ -233,7 +233,6 @@ public abstract class AbstractCrudServiceImpl<Mapper extends BaseMapper<E>, E ex
         if (entity == null) {
             throw new ServiceException("删除实体失败！实体不存在：{}", id);
         }
-        hookContext.set(HookConstants.OLD_ENTITY_KEY, entity);
         try {
             this.executeServiceHooks(entity, HookStage.BEFORE_DELETE, hookContext);
             this.baseMapper.deleteById(id);

@@ -24,7 +24,7 @@ abstract class RichTextOssUploadKeySupport {
     /**
      * Regex
      */
-    private static final Pattern FILE_URL_PATTERN = Pattern.compile("(src|href)\\s*=\\s*([\"'\\\\]+(?=https?://)([^'\"\\\\]+)[\"'\\\\]+)", Pattern.DOTALL | Pattern.MULTILINE | Pattern.CASE_INSENSITIVE);
+    private static final Pattern FILE_URL_PATTERN = Pattern.compile("(?:\\b(?:src|href)\\s*=\\s*)?([\"']?https?://[^\"'\\\\\\s>]+[\"']?)", Pattern.DOTALL | Pattern.MULTILINE | Pattern.CASE_INSENSITIVE);
 
     /**
      * Minio bucket
@@ -42,7 +42,13 @@ abstract class RichTextOssUploadKeySupport {
         Set<String> urls = new HashSet<>();
         Matcher matcher = FILE_URL_PATTERN.matcher(value);
         while (matcher.find()) {
-            urls.add(matcher.group(matcher.groupCount()));
+            String url = matcher.group(matcher.groupCount());
+            // 如果原始内容为markdown语法，url匹配后右边会多一个)，不能在正则中排除)，url格式可能为![alt](http://xxxxxx/a_(1).png)
+            if (url.endsWith(StringConstants.RIGHT_BRACKET)) {
+                urls.add(url.substring(0, url.length() - 1));
+            } else {
+                urls.add(url);
+            }
         }
 
         return urls;

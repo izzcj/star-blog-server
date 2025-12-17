@@ -11,6 +11,8 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.util.List;
+
 /**
  * 文章查询条件
  *
@@ -53,6 +55,12 @@ public class ArticleQuery extends BaseQuery {
      */
     @Query
     private Boolean recommended;
+
+    /**
+     * 排除的id
+     */
+    @Query(type = QueryType.NOT_IN, column = "id")
+    private List<Long> excludeIds;
 
     /**
      * 倒叙排序字段
