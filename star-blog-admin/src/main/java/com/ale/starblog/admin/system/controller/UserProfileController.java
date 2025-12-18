@@ -80,7 +80,7 @@ public class UserProfileController {
      * @return 修改密码结果
      */
     @PutMapping("/password")
-    public JsonResult<Void> changePassword(ChangeUserPasswordDTO changePasswordDTO) {
+    public JsonResult<Void> changePassword(@RequestBody ChangeUserPasswordDTO changePasswordDTO) {
         this.userService.changePassword(AuthenticationUtils.getLoginUserId(), changePasswordDTO.getNewPassword(), changePasswordDTO.getOldPassword());
         return JsonResult.success();
     }
