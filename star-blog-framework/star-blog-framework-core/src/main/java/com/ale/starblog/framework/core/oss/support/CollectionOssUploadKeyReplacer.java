@@ -9,13 +9,13 @@ import java.util.Collection;
 import java.util.Set;
 
 /**
- * 默认上传对象Key替换器
+ * 集合上传对象Key替换器
  *
  * @author Ale
  * @version 1.0.0 2025/10/17 16:23
  */
 @Component
-public class DefaultOssUploadKeyReplacer implements OssUploadKeyReplacer {
+public class CollectionOssUploadKeyReplacer implements OssUploadKeyReplacer {
 
     @Override
     public Object replaceKey(Field field, Object value, Collection<String> originalKeys, Collection<String> processedKeys) {

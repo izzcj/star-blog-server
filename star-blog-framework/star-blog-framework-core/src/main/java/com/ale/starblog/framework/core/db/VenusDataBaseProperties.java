@@ -68,7 +68,7 @@ public class VenusDataBaseProperties {
         /**
          * 连接池类型
          */
-        private PoolType poolType = PoolType.Druid;
+        private PoolType poolType = PoolType.Hikari;
 
         /**
          * 是否开启SQL监控

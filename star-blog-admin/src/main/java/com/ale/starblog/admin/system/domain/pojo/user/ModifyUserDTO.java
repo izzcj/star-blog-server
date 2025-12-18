@@ -49,11 +49,6 @@ public class ModifyUserDTO extends BaseModifyDTO {
     private String email;
 
     /**
-     * 备注
-     */
-    private String remark;
-
-    /**
      * 排序
      */
     private Integer sort;

@@ -10,27 +10,27 @@ import java.net.URI;
 import java.util.Collection;
 
 /**
- * 富文本对象上传Key替换器
+ * 字符串对象上传Key替换器
  *
  * @author Ale
  * @version 1.0.0 2025/10/17 16:24
  */
 @Component
-public class RichTextOssUploadKeyReplacer extends RichTextOssUploadKeySupport implements OssUploadKeyReplacer {
+public class StringOssUploadKeyReplacer extends RichTextOssUploadKeySupport implements OssUploadKeyReplacer {
 
     @Override
     public Object replaceKey(Field field, Object value, Collection<String> originalKeys, Collection<String> processedKeys) {
         if (String.class.isAssignableFrom(field.getType())) {
-            if (!this.isRichTextField(field)) {
-                return processedKeys.stream().findFirst().orElse(null);
+            if (this.isRichTextField(field)) {
+                var content = (String) value;
+                if (StrUtil.isBlank(content)) {
+                    return null;
+                }
+
+                return this.doReplace(content, processedKeys);
             }
 
-            var content = (String) value;
-            if (StrUtil.isBlank(content)) {
-                return null;
-            }
-
-            return doReplace(content, processedKeys);
+            return processedKeys.stream().findFirst().orElse(null);
         }
 
         return null;
@@ -44,11 +44,11 @@ public class RichTextOssUploadKeyReplacer extends RichTextOssUploadKeySupport im
      * @return 替换后的富文本内容
      */
     private Object doReplace(String content, Collection<String> processedKeys) {
-        for (String url : parseUrls(content)) {
+        for (String url : this.parseUrls(content)) {
             if (StrUtil.isBlank(url)) {
                 continue;
             }
-            String trimDomainUrl = trimDomain(url);
+            String trimDomainUrl = this.trimDomain(url);
             if (StrUtil.isBlank(trimDomainUrl)) {
                 continue;
             }

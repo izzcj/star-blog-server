@@ -61,7 +61,7 @@ abstract class RichTextOssUploadKeySupport {
      * @return 移除域名后的URL
      */
     protected String trimDomain(String url) {
-        return StringUtils.substringAfter(URI.create(url).getPath(), StringConstants.SLASH + bucket + StringConstants.SLASH);
+        return StringUtils.substringAfter(URI.create(url).getPath(), StringConstants.SLASH + this.bucket + StringConstants.SLASH);
     }
 
     /**

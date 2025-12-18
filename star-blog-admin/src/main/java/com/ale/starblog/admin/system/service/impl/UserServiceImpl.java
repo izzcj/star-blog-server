@@ -40,15 +40,15 @@ public class UserServiceImpl extends AbstractCrudServiceImpl<UserMapper, User, U
 
     @Override
     public void changePassword(Long id, String newPassword, String oldPassword) {
-        User user = this.getById(id);
-        if (user == null) {
-            throw new ServiceException("修改密码失败！用户不存在！");
-        }
+        User user = this.getOptById(id)
+            .orElseThrow(() -> new ServiceException("修改密码失败！用户[{}]不存在！", id));
         if (!this.passwordEncoder.matches(oldPassword, user.getPassword())) {
             throw new ServiceException("修改密码失败！原密码错误！");
         }
-        user.setPassword(this.passwordEncoder.encode(newPassword));
-        this.updateById(user);
+        this.lambdaUpdate()
+            .eq(User::getId, id)
+            .set(User::getPassword, this.passwordEncoder.encode(newPassword))
+            .update();
     }
 
     @Override

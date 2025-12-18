@@ -10,9 +10,7 @@ import com.ale.starblog.admin.system.service.IUserRoleService;
 import com.ale.starblog.admin.system.service.IUserService;
 import com.ale.starblog.framework.common.domain.JsonResult;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -60,6 +58,31 @@ public class UserProfileController {
                 .collect(Collectors.toSet())
         );
         return JsonResult.success(result);
+    }
+
+    /**
+     * 修改个人信息
+     *
+     * @param modifyUserDTO 修改个人信息DTO
+     * @return 修改个人信息结果
+     */
+    @PutMapping
+    public JsonResult<Void> modifyProfile(@RequestBody ModifyUserDTO modifyUserDTO) {
+        modifyUserDTO.setId(AuthenticationUtils.getLoginUserId());
+        this.userService.modify(BeanUtil.copyProperties(modifyUserDTO, UserBO.class));
+        return JsonResult.success();
+    }
+
+    /**
+     * 修改密码
+     *
+     * @param changePasswordDTO 修改密码DTO
+     * @return 修改密码结果
+     */
+    @PutMapping("/password")
+    public JsonResult<Void> changePassword(ChangeUserPasswordDTO changePasswordDTO) {
+        this.userService.changePassword(AuthenticationUtils.getLoginUserId(), changePasswordDTO.getNewPassword(), changePasswordDTO.getOldPassword());
+        return JsonResult.success();
     }
 
     /**
