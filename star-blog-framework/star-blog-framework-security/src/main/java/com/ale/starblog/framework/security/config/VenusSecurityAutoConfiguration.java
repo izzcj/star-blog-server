@@ -10,7 +10,7 @@ import com.ale.starblog.framework.security.support.AuthenticatedUserConverter;
 import com.ale.starblog.framework.security.support.DefaultAuthenticatedUserConverter;
 import com.ale.starblog.framework.security.support.PropertiesAuthenticatedMvcPatternProvider;
 import com.ale.starblog.framework.security.support.PropertiesPermittedMvcPatternProvider;
-import com.ale.starblog.framework.security.token.TokenManager;
+import com.ale.starblog.framework.common.security.TokenManager;
 import com.ale.starblog.framework.security.token.jwt.JwtTokenManager;
 import com.ale.starblog.framework.security.token.redis.RedisTokenManager;
 import lombok.RequiredArgsConstructor;

@@ -1,7 +1,7 @@
 package com.ale.starblog.framework.security.context;
 
 import com.ale.starblog.framework.common.data.DataRepository;
-import com.ale.starblog.framework.security.token.ExpirationAwareToken;
+import com.ale.starblog.framework.common.security.ExpirationAwareToken;
 
 /**
  * 会话上下文

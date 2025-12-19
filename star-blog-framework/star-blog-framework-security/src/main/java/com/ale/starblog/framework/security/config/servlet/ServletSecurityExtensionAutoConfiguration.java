@@ -18,7 +18,7 @@ import com.ale.starblog.framework.common.enumeration.RequestMethod;
 import com.ale.starblog.framework.security.support.AuthenticatedMvcPatternProvider;
 import com.ale.starblog.framework.security.support.MvcPattern;
 import com.ale.starblog.framework.security.support.PermittedMvcPatternProvider;
-import com.ale.starblog.framework.security.token.TokenManager;
+import com.ale.starblog.framework.common.security.TokenManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfiguration;

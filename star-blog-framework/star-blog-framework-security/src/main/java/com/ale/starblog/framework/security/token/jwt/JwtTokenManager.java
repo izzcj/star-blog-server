@@ -10,7 +10,7 @@ import com.ale.starblog.framework.security.context.SessionContext;
 import com.ale.starblog.framework.security.exception.VenusSecurityException;
 import com.ale.starblog.framework.security.support.AuthenticatedUserConverter;
 import com.ale.starblog.framework.security.token.AbstractTokenManager;
-import com.ale.starblog.framework.security.token.ExpirationAwareToken;
+import com.ale.starblog.framework.common.security.ExpirationAwareToken;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;

@@ -1,7 +1,7 @@
 package com.ale.starblog.framework.security.token.jwt;
 
 import com.ale.starblog.framework.common.security.AuthenticatedUser;
-import com.ale.starblog.framework.security.token.ExpirationAwareToken;
+import com.ale.starblog.framework.common.security.ExpirationAwareToken;
 import lombok.EqualsAndHashCode;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 

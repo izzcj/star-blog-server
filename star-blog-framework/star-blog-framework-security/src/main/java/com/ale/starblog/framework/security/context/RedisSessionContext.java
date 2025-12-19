@@ -8,7 +8,7 @@ import com.ale.starblog.framework.common.utils.CacheUtils;
 import com.ale.starblog.framework.common.utils.CastUtils;
 import com.ale.starblog.framework.common.utils.RedisUtils;
 import com.ale.starblog.framework.security.exception.VenusSecurityException;
-import com.ale.starblog.framework.security.token.ExpirationAwareToken;
+import com.ale.starblog.framework.common.security.ExpirationAwareToken;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
 import lombok.extern.slf4j.Slf4j;

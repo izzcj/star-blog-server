@@ -1,7 +1,7 @@
 package com.ale.starblog.framework.security.authentication;
 
-import com.ale.starblog.framework.security.token.ExpirationAwareToken;
-import com.ale.starblog.framework.security.token.TokenManager;
+import com.ale.starblog.framework.common.security.ExpirationAwareToken;
+import com.ale.starblog.framework.common.security.TokenManager;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

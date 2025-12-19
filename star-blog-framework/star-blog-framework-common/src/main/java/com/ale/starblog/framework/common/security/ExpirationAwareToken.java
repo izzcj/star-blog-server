@@ -1,4 +1,4 @@
-package com.ale.starblog.framework.security.token;
+package com.ale.starblog.framework.common.security;
 
 import java.util.Date;
 
