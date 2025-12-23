@@ -28,11 +28,11 @@ public interface ChannelManager {
     Channel get(String userId);
 
     /**
-     * 获取所有通道
+     * 获取所有UserId
      *
      * @return 通道集合
      */
-    Collection<Channel> all();
+    Collection<String> allUserIds();
 
     /**
      * 移除通道

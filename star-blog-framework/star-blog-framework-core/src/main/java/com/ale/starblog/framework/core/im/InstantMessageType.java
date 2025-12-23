@@ -10,7 +10,7 @@ import lombok.Getter;
  * @version 1.0.0 2025/12/19 10:35
  */
 @Getter
-public enum MessageType implements BaseEnum<String> {
+public enum InstantMessageType implements BaseEnum<String> {
 
     /**
      * 心跳PING
@@ -21,6 +21,11 @@ public enum MessageType implements BaseEnum<String> {
      * 心跳PONG
      */
     PONG,
+
+    /**
+     * 推送
+     */
+    PUSH,
 
     /**
      * 加入群组
@@ -37,7 +42,7 @@ public enum MessageType implements BaseEnum<String> {
      */
     GROUP_CHAT;
 
-    MessageType() {
+    InstantMessageType() {
         this.init();
     }
 }

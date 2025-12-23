@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Map;
 
 /**
  * IM消息
@@ -18,7 +19,7 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ImmediateMessage implements Serializable {
+public class InstantMessage implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1213245L;
@@ -34,31 +35,18 @@ public class ImmediateMessage implements Serializable {
     private String to;
 
     /**
-     * 消息
+     * 消息类型
      */
-    private Message message;
+    private InstantMessageType type;
 
     /**
      * 消息内容
      */
-    @Data
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class Message implements Serializable {
+    private String content;
 
-        @Serial
-        private static final long serialVersionUID = 56465451212L;
-
-        /**
-         * 消息类型
-         */
-        private MessageType type;
-
-        /**
-         * 消息内容
-         */
-        private String content;
-    }
+    /**
+     * 额外属性
+     */
+    private Map<String, Object> extra;
 
 }

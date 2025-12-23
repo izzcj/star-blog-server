@@ -3,9 +3,9 @@ package com.ale.starblog.framework.core.im.netty;
 import cn.hutool.core.util.StrUtil;
 import com.ale.starblog.framework.common.utils.JsonUtils;
 import com.ale.starblog.framework.core.im.GroupManager;
-import com.ale.starblog.framework.core.im.ImmediateMessage;
-import com.ale.starblog.framework.core.im.ImmediateMessageSender;
-import com.ale.starblog.framework.core.im.MessageType;
+import com.ale.starblog.framework.core.im.InstantMessage;
+import com.ale.starblog.framework.core.im.InstantMessageSender;
+import com.ale.starblog.framework.core.im.InstantMessageType;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
@@ -39,22 +39,27 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketF
     /**
      * 即时消息发送器
      */
-    private final ImmediateMessageSender immediateMessageSender;
+    private final InstantMessageSender instantMessageSender;
 
-    public WebSocketHandler(ChannelManager channelManager, GroupManager groupManager, ImmediateMessageSender immediateMessageSender) {
+    public WebSocketHandler(ChannelManager channelManager, GroupManager groupManager, InstantMessageSender instantMessageSender) {
         this.channelManager = channelManager;
         this.groupManager = groupManager;
-        this.immediateMessageSender = immediateMessageSender;
+        this.instantMessageSender = instantMessageSender;
+    }
+
+    @Override
+    public void handlerAdded(ChannelHandlerContext ctx) {
+        log.info("{}加入连接", ctx.channel().id());
     }
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, TextWebSocketFrame frame) {
-        ImmediateMessage msg = JsonUtils.fromJson(frame.text(), ImmediateMessage.class);
-        MessageType messageType = msg.getMessage().getType();
-        if (MessageType.PING.match(messageType)) {
+        InstantMessage message = JsonUtils.fromJson(frame.text(), InstantMessage.class);
+        InstantMessageType instantMessageType = message.getType();
+        if (InstantMessageType.PING.match(instantMessageType)) {
             ctx.channel().writeAndFlush(new TextWebSocketFrame(
-                ImmediateMessage.Message.builder()
-                    .type(MessageType.PONG)
+                InstantMessage.builder()
+                    .type(InstantMessageType.PONG)
                     .build()
                     .toString())
             );
@@ -63,14 +68,15 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketF
         Channel channel = ctx.channel();
         String userId = channel.attr(AttributeKey.<String>valueOf("userId")).get();
         if (StrUtil.isBlank(userId)) {
-            userId = msg.getFrom();
+            userId = message.getFrom();
         }
-        if (MessageType.JOIN_GROUP.match(messageType)) {
-            this.groupManager.joinGroup(msg.getTo(), userId);
+        if (InstantMessageType.JOIN_GROUP.match(instantMessageType)) {
+            this.groupManager.joinGroup(message.getTo(), userId);
+            this.channelManager.add(userId, channel);
             return;
         }
         this.channelManager.add(userId, channel);
-        this.immediateMessageSender.send(msg);
+        this.instantMessageSender.send(message);
     }
 
 

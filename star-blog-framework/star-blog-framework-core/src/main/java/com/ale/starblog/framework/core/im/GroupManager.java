@@ -34,4 +34,11 @@ public interface GroupManager {
      */
     void leaveGroup(String groupId, String userId);
 
+    /**
+     * 删除群组
+     *
+     * @param groupId 群组id
+     */
+    void removeGroup(String groupId);
+
 }

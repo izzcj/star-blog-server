@@ -1,5 +1,6 @@
 package com.ale.starblog.framework.core.im.netty;
 
+import com.ale.starblog.framework.core.im.InstantMessageProperties;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -17,11 +18,17 @@ import org.springframework.beans.factory.InitializingBean;
 public class NettyServer implements InitializingBean {
 
     /**
+     * 即时消息配置属性
+     */
+    private final InstantMessageProperties instantMessageProperties;
+
+    /**
      * WebSocket初始化器
      */
     private final WebSocketInitializer webSocketInitializer;
 
-    public NettyServer(WebSocketInitializer webSocketInitializer) {
+    public NettyServer(InstantMessageProperties instantMessageProperties, WebSocketInitializer webSocketInitializer) {
+        this.instantMessageProperties = instantMessageProperties;
         this.webSocketInitializer = webSocketInitializer;
     }
 
@@ -36,16 +43,17 @@ public class NettyServer implements InitializingBean {
     private void start() {
         EventLoopGroup boss = new NioEventLoopGroup(1);
         EventLoopGroup worker = new NioEventLoopGroup();
+        int port = this.instantMessageProperties.getPort();
         try {
             ServerBootstrap b = new ServerBootstrap();
             b.group(boss, worker)
                 .channel(NioServerSocketChannel.class)
                 .childHandler(this.webSocketInitializer);
 
-            b.bind(8081).sync();
-            log.info("Netty WebSocket started at 8081");
+            b.bind(port).sync();
+            log.info("Netty WebSocket服务启动成功！端口：[{}]", port);
         } catch (Exception e) {
-            log.error("Netty WebSocket start failed", e);
+            log.error("Netty WebSocket启动失败！", e);
         }
     }
 

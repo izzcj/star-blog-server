@@ -5,6 +5,7 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
+import io.netty.handler.stream.ChunkedWriteHandler;
 import io.netty.handler.timeout.IdleStateHandler;
 
 /**
@@ -34,10 +35,11 @@ public class WebSocketInitializer extends ChannelInitializer<SocketChannel> {
     protected void initChannel(SocketChannel ch) {
         ch.pipeline().addLast(
             new HttpServerCodec(),
+            new ChunkedWriteHandler(),
             new HttpObjectAggregator(65536),
             this.authHandler,
             new IdleStateHandler(60, 0, 0),
-            new WebSocketServerProtocolHandler("/ws"),
+            new WebSocketServerProtocolHandler("/ws", true),
             this.webSocketHandler
         );
     }

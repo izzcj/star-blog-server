@@ -14,32 +14,41 @@ import java.util.concurrent.ConcurrentHashMap;
 public class SimpleChannelManager implements ChannelManager {
 
     /**
-     * 通道映射
+     * 用户通道映射
      */
-    private static final ConcurrentHashMap<String, Channel> CHANNEL_MAPPING = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<String, Channel> USER_CHANNEL_MAPPING = new ConcurrentHashMap<>();
 
+    /**
+     * 通道用户映射
+     */
+    private static final ConcurrentHashMap<Channel, String> CHANNEL_USER_MAPPING = new ConcurrentHashMap<>();
 
     @Override
     public void add(String userId, Channel channel) {
-        Channel old = CHANNEL_MAPPING.put(userId, channel);
+        Channel old = USER_CHANNEL_MAPPING.put(userId, channel);
         if (old != null && old != channel) {
             old.close();
+            CHANNEL_USER_MAPPING.remove(old);
         }
+        CHANNEL_USER_MAPPING.put(channel, userId);
     }
 
     @Override
     public Channel get(String userId) {
-        return CHANNEL_MAPPING.get(userId);
+        return USER_CHANNEL_MAPPING.get(userId);
     }
 
     @Override
-    public Collection<Channel> all() {
-        return CHANNEL_MAPPING.values();
+    public Collection<String> allUserIds() {
+        return USER_CHANNEL_MAPPING.keySet();
     }
 
     @Override
     public void remove(Channel channel) {
-        CHANNEL_MAPPING.values().remove(channel);
+        String userId = CHANNEL_USER_MAPPING.remove(channel);
+        if (userId != null) {
+            USER_CHANNEL_MAPPING.remove(userId);
+        }
     }
 
 }

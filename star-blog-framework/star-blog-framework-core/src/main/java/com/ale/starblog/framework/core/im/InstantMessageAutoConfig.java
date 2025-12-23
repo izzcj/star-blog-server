@@ -1,7 +1,8 @@
 package com.ale.starblog.framework.core.im;
+
 import com.ale.starblog.framework.common.security.TokenManager;
-import com.ale.starblog.framework.core.im.mq.MessageConsumer;
-import com.ale.starblog.framework.core.im.mq.MessageProducer;
+import com.ale.starblog.framework.core.im.mq.RabbitMessageConsumer;
+import com.ale.starblog.framework.core.im.mq.RabbitMessageProducer;
 import com.ale.starblog.framework.core.im.netty.*;
 import com.rabbitmq.client.Channel;
 import lombok.RequiredArgsConstructor;
@@ -24,8 +25,15 @@ import org.springframework.context.annotation.Bean;
  * @version 1.0.0 2025/12/19 10:25
  */
 @AutoConfiguration
-@EnableConfigurationProperties(ImmediateMessageProperties.class)
-public class ImmediateMessageAutoConfig {
+@RequiredArgsConstructor
+@ConditionalOnBooleanProperty(prefix = "venus.im", name = "enabled")
+@EnableConfigurationProperties(InstantMessageProperties.class)
+public class InstantMessageAutoConfig {
+
+    /**
+     * 配置属性
+     */
+    private final InstantMessageProperties properties;
 
     /**
      * 通道管理器
@@ -46,7 +54,7 @@ public class ImmediateMessageAutoConfig {
     @Bean
     @ConditionalOnMissingBean
     public GroupManager groupManager() {
-        return new SimpleGroupManager();
+        return new RedisGroupManager();
     }
 
     /**
@@ -64,12 +72,13 @@ public class ImmediateMessageAutoConfig {
      * 实时消息发送器
      *
      * @param channelManager 通道管理器
-     * @return {@link ImmediateMessageSender}
+     * @param groupManager   群组管理器
+     * @return {@link InstantMessageSender}
      */
     @Bean
     @ConditionalOnMissingBean
-    public ImmediateMessageSender immediateMessageSender(ChannelManager channelManager) {
-        return new WebSocketImmediateMessageSender(channelManager);
+    public InstantMessageSender immediateMessageSender(ChannelManager channelManager, GroupManager groupManager) {
+        return new WebSocketInstantMessageSender(channelManager, groupManager);
     }
 
     /**
@@ -77,12 +86,12 @@ public class ImmediateMessageAutoConfig {
      *
      * @param channelManager         通道管理器
      * @param groupManager           群组管理器
-     * @param immediateMessageSender 即时消息发送器
+     * @param instantMessageSender 即时消息发送器
      * @return {@link WebSocketHandler}
      */
     @Bean
-    public WebSocketHandler webSocketHandler(ChannelManager channelManager, GroupManager groupManager, ImmediateMessageSender immediateMessageSender) {
-        return new WebSocketHandler(channelManager, groupManager, immediateMessageSender);
+    public WebSocketHandler webSocketHandler(ChannelManager channelManager, GroupManager groupManager, InstantMessageSender instantMessageSender) {
+        return new WebSocketHandler(channelManager, groupManager, instantMessageSender);
     }
 
     /**
@@ -107,13 +116,14 @@ public class ImmediateMessageAutoConfig {
     @Bean
     @ConditionalOnBean(WebSocketInitializer.class)
     public NettyServer nettyServer(WebSocketInitializer webSocketInitializer) {
-        return new NettyServer(webSocketInitializer);
+        return new NettyServer(this.properties, webSocketInitializer);
     }
 
     /**
      * RabbitMq即时消息自动配置
      */
     @RequiredArgsConstructor
+    @ConditionalOnProperty(prefix = "venus.im", name = "sender", havingValue = "rabbit")
     @ConditionalOnClass({ RabbitTemplate.class, Channel.class })
     public static class RabbitMqImmediateMessageConfiguration {
 
@@ -171,11 +181,11 @@ public class ImmediateMessageAutoConfig {
          * 即时消息发送器
          *
          * @param rabbitTemplate RabbitMq模板
-         * @return {@link ImmediateMessageSender}
+         * @return {@link InstantMessageSender}
          */
         @Bean
-        public ImmediateMessageSender immediateMessageSender(RabbitTemplate rabbitTemplate) {
-            return new MessageProducer(rabbitTemplate);
+        public InstantMessageSender immediateMessageSender(RabbitTemplate rabbitTemplate) {
+            return new RabbitMessageProducer(rabbitTemplate);
         }
 
         /**
@@ -183,11 +193,11 @@ public class ImmediateMessageAutoConfig {
          *
          * @param channelManager 通道管理器
          * @param groupManager   群组管理器
-         * @return {@link MessageConsumer}
+         * @return {@link RabbitMessageConsumer}
          */
         @Bean
-        public MessageConsumer messageConsumer(ChannelManager channelManager, GroupManager groupManager) {
-            return new MessageConsumer(channelManager, groupManager);
+        public RabbitMessageConsumer messageConsumer(ChannelManager channelManager, GroupManager groupManager) {
+            return new RabbitMessageConsumer(channelManager, groupManager);
         }
     }
 
