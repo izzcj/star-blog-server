@@ -21,6 +21,8 @@ import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 /**
@@ -30,6 +32,7 @@ import java.util.List;
  * @param <S> Service类型
  * @param <V> VO类型
  * @param <B> BO类型
+ * @param <Q> 查询条件类型
  * @param <C> 创建DTO类型
  * @param <M> 修改DTO类型
  * @author Ale
@@ -37,7 +40,7 @@ import java.util.List;
  * @since 2025/3/31
  */
 @Slf4j
-public abstract class BaseController<E extends BaseEntity, S extends ICrudService<E, B>, V extends BaseVO, B extends BaseBO, C extends BaseCreateDTO, M extends BaseModifyDTO> {
+public abstract class BaseController<E extends BaseEntity, S extends ICrudService<E, B>, V extends BaseVO, B extends BaseBO, Q extends BaseQuery, C extends BaseCreateDTO, M extends BaseModifyDTO> {
 
     /**
      * Service
@@ -84,7 +87,8 @@ public abstract class BaseController<E extends BaseEntity, S extends ICrudServic
      * @param id ID
      * @return 结果
      */
-    protected JsonResult<V> queryById(Long id) {
+    @GetMapping("/{id}")
+    public JsonResult<V> fetchById(@PathVariable(name = "id") Long id) {
         if (id == null) {
             return JsonResult.fail("id不能为空");
         }
@@ -103,7 +107,8 @@ public abstract class BaseController<E extends BaseEntity, S extends ICrudServic
      * @param query 查询条件
      * @return 结果
      */
-    protected JsonResult<V> queryOne(BaseQuery query) {
+    @GetMapping
+    public JsonResult<V> fetchOne(Q query) {
         B entityBO = this.service.queryOne(query);
         V result = BeanUtil.copyProperties(entityBO, this.voClass);
         this.translation(result);
@@ -116,7 +121,8 @@ public abstract class BaseController<E extends BaseEntity, S extends ICrudServic
      * @param query 查询条件
      * @return 结果
      */
-    protected JsonResult<List<V>> queryList(BaseQuery query) {
+    @GetMapping("/list")
+    public JsonResult<List<V>> fetchList(Q query) {
         HookContext hookContext = HookContext.newContext();
         hookContext.set(HookConstants.QUERY_KEY, query);
         try {
@@ -138,7 +144,8 @@ public abstract class BaseController<E extends BaseEntity, S extends ICrudServic
      * @param query    查询条件
      * @return 结果
      */
-    protected JsonPageResult<V> queryPage(@PageableDefault(page = 1, size = 20) Pageable pageable, BaseQuery query) {
+    @GetMapping("/page")
+    public JsonPageResult<V> fetchPage(@PageableDefault(page = 1, size = 20) Pageable pageable, Q query) {
         HookContext hookContext = HookContext.newContext();
         hookContext.set(HookConstants.QUERY_KEY, query);
         try {
@@ -164,7 +171,8 @@ public abstract class BaseController<E extends BaseEntity, S extends ICrudServic
      * @param createDTO 创建DTO
      * @return 结果
      */
-    protected JsonResult<Void> createEntity(C createDTO) {
+    @PostMapping
+    public JsonResult<Void> create(C createDTO) {
         this.service.create(BeanUtil.copyProperties(createDTO, this.boClass));
         return JsonResult.success();
     }
@@ -175,7 +183,8 @@ public abstract class BaseController<E extends BaseEntity, S extends ICrudServic
      * @param createDTOList 创建DTO列表
      * @return 结果
      */
-    protected JsonResult<Void> createEntity(List<C> createDTOList) {
+    @PostMapping("/batch")
+    public JsonResult<Void> batchCreate(List<C> createDTOList) {
         if (createDTOList == null || createDTOList.isEmpty()) {
             return JsonResult.fail("批量新增失败！新增实体列表为空！");
         }
@@ -189,7 +198,8 @@ public abstract class BaseController<E extends BaseEntity, S extends ICrudServic
      * @param modifyDTO 修改DTO
      * @return 结果
      */
-    protected JsonResult<Void> modifyEntity(M modifyDTO) {
+    @PutMapping
+    public JsonResult<Void> modify(M modifyDTO) {
         if (modifyDTO.getId() == null) {
             return JsonResult.fail("修改实体失败！实体ID为空！");
         }
@@ -203,7 +213,8 @@ public abstract class BaseController<E extends BaseEntity, S extends ICrudServic
      * @param modifyDTOList 修改DTO列表
      * @return 结果
      */
-    protected JsonResult<Void> modifyEntity(List<M> modifyDTOList) {
+    @PutMapping("/batch")
+    public JsonResult<Void> batchModify(List<M> modifyDTOList) {
         if (modifyDTOList == null || modifyDTOList.isEmpty()) {
             return JsonResult.fail("批量修改失败！修改实体列表为空！");
         }
@@ -217,7 +228,8 @@ public abstract class BaseController<E extends BaseEntity, S extends ICrudServic
      * @param id ID
      * @return 结果
      */
-    protected JsonResult<Void> deleteEntity(Long id) {
+    @DeleteMapping("/{id}")
+    public JsonResult<Void> delete(@PathVariable(name = "id") Long id) {
         if (id == null) {
             return JsonResult.fail("id不能为空");
         }
@@ -231,7 +243,8 @@ public abstract class BaseController<E extends BaseEntity, S extends ICrudServic
      * @param ids ID列表
      * @return 结果
      */
-    protected JsonResult<Void> deleteEntity(List<Long> ids) {
+    @DeleteMapping("/{ids}")
+    public JsonResult<Void> batchDelete(@PathVariable(name = "ids") List<Long> ids) {
         if (ids == null || ids.isEmpty()) {
             return JsonResult.fail("id不能为空");
         }

@@ -29,23 +29,12 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/system/user")
-public class UserController extends BaseController<User, IUserService, UserVO, UserBO, CreateUserDTO, ModifyUserDTO> {
+public class UserController extends BaseController<User, IUserService, UserVO, UserBO, UserQuery, CreateUserDTO, ModifyUserDTO> {
 
     /**
      * 用户角色服务
      */
     private final IUserRoleService userRoleService;
-
-    /**
-     * 通过id获取用户
-     *
-     * @param id 用户id
-     * @return 用户信息
-     */
-    @GetMapping("/{id}")
-    public JsonResult<UserVO> fetchDetails(@PathVariable(name = "id") Long id) {
-        return this.queryById(id);
-    }
 
     /**
      * 获取用户所属角色id集合
@@ -127,44 +116,14 @@ public class UserController extends BaseController<User, IUserService, UserVO, U
         return JsonResult.success();
     }
 
-    /**
-     * 分页获取用户
-     *
-     * @param pageable 分页参数
-     * @param query    查询条件
-     * @return 用户分页数据
-     */
-    @GetMapping("/page")
-    public JsonPageResult<UserVO> fetchPage(Pageable pageable, UserQuery query) {
-        return this.queryPage(pageable, query);
-    }
-
-    /**
-     * 创建用户
-     *
-     * @param createUserDTO 创建用户dto
-     *
-     * @return Void
-     */
-    @PostMapping
-    public JsonResult<Void> create(@RequestBody @Validated CreateUserDTO createUserDTO) {
-        return this.createEntity(createUserDTO);
-    }
-
-    /**
-     * 修改用户
-     *
-     * @param modifyUserDTO 修改用户dto
-     *
-     * @return Void
-     */
-    @PutMapping
+    @Override
     public JsonResult<Void> modify(@RequestBody @Validated ModifyUserDTO modifyUserDTO) {
         List<Long> roleIds = modifyUserDTO.getRoleIds();
         if (CollectionUtil.isNotEmpty(roleIds)) {
             this.userRoleService.authUser(modifyUserDTO.getId(), roleIds);
         }
-        return this.modifyEntity(modifyUserDTO);
+        this.service.modify(BeanUtil.copyProperties(modifyUserDTO, UserBO.class));
+        return JsonResult.success();
     }
 
     /**
@@ -179,14 +138,4 @@ public class UserController extends BaseController<User, IUserService, UserVO, U
         return JsonResult.success();
     }
 
-    /**
-     * 删除用户
-     *
-     * @param id 用户id
-     * @return Void
-     */
-    @DeleteMapping("/{id}")
-    public JsonResult<Void> delete(@PathVariable(name = "id") Long id) {
-        return this.deleteEntity(id);
-    }
 }

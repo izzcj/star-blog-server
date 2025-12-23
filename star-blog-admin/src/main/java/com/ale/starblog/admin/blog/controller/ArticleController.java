@@ -12,14 +12,11 @@ import com.ale.starblog.admin.system.constants.SystemConfigConstants;
 import com.ale.starblog.admin.system.domain.entity.DictData;
 import com.ale.starblog.admin.system.service.IDictDataService;
 import com.ale.starblog.admin.system.service.ISystemConfigService;
-import com.ale.starblog.framework.common.domain.JsonPageResult;
 import com.ale.starblog.framework.common.domain.JsonResult;
 import com.ale.starblog.framework.common.exception.ServiceException;
 import com.ale.starblog.framework.core.controller.BaseController;
 import com.ale.starblog.framework.core.translation.GenericTranslationSupport;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,7 +34,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/blog/article")
-public class ArticleController extends BaseController<Article, IArticleService, ArticleVO, ArticleBO, CreateArticleDTO, ModifyArticleDTO> {
+public class ArticleController extends BaseController<Article, IArticleService, ArticleVO, ArticleBO, ArticleQuery, CreateArticleDTO, ModifyArticleDTO> {
 
     /**
      * 文章标签关联服务
@@ -55,13 +52,13 @@ public class ArticleController extends BaseController<Article, IArticleService, 
     private final IDictDataService dictDataService;
 
     /**
-     * 通过id获取文章
+     * 获取文章详情
      *
      * @param id 文章id
      * @return 文章信息
      */
-    @GetMapping("/{id}")
-    public JsonResult<ArticleDetailsVO> fetchDetails(@PathVariable(name = "id") Long id) {
+    @GetMapping("/detail/{id}")
+    public JsonResult<ArticleDetailsVO> fetchDetail(@PathVariable(name = "id") Long id) {
         Article article = Optional.ofNullable(this.service.getById(id))
             .orElseThrow(() -> new ServiceException("文章不存在"));
         ArticleDetailsVO result = BeanUtil.copyProperties(article, ArticleDetailsVO.class);
@@ -79,18 +76,6 @@ public class ArticleController extends BaseController<Article, IArticleService, 
             .collect(Collectors.toList());
         result.setTags(tags);
         return JsonResult.success(result);
-    }
-
-    /**
-     * 分页获取文章
-     *
-     * @param pageable 分页参数
-     * @param query    查询条件
-     * @return 文章分页数据
-     */
-    @GetMapping("/page")
-    public JsonPageResult<ArticleVO> fetchPage(Pageable pageable, ArticleQuery query) {
-        return this.queryPage(pageable, query);
     }
 
     /**
@@ -125,39 +110,6 @@ public class ArticleController extends BaseController<Article, IArticleService, 
                 )
                 .collect(Collectors.toList())
         );
-    }
-
-    /**
-     * 创建文章
-     *
-     * @param createArticleDTO 创建文章dto
-     * @return Void
-     */
-    @PostMapping
-    public JsonResult<Void> create(@RequestBody @Validated CreateArticleDTO createArticleDTO) {
-        return this.createEntity(createArticleDTO);
-    }
-
-    /**
-     * 修改文章
-     *
-     * @param modifyArticleDTO 修改文章dto
-     * @return Void
-     */
-    @PutMapping
-    public JsonResult<Void> modify(@RequestBody @Validated ModifyArticleDTO modifyArticleDTO) {
-        return this.modifyEntity(modifyArticleDTO);
-    }
-
-    /**
-     * 删除文章
-     *
-     * @param id 文章id
-     * @return Void
-     */
-    @DeleteMapping("/{id}")
-    public JsonResult<Void> delete(@PathVariable(name = "id") Long id) {
-        return this.deleteEntity(id);
     }
 
     /**

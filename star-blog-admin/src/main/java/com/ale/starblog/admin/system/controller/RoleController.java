@@ -4,14 +4,11 @@ import com.ale.starblog.admin.system.domain.entity.Role;
 import com.ale.starblog.admin.system.domain.pojo.role.*;
 import com.ale.starblog.admin.system.service.IRoleMenuService;
 import com.ale.starblog.admin.system.service.IRoleService;
-import com.ale.starblog.framework.common.domain.JsonPageResult;
 import com.ale.starblog.framework.common.domain.JsonResult;
 import com.ale.starblog.framework.common.support.Option;
 import com.ale.starblog.framework.core.controller.BaseController;
 import com.ale.starblog.framework.core.convert.OptionConvertible;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
@@ -28,46 +25,12 @@ import java.util.Set;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/system/role")
-public class RoleController extends BaseController<Role, IRoleService, RoleVO, RoleBO, CreateRoleDTO, ModifyRoleDTO> {
+public class RoleController extends BaseController<Role, IRoleService, RoleVO, RoleBO, RoleQuery, CreateRoleDTO, ModifyRoleDTO> {
 
     /**
      * 角色菜单服务
      */
     private final IRoleMenuService roleMenuService;
-
-    /**
-     * 根据id获取角色
-     *
-     * @param id 角色id
-     * @return 结果
-     */
-    @GetMapping("/{id}")
-    public JsonResult<RoleVO> fetchDetails(@PathVariable(name = "id") Long id) {
-        return this.queryById(id);
-    }
-
-    /**
-     * 分页获取角色
-     *
-     * @param pageable 分页信息
-     * @param query    查询条件
-     * @return 结果
-     */
-    @GetMapping("/page")
-    public JsonPageResult<RoleVO> fetchPage(Pageable pageable, RoleQuery query) {
-        return this.queryPage(pageable, query);
-    }
-
-    /**
-     * 获取角色列表
-     *
-     * @param query 查询条件
-     * @return 结果
-     */
-    @GetMapping("/list")
-    public JsonResult<List<RoleVO>> fetchList(RoleQuery query) {
-        return this.queryList(query);
-    }
 
     /**
      * 获取角色选项
@@ -99,28 +62,6 @@ public class RoleController extends BaseController<Role, IRoleService, RoleVO, R
     }
 
     /**
-     * 新增角色
-     *
-     * @param createRoleDTO 创建角色dto
-     * @return 结果
-     */
-    @PostMapping
-    public JsonResult<Void> create(@RequestBody @Validated CreateRoleDTO createRoleDTO) {
-        return this.createEntity(createRoleDTO);
-    }
-
-    /**
-     * 修改系统角色
-     *
-     * @param modifyRoleDTO 修改角色dto
-     * @return 结果
-     */
-    @PutMapping
-    public JsonResult<Void> modify(@RequestBody @Validated ModifyRoleDTO modifyRoleDTO) {
-        return this.modifyEntity(modifyRoleDTO);
-    }
-
-    /**
      * 保存角色菜单权限
      *
      * @param id      角色id
@@ -133,14 +74,4 @@ public class RoleController extends BaseController<Role, IRoleService, RoleVO, R
         return JsonResult.success();
     }
 
-    /**
-     * 删除系统角色
-     *
-     * @param id 角色id
-     * @return 结果
-     */
-    @DeleteMapping("/{id}")
-    public JsonResult<Void> delete(@PathVariable(name = "id") Long id) {
-        return this.deleteEntity(id);
-    }
 }
