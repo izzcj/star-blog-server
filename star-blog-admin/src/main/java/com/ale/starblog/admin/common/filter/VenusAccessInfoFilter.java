@@ -19,6 +19,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 /**
@@ -36,7 +37,9 @@ public class VenusAccessInfoFilter implements VenusFilter {
         Set<String> accessedIps = RedisUtils.getIfAbsent(cacheKey, Sets::newHashSet);
         if (!accessedIps.contains(request.getRemoteAddr())) {
             accessedIps.add(request.getRemoteAddr());
-            RedisUtils.set(cacheKey, accessedIps, Duration.ofDays(1));
+            // 过期时间为当前时间到第二天0点
+            LocalDateTime now = LocalDateTime.now();
+            RedisUtils.set(cacheKey, accessedIps, Duration.between(now, now.plusDays(1).withHour(0).withMinute(0).withSecond(0)));
             SpringUtil.publishEvent(new DailyStatInfoChangeEvent(this, StatInfoConstants.STAT_INFO_TYPE_VIEW_COUNT, 1));
         }
         filterChain.doFilter(request, response);

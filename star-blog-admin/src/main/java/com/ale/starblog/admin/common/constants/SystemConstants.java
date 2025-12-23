@@ -22,5 +22,5 @@ public class SystemConstants {
     /**
      * 访问IP缓存键
      */
-    public static final String ACCESS_IP_CACHE_KEY = "accessIPCacheKey";
+    public static final String ACCESS_IP_CACHE_KEY = "accessIP";
 }
