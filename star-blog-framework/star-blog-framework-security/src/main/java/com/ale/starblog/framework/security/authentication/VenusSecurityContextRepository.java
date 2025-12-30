@@ -86,7 +86,10 @@ public class VenusSecurityContextRepository implements SecurityContextRepository
             return;
         }
         String accessToken = this.tokenManager.generateAccessToken(context.getAuthentication());
-        request.setAttribute(SecurityConstants.TOKEN_CONTEXT_KEY, new TokenContext(accessToken, null));
+        request.setAttribute(
+            SecurityConstants.TOKEN_CONTEXT_KEY,
+            new TokenContext(accessToken, null, this.tokenManager.getAccessTokenExpiration().toSeconds())
+        );
     }
 
     @Override

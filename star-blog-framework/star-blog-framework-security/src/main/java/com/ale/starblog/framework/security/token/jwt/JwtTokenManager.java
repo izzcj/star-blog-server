@@ -145,6 +145,11 @@ public class JwtTokenManager extends AbstractTokenManager {
     }
 
     @Override
+    public Duration getAccessTokenExpiration() {
+        return this.tokenExpiration;
+    }
+
+    @Override
     public void expiresToken(ExpirationAwareToken token) {
         // token放入过期缓存中
         Duration duration = Duration.between(

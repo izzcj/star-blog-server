@@ -9,7 +9,7 @@ import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 /**
- * 系统公告创建DTO
+ * 系统通知创建DTO
  *
  * @author Ale
  * @version 1.0.0 2025-12-23 15:15:06

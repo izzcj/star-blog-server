@@ -110,6 +110,11 @@ public class RedisTokenManager extends AbstractTokenManager {
     }
 
     @Override
+    public Duration getAccessTokenExpiration() {
+        return this.tokenExpiration;
+    }
+
+    @Override
     public void expiresToken(ExpirationAwareToken token) {
         this.expiresToken(token.getTokenId());
     }

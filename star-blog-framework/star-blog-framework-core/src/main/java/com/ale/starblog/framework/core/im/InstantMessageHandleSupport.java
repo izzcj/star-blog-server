@@ -8,8 +8,6 @@ import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * 实时消息处理支持
@@ -46,6 +44,9 @@ public abstract class InstantMessageHandleSupport {
             return;
         }
         for (String receiverId : receiverIds) {
+            if (receiverId.equals(message.getFrom())) {
+                continue;
+            }
             this.sendMessage(receiverId, messageJson);
         }
     }
@@ -59,10 +60,7 @@ public abstract class InstantMessageHandleSupport {
     private Collection<String> getReceiverIds(InstantMessage message) {
         InstantMessageType instantMessageType = message.getType();
         if (InstantMessageType.GROUP_CHAT.match(instantMessageType)) {
-            return this.groupManager.getGroupMembers(message.getTo()).stream()
-                // 发送者消息由前端乐观渲染
-                .filter(groupMember -> !Objects.equals(groupMember, message.getFrom()))
-                .collect(Collectors.toList());
+            return this.groupManager.getGroupMembers(message.getTo());
         }
         if (InstantMessageType.PUSH.match(instantMessageType)) {
             return this.channelManager.allUserIds();

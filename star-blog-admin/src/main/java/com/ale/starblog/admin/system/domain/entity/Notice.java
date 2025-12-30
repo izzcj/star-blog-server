@@ -1,8 +1,11 @@
 package com.ale.starblog.admin.system.domain.entity;
 
 import java.time.LocalDateTime;
+
+import com.ale.starblog.framework.common.domain.entity.BaseAuditEntity;
+import com.ale.starblog.framework.core.oss.OssUpload;
+import com.ale.starblog.framework.core.oss.RichText;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.ale.starblog.framework.common.domain.entity.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -10,7 +13,7 @@ import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 /**
- * 系统公告实体
+ * 系统通知实体
  *
  * @author Ale
  * @version 1.0.0 2025-12-23 15:15:51
@@ -21,7 +24,7 @@ import lombok.experimental.SuperBuilder;
 @ToString(callSuper = true)
 @TableName("sys_notice")
 @EqualsAndHashCode(callSuper = true)
-public class Notice extends BaseEntity {
+public class Notice extends BaseAuditEntity {
 
     /**
      * 分类
@@ -36,6 +39,8 @@ public class Notice extends BaseEntity {
     /**
      * 内容
      */
+    @OssUpload
+    @RichText
     private String content;
 
     /**

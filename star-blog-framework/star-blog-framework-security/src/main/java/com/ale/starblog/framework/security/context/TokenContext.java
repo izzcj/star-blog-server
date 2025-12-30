@@ -23,4 +23,9 @@ public class TokenContext {
      * 刷新token
      */
     private String refreshToken;
+
+    /**
+     * 过期时间
+     */
+    private Long expiresIn;
 }

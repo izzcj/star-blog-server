@@ -11,7 +11,7 @@ import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 /**
- * 系统公告查询条件
+ * 系统通知查询条件
  *
  * @author Ale
  * @version 1.0.0 2025-12-23 15:15:06

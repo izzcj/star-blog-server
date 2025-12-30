@@ -60,12 +60,13 @@ public class InstantMessageAutoConfig {
     /**
      * 鉴权处理器
      *
-     * @param tokenManager token管理器
+     * @param tokenManager   token管理器
+     * @param channelManager 通道管理器
      * @return {@link AuthHandler}
      */
     @Bean
-    public AuthHandler authHandler(TokenManager tokenManager) {
-        return new AuthHandler(tokenManager);
+    public AuthHandler authHandler(TokenManager tokenManager, ChannelManager channelManager) {
+        return new AuthHandler(tokenManager, channelManager);
     }
 
     /**

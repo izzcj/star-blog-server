@@ -172,7 +172,7 @@ public abstract class BaseController<E extends BaseEntity, S extends ICrudServic
      * @return 结果
      */
     @PostMapping
-    public JsonResult<Void> create(C createDTO) {
+    public JsonResult<Void> create(@RequestBody C createDTO) {
         this.service.create(BeanUtil.copyProperties(createDTO, this.boClass));
         return JsonResult.success();
     }
@@ -184,7 +184,7 @@ public abstract class BaseController<E extends BaseEntity, S extends ICrudServic
      * @return 结果
      */
     @PostMapping("/batch")
-    public JsonResult<Void> batchCreate(List<C> createDTOList) {
+    public JsonResult<Void> batchCreate(@RequestBody List<C> createDTOList) {
         if (createDTOList == null || createDTOList.isEmpty()) {
             return JsonResult.fail("批量新增失败！新增实体列表为空！");
         }
@@ -199,7 +199,7 @@ public abstract class BaseController<E extends BaseEntity, S extends ICrudServic
      * @return 结果
      */
     @PutMapping
-    public JsonResult<Void> modify(M modifyDTO) {
+    public JsonResult<Void> modify(@RequestBody M modifyDTO) {
         if (modifyDTO.getId() == null) {
             return JsonResult.fail("修改实体失败！实体ID为空！");
         }
@@ -214,7 +214,7 @@ public abstract class BaseController<E extends BaseEntity, S extends ICrudServic
      * @return 结果
      */
     @PutMapping("/batch")
-    public JsonResult<Void> batchModify(List<M> modifyDTOList) {
+    public JsonResult<Void> batchModify(@RequestBody List<M> modifyDTOList) {
         if (modifyDTOList == null || modifyDTOList.isEmpty()) {
             return JsonResult.fail("批量修改失败！修改实体列表为空！");
         }

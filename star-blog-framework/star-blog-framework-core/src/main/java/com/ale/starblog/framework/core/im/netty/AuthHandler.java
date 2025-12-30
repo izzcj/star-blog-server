@@ -30,8 +30,14 @@ public class AuthHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
      */
     private final TokenManager tokenManager;
 
-    public AuthHandler(TokenManager tokenManager) {
+    /**
+     * 通道管理器
+     */
+    private final ChannelManager channelManager;
+
+    public AuthHandler(TokenManager tokenManager, ChannelManager channelManager) {
         this.tokenManager = tokenManager;
+        this.channelManager = channelManager;
     }
 
     @Override
@@ -57,6 +63,8 @@ public class AuthHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
                     userId = authenticatedUser.getId().toString();
                 }
             }
+            this.channelManager.add(userId, ctx.channel());
+            log.info("{}加入连接", userId);
         }
         ctx.channel().attr(AttributeKey.valueOf("userId")).set(userId);
         ctx.fireChannelRead(req.retain());

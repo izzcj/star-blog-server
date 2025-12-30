@@ -2,6 +2,8 @@ package com.ale.starblog.framework.common.security;
 
 import org.springframework.security.core.Authentication;
 
+import java.time.Duration;
+
 /**
  * token管理器
  *
@@ -42,6 +44,13 @@ public interface TokenManager {
      * @return 刷新Token
      */
     String generateRefreshToken(Authentication authentication);
+
+    /**
+     * 获取访问Token过期时长
+     *
+     * @return 访问Token过期时长
+     */
+    Duration getAccessTokenExpiration();
 
     /**
      * 过期一个Token

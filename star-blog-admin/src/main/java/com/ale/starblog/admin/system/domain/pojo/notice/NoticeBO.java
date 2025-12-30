@@ -9,7 +9,7 @@ import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 /**
- * 系统公告BO
+ * 系统通知BO
  *
  * @author Ale
  * @version 1.0.0 2025-12-23 15:15:05

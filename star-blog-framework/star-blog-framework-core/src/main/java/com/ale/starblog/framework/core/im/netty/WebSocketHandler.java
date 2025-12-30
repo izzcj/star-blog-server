@@ -48,20 +48,16 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketF
     }
 
     @Override
-    public void handlerAdded(ChannelHandlerContext ctx) {
-        log.info("{}加入连接", ctx.channel().id());
-    }
-
-    @Override
     protected void channelRead0(ChannelHandlerContext ctx, TextWebSocketFrame frame) {
         InstantMessage message = JsonUtils.fromJson(frame.text(), InstantMessage.class);
         InstantMessageType instantMessageType = message.getType();
         if (InstantMessageType.PING.match(instantMessageType)) {
             ctx.channel().writeAndFlush(new TextWebSocketFrame(
-                InstantMessage.builder()
-                    .type(InstantMessageType.PONG)
-                    .build()
-                    .toString())
+                JsonUtils.toJson(
+                    InstantMessage.builder()
+                        .type(InstantMessageType.PONG)
+                        .build())
+                )
             );
             return;
         }
@@ -75,7 +71,6 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketF
             this.channelManager.add(userId, channel);
             return;
         }
-        this.channelManager.add(userId, channel);
         this.instantMessageSender.send(message);
     }
 

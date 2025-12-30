@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ale.starblog.admin.system.domain.entity.Notice;
 
 /**
- * 系统公告Mapper
+ * 系统通知Mapper
  *
  * @author Ale
  * @version 1.0.0 2025-12-23 15:17:42
