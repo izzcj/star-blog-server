@@ -1,7 +1,11 @@
 package com.ale.starblog.admin.system.domain.pojo.notice;
 
 import java.time.LocalDateTime;
+
+import com.ale.starblog.admin.common.constants.TranslationConstants;
+import com.ale.starblog.admin.system.constants.DictTypeConstants;
 import com.ale.starblog.framework.core.pojo.BaseVO;
+import com.ale.starblog.framework.core.translation.TranslationField;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -24,7 +28,13 @@ public class NoticeVO extends BaseVO {
     /**
      * 分类
      */
+    @TranslationField(type = TranslationConstants.TRANSLATION_DICT, params = "type=" + DictTypeConstants.DICT_TYPE_NOTICE_TYPE)
     private String type;
+
+    /**
+     * 分类名称
+     */
+    private String typeName;
 
     /**
      * 标题

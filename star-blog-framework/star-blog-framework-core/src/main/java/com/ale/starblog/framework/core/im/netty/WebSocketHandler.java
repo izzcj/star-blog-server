@@ -84,7 +84,7 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketF
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) {
         if (evt instanceof IdleStateEvent event) {
             if (event.state() == IdleState.READER_IDLE) {
-                log.info("心跳超时，关闭{}连接", ctx.channel().id());
+                log.info("心跳超时，关闭{}连接", this.channelManager.getUserId(ctx.channel()));
                 this.channelManager.remove(ctx.channel());
                 ctx.close();
             }

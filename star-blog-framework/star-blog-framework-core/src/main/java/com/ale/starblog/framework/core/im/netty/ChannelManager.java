@@ -28,6 +28,14 @@ public interface ChannelManager {
     Channel get(String userId);
 
     /**
+     * 获取用户id
+     *
+     * @param channel 通道
+     * @return 用户id
+     */
+    String getUserId(Channel channel);
+
+    /**
      * 获取所有UserId
      *
      * @return 通道集合

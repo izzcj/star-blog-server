@@ -39,6 +39,11 @@ public class SimpleChannelManager implements ChannelManager {
     }
 
     @Override
+    public String getUserId(Channel channel) {
+        return CHANNEL_USER_MAPPING.get(channel);
+    }
+
+    @Override
     public Collection<String> allUserIds() {
         return USER_CHANNEL_MAPPING.keySet();
     }

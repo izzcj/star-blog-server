@@ -15,6 +15,11 @@ public final class DictTypeConstants {
     public static final String DICT_TYPE_SYSTEM_CONFIG_CATEGORY = "system-config-category";
 
     /**
+     * 系统通知分类字典类型
+     */
+    public static final String DICT_TYPE_NOTICE_TYPE = "notice-type";
+
+    /**
      * 文章分类字典类型
      */
     public static final String DICT_TYPE_ARTICLE_CATEGORY = "article-category";
