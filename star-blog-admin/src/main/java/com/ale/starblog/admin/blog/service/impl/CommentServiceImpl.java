@@ -106,7 +106,6 @@ public class CommentServiceImpl extends AbstractCrudServiceImpl<CommentMapper, C
         List<CommentBO> records = result.getRecords();
 
         Long loginUserId = SecurityUtils.getLoginUserId();
-        // 未登录不判断是否点赞
         if (records.isEmpty()) {
             return result;
         }

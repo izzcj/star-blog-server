@@ -19,6 +19,7 @@ import com.ale.starblog.framework.core.translation.GenericTranslationSupport;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -92,6 +93,7 @@ public class ArticleController extends BaseController<Article, IArticleService, 
         List<DictData> articleCategories = this.dictDataService.lambdaQuery()
             .eq(DictData::getDictKey, DictTypeConstants.DICT_TYPE_ARTICLE_CATEGORY)
             .in(DictData::getDictValue, homeArticleCategoryNavbarConfig)
+            .orderByAsc(DictData::getSort)
             .list();
         if (CollectionUtil.isEmpty(articleCategories)) {
             throw new ServiceException("文章类型不存在！");
@@ -100,6 +102,7 @@ public class ArticleController extends BaseController<Article, IArticleService, 
         return JsonResult.success(
             articleCategories
                 .stream()
+                .sorted(Comparator.comparingInt(DictData::getSort))
                 .map(articleCategory ->
                     ArticleCategoryNavbarVO.builder()
                         .categoryLabel(articleCategory.getDictLabel())

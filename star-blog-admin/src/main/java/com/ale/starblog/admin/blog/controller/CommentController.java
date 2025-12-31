@@ -1,14 +1,21 @@
 package com.ale.starblog.admin.blog.controller;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.ale.starblog.admin.blog.domain.entity.Comment;
 import com.ale.starblog.admin.blog.domain.pojo.comment.*;
 import com.ale.starblog.admin.blog.service.ICommentService;
+import com.ale.starblog.framework.common.domain.JsonPageResult;
 import com.ale.starblog.framework.common.domain.JsonResult;
 import com.ale.starblog.framework.common.utils.SecurityUtils;
 import com.ale.starblog.framework.core.controller.BaseController;
+import com.ale.starblog.framework.core.translation.GenericTranslationSupport;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * /博客管理/评论管理
@@ -20,6 +27,18 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/blog/comment")
 public class CommentController extends BaseController<Comment, ICommentService, CommentVO, CommentBO, CommentQuery, CreateCommentDTO, ModifyCommentDTO> {
+
+    @Override
+    public JsonPageResult<CommentVO> fetchPage(Pageable pageable, CommentQuery query) {
+        IPage<CommentBO> commentPage = this.service.fetchPage(pageable, query);
+        return JsonPageResult.of(commentPage, comments -> {
+            List<CommentVO> result = BeanUtil.copyToList(comments, CommentVO.class);
+            return result.stream()
+                .peek(GenericTranslationSupport::translate)
+                .toList();
+            }
+        );
+    }
 
     /**
      * 点赞评论
