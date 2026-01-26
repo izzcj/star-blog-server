@@ -11,7 +11,6 @@
     <artifactId>star-blog-framework-security</artifactId>
     <name>star-blog-framework-security</name>
     <description>StarBlog框架鉴权模块</description>
-    <version>1.0.0</version>
     <packaging>jar</packaging>
 
     <dependencies>

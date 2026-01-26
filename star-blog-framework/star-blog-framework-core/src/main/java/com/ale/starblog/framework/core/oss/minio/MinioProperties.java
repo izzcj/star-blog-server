@@ -22,14 +22,15 @@ public class MinioProperties extends EnableAwareProperties {
     private String endpoint = "127.0.0.1";
 
     /**
+     * 域名
+     * 线上环境使用
+     */
+    private String domain;
+
+    /**
      * 端口号
      */
     private Integer port = 9000;
-
-    /**
-     * 是否启用Https
-     */
-    private Boolean secure = false;
 
     /**
      * 访问Key

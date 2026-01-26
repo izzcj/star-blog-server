@@ -4,8 +4,8 @@ import com.ale.starblog.framework.common.domain.entity.BaseEntity;
 import com.ale.starblog.framework.common.porxy.ProxyResolvable;
 import com.ale.starblog.framework.common.support.TriConsumer;
 import com.ale.starblog.framework.common.utils.CastUtils;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Resource;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.ObjectProvider;
 
 /**
@@ -69,7 +69,7 @@ public abstract class ServiceHookExecutorSupport<E extends BaseEntity, H extends
      * @param hookStage 钩子阶段
      * @return 钩子调用器
      */
-    @NotNull
+    @Nonnull
     private <T extends ServiceHook<?>> TriConsumer<T, Object, HookContext> getServiceHookInvoker(HookStage hookStage) {
         return switch (hookStage) {
             case BEFORE_QUERY -> (hook, param, context) -> hook.beforeQuery(CastUtils.cast(param), context);

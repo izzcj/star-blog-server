@@ -32,6 +32,11 @@ build/
 ### VS Code ###
 .vscode/
 
+### Docker ###
+/docker/nginx/ssl
+/docker/nginx/html
+
+
 ### Claude Code ###
 CLAUDE.md
 DEV_GUIDE.md

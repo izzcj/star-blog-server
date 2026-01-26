@@ -11,7 +11,6 @@
     <artifactId>star-blog-framework-common</artifactId>
     <name>star-blog-framework-common</name>
     <description>StarBlog框架通用模块</description>
-    <version>1.0.0</version>
     <packaging>jar</packaging>
 
     <dependencies>

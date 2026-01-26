@@ -47,7 +47,7 @@ public class MinioOssService implements OssService {
     public MinioOssService(MinioProperties minioProperties) throws Exception {
         this.minioProperties = minioProperties;
         this.minioClient = MinioClient.builder()
-            .endpoint(minioProperties.getEndpoint(), minioProperties.getPort(), minioProperties.getSecure())
+            .endpoint(minioProperties.getEndpoint(), minioProperties.getPort(), false)
             .credentials(minioProperties.getAccessKey(), minioProperties.getSecretKey())
             .build();
 
@@ -110,18 +110,18 @@ public class MinioOssService implements OssService {
     public String getBaseUrl() {
         try {
             StringBuilder uri = new StringBuilder();
-            if (Boolean.TRUE.equals(this.minioProperties.getSecure())) {
-                uri.append("https");
+            if (StrUtil.isNotBlank(this.minioProperties.getDomain())) {
+                uri.append("https://")
+                   .append(this.minioProperties.getDomain())
+                   .append(StringConstants.SLASH)
+                   .append("minio");
             } else {
-                uri.append("http");
+                uri.append("http://")
+                   .append(this.minioProperties.getEndpoint())
+                   .append(StringConstants.COLON)
+                   .append(this.minioProperties.getPort());
             }
-            uri.append(StringConstants.COLON)
-                .append(StringConstants.SLASH)
-                .append(StringConstants.SLASH)
-                .append(this.minioProperties.getEndpoint())
-                .append(StringConstants.COLON)
-                .append(this.minioProperties.getPort())
-                .append(StringConstants.SLASH)
+            uri.append(StringConstants.SLASH)
                 .append(this.minioProperties.getBucket())
                 .append(StringConstants.SLASH);
             URL url = URI.create(uri.toString()).toURL();

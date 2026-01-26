@@ -1,8 +1,8 @@
 package com.ale.starblog.framework.core.spring.converter;
 
 import com.ale.starblog.framework.common.enumeration.BaseEnum;
+import jakarta.annotation.Nonnull;
 import lombok.RequiredArgsConstructor;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.convert.converter.ConverterFactory;
 import org.springframework.lang.NonNull;
@@ -36,9 +36,9 @@ public class EnumConverterFactory implements ConverterFactory<String, BaseEnum> 
          */
         private final Class<T> enumClass;
 
-        @NotNull
+        @Nonnull
         @Override
-        public T convert(@NotNull String source) {
+        public T convert(@Nonnull String source) {
             return BaseEnum.getByValue(this.enumClass, source);
         }
     }
