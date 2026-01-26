@@ -730,12 +730,12 @@ public class DefaultTaskService implements TaskService {
                 Optional.ofNullable(currentExecution.getVariableByKey(FlowVariableConstants.ACCUMULATIVE_WEIGHT))
                     .orElse(0)
             );
+            accumulativeWeight += historyTaskActor.getWeight();
             if (accumulativeWeight >= approvalNode.getPassWeight()) {
                 // 自动通过其他人的任务
                 this.forceFinishTask(historyTask.getExecutionId(), FlowInstanceState.COMPLETE);
                 FlowContext.getExecutionService().completeExecution(currentExecution);
             } else {
-                accumulativeWeight += historyTaskActor.getWeight();
                 currentExecution.addVariable(FlowVariableConstants.ACCUMULATIVE_WEIGHT, accumulativeWeight);
             }
         }

@@ -16,11 +16,6 @@ import java.util.Map;
  */
 public interface JsonVariableAccessor extends VariableAccessor<String> {
 
-    /**
-     * 获取所有变量
-     *
-     * @return 所有变量
-     */
     @Override
     @SuppressWarnings("unchecked")
     default Map<String, Object> getAllVariable() {
@@ -30,12 +25,6 @@ public interface JsonVariableAccessor extends VariableAccessor<String> {
         return JSON.parseObject(this.getVariable(), Map.class);
     }
 
-    /**
-     * 获取变量
-     *
-     * @param variableKey 变量key
-     * @return 变量
-     */
     @Override
     default Object getVariableByKey(String variableKey) {
         Map<String, Object> allVariable = this.getAllVariable();
@@ -56,11 +45,6 @@ public interface JsonVariableAccessor extends VariableAccessor<String> {
         return value.equals(variableValue);
     }
 
-    /**
-     * 添加变量
-     *
-     * @param variable 添加的变量
-     */
     @Override
     default void addVariable(Map<String, Object> variable) {
         if (CollectionUtil.isNotEmpty(variable)) {
@@ -77,11 +61,6 @@ public interface JsonVariableAccessor extends VariableAccessor<String> {
         }
     }
 
-    /**
-     * 删除变量
-     *
-     * @param variableKey 删除的变量key
-     */
     @Override
     default void removeVariable(String variableKey) {
         Map<String, Object> allVariable = this.getAllVariable();
