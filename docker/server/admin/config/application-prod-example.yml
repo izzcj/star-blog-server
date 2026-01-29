@@ -1,0 +1,63 @@
+spring:
+  liquibase:
+    enabled: false
+  application:
+    name: StarBlogAdminService
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      database: 1
+
+venus:
+  # 数据库配置（未配置url、host、port时使用默认配置）
+  db:
+    type: postgresql
+    database: star_blog
+    schema: star_blog
+    username: your_username
+    password: your_password
+    pool:
+      pool-type: hikari
+  oss:
+    minio:
+      enabled: true
+      access-key: access_key
+      secret-key: secret_key
+      bucket: star-blog
+  # 鉴权配置
+  security:
+    token-type: redis
+    token-expiration: 24h
+    refresh-token-expiration-per-request: true
+    permitted-uris:
+      - uri: /**
+        methods:
+          - all
+  # 日志配置
+  logging:
+    enabled: true
+    level:
+      com.ale.starblog.admin: info
+    log-file:
+      info:
+        file-path: star-blog-admin/logs/info.log
+      error:
+        file-path: star-blog-admin/logs/error.log
+  # 共享数据配置
+  shared-data-context:
+    clear-on-lifecycle: true
+  im:
+    enabled: true
+    sender: websocket
+  # 工作流配置
+  workflow:
+    enabled: false
+    generate-logic-task: false
+    generate-database-table: false
+  # 代理配置
+  proxy:
+    enabled: true
+  # 通用配置
+  common:
+    enable-cors: true
