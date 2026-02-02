@@ -11,6 +11,11 @@ public enum OssServiceProvider {
     /**
      * minio
      */
-    MINIO
+    MINIO,
+
+    /**
+     * 阿里云OSS
+     */
+    ALIYUN
 
 }

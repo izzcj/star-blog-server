@@ -12,8 +12,9 @@
  Target Server Version : 170000 (170000)
  File Encoding         : 65001
 
- Date: 15/01/2026 15:06:52
+ Date: 30/01/2026 17:03:56
 */
+
 -- 创建数据库
 CREATE DATABASE star_blog;
 -- 切换数据库
@@ -22,12 +23,13 @@ CREATE DATABASE star_blog;
 CREATE SCHEMA IF NOT EXISTS star_blog;
 -- 设置默认schema
 SET search_path TO star_blog;
+
 -- ----------------------------
 -- Table structure for blog_activity
 -- ----------------------------
 DROP TABLE IF EXISTS "star_blog"."blog_activity";
 CREATE TABLE "star_blog"."blog_activity" (
-  "id" int8 NOT NULL primary key ,
+  "id" int8 NOT NULL,
   "deleted" bool NOT NULL DEFAULT false,
   "create_time" timestamp(6) NOT NULL,
   "update_time" timestamp(6) NOT NULL,
@@ -48,6 +50,10 @@ COMMENT ON COLUMN "star_blog"."blog_activity"."article_id" IS '文章ID';
 COMMENT ON COLUMN "star_blog"."blog_activity"."ref_id" IS '引用ID';
 COMMENT ON COLUMN "star_blog"."blog_activity"."user_id" IS '用户ID';
 COMMENT ON TABLE "star_blog"."blog_activity" IS '动态表';
+
+-- ----------------------------
+-- Records of blog_activity
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for blog_article
@@ -93,6 +99,10 @@ COMMENT ON COLUMN "star_blog"."blog_article"."recommended" IS '是否推荐';
 COMMENT ON TABLE "star_blog"."blog_article" IS '文章表';
 
 -- ----------------------------
+-- Records of blog_article
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for blog_article_tag
 -- ----------------------------
 DROP TABLE IF EXISTS "star_blog"."blog_article_tag";
@@ -112,6 +122,10 @@ COMMENT ON COLUMN "star_blog"."blog_article_tag"."update_time" IS '最后更新�
 COMMENT ON COLUMN "star_blog"."blog_article_tag"."article_id" IS '文章ID';
 COMMENT ON COLUMN "star_blog"."blog_article_tag"."tag_id" IS '标签ID';
 COMMENT ON TABLE "star_blog"."blog_article_tag" IS '文章标签关联表';
+
+-- ----------------------------
+-- Records of blog_article_tag
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for blog_comment
@@ -148,6 +162,10 @@ COMMENT ON COLUMN "star_blog"."blog_comment"."reject_reason" IS '驳回原因';
 COMMENT ON TABLE "star_blog"."blog_comment" IS '评论表';
 
 -- ----------------------------
+-- Records of blog_comment
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for blog_comment_like
 -- ----------------------------
 DROP TABLE IF EXISTS "star_blog"."blog_comment_like";
@@ -167,6 +185,11 @@ COMMENT ON COLUMN "star_blog"."blog_comment_like"."update_time" IS '修改时间
 COMMENT ON COLUMN "star_blog"."blog_comment_like"."user_id" IS '用户ID';
 COMMENT ON COLUMN "star_blog"."blog_comment_like"."comment_id" IS '评论ID';
 COMMENT ON TABLE "star_blog"."blog_comment_like" IS '评论点赞';
+
+-- ----------------------------
+-- Records of blog_comment_like
+-- ----------------------------
+
 
 -- ----------------------------
 -- Table structure for blog_tag
@@ -250,6 +273,9 @@ COMMENT ON TABLE "star_blog"."sys_config" IS '系统配置';
 -- ----------------------------
 -- Records of sys_config
 -- ----------------------------
+INSERT INTO "star_blog"."sys_config" VALUES (2017145600312807426, 'f', '2026-01-30 15:59:22.527377', 1, '2026-01-30 16:13:54.739931', 1, NULL, 'system-config', '登录页背景图', 'IMAGE', 'login-bg', 'image/CE2E4E70986440D78B21389766B2B55E__login-bg.jpg', NULL, NULL, 2, 'f');
+INSERT INTO "star_blog"."sys_config" VALUES (1995695140959887361, 'f', '2025-12-02 11:22:54.49236', 1, '2025-12-02 11:56:36.366314', 1, NULL, 'system-config', '是否启用评论审核', 'BOOLEAN', 'enable-comment-audit', 'true', NULL, NULL, 3, 'f');
+INSERT INTO "star_blog"."sys_config" VALUES (1988154623745261569, 'f', '2025-11-11 15:59:35.085239', 1, '2025-11-27 11:28:44.851546', 1, NULL, 'home-config', '首页标题', 'TEXT', 'home-title', '十月秋雨凉', NULL, NULL, 1, 'f');
 INSERT INTO "star_blog"."sys_config" VALUES (1988132356466343937, 'f', '2025-11-11 14:31:06.168428', 1, '2025-11-19 15:32:54.91734', 1, NULL, 'home-config', '首页格言', 'JSON', 'home-motto', '[
   "醉后不知天在水，满船清梦压星河",
   "人道洛阳花似锦，偏我来时不逢春",
@@ -257,9 +283,8 @@ INSERT INTO "star_blog"."sys_config" VALUES (1988132356466343937, 'f', '2025-11-
   "晚安"
 ]', NULL, NULL, 2, 'f');
 INSERT INTO "star_blog"."sys_config" VALUES (1988182434421854209, 'f', '2025-11-11 17:50:05.669271', 1, '2025-11-27 10:18:43.053287', 1, NULL, 'home-config', '网站logo', 'IMAGE', 'logo', 'image/3C31FFB856A74581A82B88C5306BCEB6__下载.png', NULL, NULL, 3, 'f');
-INSERT INTO "star_blog"."sys_config" VALUES (1988154623745261569, 'f', '2025-11-11 15:59:35.085239', 1, '2025-11-27 11:28:44.851546', 1, NULL, 'home-config', '首页标题', 'TEXT', 'home-title', '十月秋雨凉', NULL, NULL, 1, 'f');
-INSERT INTO "star_blog"."sys_config" VALUES (1995695140959887361, 'f', '2025-12-02 11:22:54.49236', 1, '2025-12-02 11:56:36.366314', 1, NULL, 'system-config', '是否启用评论审核', 'BOOLEAN', 'enable-comment-audit', 'true', NULL, NULL, 1, 'f');
 INSERT INTO "star_blog"."sys_config" VALUES (1997904731911155714, 'f', '2025-12-08 13:43:02.021758', 1, '2025-12-31 15:01:03.589613', 1, NULL, 'home-config', '导航栏分类', 'MULTI_SELECT', 'home-article-category-navbar', '["server-develop","web-develop","daily-life","ai-programme"]', 'DICT', 'article-category', 4, 'f');
+INSERT INTO "star_blog"."sys_config" VALUES (2017149625594728450, 'f', '2026-01-30 16:15:22.227085', 1, '2026-01-30 16:15:32.629762', 1, NULL, 'system-config', '网站背景图', 'IMAGE', 'web-bg', 'image/B79E0518F4A84FDFADC8B5BD2B2F8F5F__background.png', NULL, NULL, 1, 'f');
 
 -- ----------------------------
 -- Table structure for sys_daily_stat_info
@@ -285,6 +310,11 @@ COMMENT ON COLUMN "star_blog"."sys_daily_stat_info"."register_count" IS '注册�
 COMMENT ON COLUMN "star_blog"."sys_daily_stat_info"."active_count" IS '活跃用户数';
 COMMENT ON COLUMN "star_blog"."sys_daily_stat_info"."stat_date" IS '统计日期';
 COMMENT ON TABLE "star_blog"."sys_daily_stat_info" IS '系统每日统计信息';
+
+-- ----------------------------
+-- Records of sys_daily_stat_info
+-- ----------------------------
+
 
 -- ----------------------------
 -- Table structure for sys_dict_data
@@ -463,6 +493,7 @@ COMMENT ON TABLE "star_blog"."sys_notice" IS '系统公告';
 -- Records of sys_notice
 -- ----------------------------
 
+
 -- ----------------------------
 -- Table structure for sys_role
 -- ----------------------------
@@ -524,6 +555,8 @@ COMMENT ON COLUMN "star_blog"."sys_role_menu"."update_time" IS '修改时间';
 -- ----------------------------
 -- Records of sys_role_menu
 -- ----------------------------
+INSERT INTO "star_blog"."sys_role_menu" VALUES (1993927637321613313, 2, 1990711281612689410, 'f', '2025-11-27 14:19:28.778536', '2025-11-27 14:19:28.778536');
+INSERT INTO "star_blog"."sys_role_menu" VALUES (1993927637321613314, 2, 1990984169322340353, 'f', '2025-11-27 14:19:28.779536', '2025-11-27 14:19:28.779536');
 
 -- ----------------------------
 -- Table structure for sys_user
@@ -573,7 +606,10 @@ COMMENT ON TABLE "star_blog"."sys_user" IS '用户';
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO "star_blog"."sys_user" VALUES (1, 'ale', '$2a$10$gnZL0kvJqhPaYoVJB30Vme8PpTr2v/lsBeY9vGf1MTHrKKjXrMoYC', 'image/CEC77A504C5F42C19740AA9CC80E1156__avatar.jpg', '不快乐的阿乐', 1, '', 'sh1031578962@163.com', '2026-01-13 16:50:05.712998', '127.0.0.1', 'f', 1, 0, '2023-03-14 11:02:02', 1, '2025-12-18 17:36:57.606164', 1, '后端开发一只，立志成为糕手');
+INSERT INTO "star_blog"."sys_user" VALUES (1905553869777395714, 'dog', '$2a$10$/ZV4LgCgch5N0ugnMyftm.1NcIlEmqEqorql5H/z909WZLwgff7tS', 'image/153CEA3511094CD9A4D97E58FCABE1BC__avatar.jpg', '大狗', 1, '15552543689', NULL, NULL, NULL, 'f', 1, 1, '2025-03-28 17:33:41', 1, '2025-12-16 16:16:35.301819', 1, NULL);
+INSERT INTO "star_blog"."sys_user" VALUES (3, 'dom', '$2a$10$OiF0PBkacFpZW8zYM93nNOjEK6L5SzftwF5weh2qfV/MIW5YT7gTC', 'https://img1.baidu.com/it/u=1403245892,3051757811&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500', '天天', 1, '14785852315', 'sh1031578962@163.com', '2023-05-16 13:12:37', NULL, 'f', 1, 2, '2023-05-10 13:15:53', 1, '2023-05-16 14:09:26', 1, '测试账号，随时会删');
+INSERT INTO "star_blog"."sys_user" VALUES (1, 'ale', '$2a$10$gnZL0kvJqhPaYoVJB30Vme8PpTr2v/lsBeY9vGf1MTHrKKjXrMoYC', 'image/CEC77A504C5F42C19740AA9CC80E1156__avatar.jpg', '不快乐的阿乐', 1, '', 'sh1031578962@163.com', '2026-01-29 17:19:09.228325', '127.0.0.1', 'f', 1, 0, '2023-03-14 11:02:02', 1, '2025-12-18 17:36:57.606164', 1, '后端开发一只，立志成为糕手');
+INSERT INTO "star_blog"."sys_user" VALUES (2, 'noob', '$2a$10$RjxJlSkMzaQSuwNE0Z98rOqoQDBu3/Yf6LHJpbWRXORCZ3ugxsdce', 'https://img1.baidu.com/it/u=1403245892,3051757811&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500', '缄默', 1, '14785852315', '1031578962@qq.com', '2023-05-16 11:26:30', NULL, 'f', 1, 3, '2023-03-16 17:58:01', 1, '2025-06-03 17:16:34', 1, NULL);
 
 -- ----------------------------
 -- Table structure for sys_user_role
@@ -600,6 +636,9 @@ COMMENT ON TABLE "star_blog"."sys_user_role" IS '用户角色';
 -- Records of sys_user_role
 -- ----------------------------
 INSERT INTO "star_blog"."sys_user_role" VALUES (1, 1, 1, 'f', '2025-05-29 10:26:20', '2025-05-29 10:26:23');
+INSERT INTO "star_blog"."sys_user_role" VALUES (1929829549822128129, 2, 2, 'f', '2025-06-03 17:16:34', '2025-06-03 17:16:34');
+INSERT INTO "star_blog"."sys_user_role" VALUES (1928383512028839938, 1905553869777395714, 2, 't', '2025-05-30 17:30:32', '2025-11-19 17:08:11.682101');
+INSERT INTO "star_blog"."sys_user_role" VALUES (1991071073476685825, 1, 2, 'f', '2025-11-19 17:08:30.887647', '2025-11-19 17:08:30.887647');
 
 -- ----------------------------
 -- Primary Key structure for table blog_activity

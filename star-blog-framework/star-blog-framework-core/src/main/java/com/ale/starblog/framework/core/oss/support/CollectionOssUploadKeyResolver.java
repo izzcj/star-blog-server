@@ -1,6 +1,7 @@
 package com.ale.starblog.framework.core.oss.support;
 
 import com.ale.starblog.framework.common.utils.CastUtils;
+import com.ale.starblog.framework.core.oss.OssServiceProvider;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Field;
@@ -16,7 +17,7 @@ import java.util.Collection;
 public class CollectionOssUploadKeyResolver implements OssUploadKeyResolver {
 
     @Override
-    public Collection<String> resolveKeys(Field field, Object value) {
+    public Collection<String> resolveKeys(Field field, Object value, OssServiceProvider ossServiceProvider) {
         if (Collection.class.isAssignableFrom(field.getType())) {
             return CastUtils.cast(value);
         }

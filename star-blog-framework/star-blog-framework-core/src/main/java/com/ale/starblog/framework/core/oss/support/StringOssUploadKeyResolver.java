@@ -2,6 +2,7 @@ package com.ale.starblog.framework.core.oss.support;
 
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpUtil;
+import com.ale.starblog.framework.core.oss.OssServiceProvider;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Field;
@@ -19,7 +20,7 @@ import java.util.List;
 public class StringOssUploadKeyResolver extends RichTextOssUploadKeySupport implements OssUploadKeyResolver {
 
     @Override
-    public Collection<String> resolveKeys(Field field, Object value) {
+    public Collection<String> resolveKeys(Field field, Object value, OssServiceProvider ossServiceProvider) {
         if (String.class.isAssignableFrom(field.getType())) {
             var content = (String) value;
             if (StrUtil.isBlank(content)) {
@@ -27,7 +28,7 @@ public class StringOssUploadKeyResolver extends RichTextOssUploadKeySupport impl
             }
 
             if (this.isRichTextField(field)) {
-                return this.extractKeys(content);
+                return this.extractKeys(content, ossServiceProvider);
             }
 
             // 不处理外部链接
@@ -44,11 +45,12 @@ public class StringOssUploadKeyResolver extends RichTextOssUploadKeySupport impl
      * 提取富文本中的对象Key
      *
      * @param value 富文本内容
+     * @param ossServiceProvider OSS实现
      * @return 对象Key集合
      */
-    private Collection<String> extractKeys(String value) {
+    private Collection<String> extractKeys(String value, OssServiceProvider ossServiceProvider) {
         return this.parseUrls(value).stream()
-            .map(this::trimDomain)
+            .map(url -> this.trimDomain(url, ossServiceProvider))
             .filter(StrUtil::isNotBlank)
             .toList();
     }

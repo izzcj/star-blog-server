@@ -37,6 +37,7 @@
         <thumbnailator.version>0.4.21</thumbnailator.version>
         <minion.version>8.5.10</minion.version>
         <fast-excel.version>1.3.0</fast-excel.version>
+        <aliyun-oss.version>3.18.4</aliyun-oss.version>
     </properties>
 
     <!-- 通用依赖 -->
@@ -145,6 +146,12 @@
                 <groupId>cn.idev.excel</groupId>
                 <artifactId>fastexcel</artifactId>
                 <version>${fast-excel.version}</version>
+            </dependency>
+            <!-- 阿里云OSS -->
+            <dependency>
+                <groupId>com.aliyun.oss</groupId>
+                <artifactId>aliyun-sdk-oss</artifactId>
+                <version>${aliyun-oss.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

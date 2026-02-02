@@ -120,9 +120,9 @@ public class OssUploadGlobalServiceHook implements GlobalServiceHook {
             OssServiceProvider ossProvider = ossUpload.provider();
             Collection<String> oldObjectKeys = null;
             if (oldEntity != null) {
-                oldObjectKeys = this.resolveKeys(reflectionField.field(), reflectionField.getValue(oldEntity));
+                oldObjectKeys = this.resolveKeys(reflectionField.field(), reflectionField.getValue(oldEntity), ossProvider);
             }
-            Collection<String> newObjectKeys = this.resolveKeys(reflectionField.field(), reflectionField.getValue(entity));
+            Collection<String> newObjectKeys = this.resolveKeys(reflectionField.field(), reflectionField.getValue(entity), ossProvider);
 
             if (CollectionUtil.isEmpty(oldObjectKeys) && CollectionUtil.isEmpty(newObjectKeys)) {
                 continue;
@@ -251,13 +251,14 @@ public class OssUploadGlobalServiceHook implements GlobalServiceHook {
     /**
      * 解析上传对象Key
      *
-     * @param field 字段
-     * @param value 值
+     * @param field              字段
+     * @param value              值
+     * @param ossServiceProvider OSS实现
      * @return 对象Key集合
      */
-    private Collection<String> resolveKeys(Field field, Object value) {
+    private Collection<String> resolveKeys(Field field, Object value, OssServiceProvider ossServiceProvider) {
         for (OssUploadKeyResolver ossUploadKeyResolver : this.ossUploadKeyResolvers) {
-            var keys = ossUploadKeyResolver.resolveKeys(field, value);
+            var keys = ossUploadKeyResolver.resolveKeys(field, value, ossServiceProvider);
             if (keys != null && !keys.isEmpty()) {
                 return keys;
             }
@@ -280,7 +281,13 @@ public class OssUploadGlobalServiceHook implements GlobalServiceHook {
             return;
         }
         for (OssUploadKeyReplacer ossUploadKeyReplacer : this.ossUploadKeyReplacers) {
-            var newValue = ossUploadKeyReplacer.replaceKey(reflectionField.field(), value, originalKeys, processedKeys);
+            var newValue = ossUploadKeyReplacer.replaceKey(
+                    reflectionField.field(),
+                    value,
+                    originalKeys,
+                    processedKeys,
+                    reflectionField.field().getAnnotation(OssUpload.class).provider()
+            );
             if (newValue != null) {
                 reflectionField.setValue(entity, this.conversionService.convert(newValue, reflectionField.field().getType()));
                 return;

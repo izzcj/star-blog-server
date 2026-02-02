@@ -25,6 +25,11 @@ import java.util.concurrent.CountDownLatch;
 public final class OssSupport {
 
     /**
+     * oss配置
+     */
+    private static OssProperties ossProperties;
+
+    /**
      * OSS对象存储服务实现
      */
     private static List<OssService> ossServices;
@@ -34,7 +39,8 @@ public final class OssSupport {
      */
     private static TaskExecutor taskExecutor;
 
-    public OssSupport(List<OssService> ossServices, @Qualifier("applicationTaskExecutor") TaskExecutor taskExecutor) {
+    public OssSupport(OssProperties ossProperties, List<OssService> ossServices, @Qualifier("applicationTaskExecutor") TaskExecutor taskExecutor) {
+        OssSupport.ossProperties = ossProperties;
         OssSupport.ossServices = ossServices;
         OssSupport.taskExecutor = taskExecutor;
     }
@@ -46,7 +52,7 @@ public final class OssSupport {
      * @return bool
      */
     public static boolean exists(String objectKey) {
-        return exists(OssServiceProvider.MINIO, objectKey);
+        return exists(OssSupport.ossProperties.getDefaultProvider(), objectKey);
     }
 
     /**
@@ -87,7 +93,7 @@ public final class OssSupport {
      * @return 对象大小
      */
     public static long getSize(String objectKey) {
-        return getSize(OssServiceProvider.MINIO, objectKey);
+        return getSize(OssSupport.ossProperties.getDefaultProvider(), objectKey);
     }
 
     /**
@@ -128,7 +134,7 @@ public final class OssSupport {
      * @return Map
      */
     public static Map<String, Boolean> existsAll(Set<String> objectKeys) {
-        return existsAll(OssServiceProvider.MINIO, objectKeys);
+        return existsAll(OssSupport.ossProperties.getDefaultProvider(), objectKeys);
     }
 
     /**
@@ -183,7 +189,7 @@ public final class OssSupport {
      * @return 输入流
      */
     public static InputStream downloadObject(String objectKey) {
-        return downloadObject(OssServiceProvider.MINIO, objectKey);
+        return downloadObject(OssSupport.ossProperties.getDefaultProvider(), objectKey);
     }
 
     /**
@@ -224,7 +230,7 @@ public final class OssSupport {
      * @return 输入流Map
      */
     public static Map<String, InputStream> downloadObjects(Set<String> objectKeys) {
-        return downloadObjects(OssServiceProvider.MINIO, objectKeys);
+        return downloadObjects(OssSupport.ossProperties.getDefaultProvider(), objectKeys);
     }
 
     /**
@@ -281,7 +287,7 @@ public final class OssSupport {
      * @return 对象Key
      */
     public static String uploadObject(String objectKeyPrefix, String objectName, InputStream objectContent) {
-        return uploadObject(OssServiceProvider.MINIO, objectKeyPrefix, objectName, objectContent);
+        return uploadObject(OssSupport.ossProperties.getDefaultProvider(), objectKeyPrefix, objectName, objectContent);
     }
 
     /**
@@ -311,7 +317,7 @@ public final class OssSupport {
      * @return 对象Key Map
      */
     public static Map<String, String> uploadObjects(String objectKeyPrefix, Map<String, InputStream> objectContents) {
-        return uploadObjects(OssServiceProvider.MINIO, objectKeyPrefix, objectContents);
+        return uploadObjects(OssSupport.ossProperties.getDefaultProvider(), objectKeyPrefix, objectContents);
     }
 
     /**
@@ -356,7 +362,7 @@ public final class OssSupport {
      * @return 对象Key
      */
     public static String uploadObject(String objectKeyPrefix, String objectName, String mimeType, InputStream objectContent) {
-        return uploadObject(OssServiceProvider.MINIO, objectKeyPrefix, objectName, mimeType, objectContent);
+        return uploadObject(OssSupport.ossProperties.getDefaultProvider(), objectKeyPrefix, objectName, mimeType, objectContent);
     }
 
     /**
@@ -388,7 +394,7 @@ public final class OssSupport {
      * @return 对象Key Map
      */
     public static Map<String, String> uploadObjects(String objectKeyPrefix, String mimeType, Map<String, InputStream> objectContents) {
-        return uploadObjects(OssServiceProvider.MINIO, objectKeyPrefix, mimeType, objectContents);
+        return uploadObjects(OssSupport.ossProperties.getDefaultProvider(), objectKeyPrefix, mimeType, objectContents);
     }
 
     /**
@@ -435,7 +441,7 @@ public final class OssSupport {
      * @return 对象Key
      */
     public static String uploadImage(String objectName, InputStream objectContent) {
-        return uploadImage(OssServiceProvider.MINIO, objectName, objectContent);
+        return uploadImage(OssSupport.ossProperties.getDefaultProvider(), objectName, objectContent);
     }
 
     /**
@@ -464,7 +470,7 @@ public final class OssSupport {
      * @return 对象Key
      */
     public static String compressAndUploadImage(String objectName, InputStream objectContent) {
-        return compressAndUploadImage(OssServiceProvider.MINIO, objectName, objectContent);
+        return compressAndUploadImage(OssSupport.ossProperties.getDefaultProvider(), objectName, objectContent);
     }
 
     /**
@@ -492,7 +498,7 @@ public final class OssSupport {
      * @return 移动后的对象Key
      */
     public static String moveObject(String objectKey) {
-        return moveObject(OssServiceProvider.MINIO, objectKey);
+        return moveObject(OssSupport.ossProperties.getDefaultProvider(), objectKey);
     }
 
     /**
@@ -533,7 +539,7 @@ public final class OssSupport {
      * @return 移动后的对象Key
      */
     public static String backObject(String objectKey) {
-        return backObject(OssServiceProvider.MINIO, objectKey);
+        return backObject(OssSupport.ossProperties.getDefaultProvider(), objectKey);
     }
 
     /**
@@ -573,7 +579,7 @@ public final class OssSupport {
      * @param objectKey 对象Key
      */
     public static void removeObject(String objectKey) {
-        removeObject(OssServiceProvider.MINIO, objectKey);
+        removeObject(OssSupport.ossProperties.getDefaultProvider(), objectKey);
     }
 
     /**
@@ -612,7 +618,7 @@ public final class OssSupport {
      * @param objectKeys 对象Key集合
      */
     public static void removeObjects(Set<String> objectKeys) {
-        removeObjects(OssServiceProvider.MINIO, objectKeys);
+        removeObjects(OssSupport.ossProperties.getDefaultProvider(), objectKeys);
     }
 
     /**
@@ -643,6 +649,17 @@ public final class OssSupport {
         }
 
         throw new OssException("OSS对象存储[{}]未实现或未启用", ossServiceProvider.name());
+    }
+
+    /**
+     * 获取bucket
+     *
+     * @param ossServiceProvider OSS实现
+     * @return bucket
+     */
+    public static String getBucket(OssServiceProvider ossServiceProvider) {
+        OssService used = findOssService(ossServiceProvider);
+        return used.getBucket();
     }
 
     /**

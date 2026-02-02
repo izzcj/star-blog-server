@@ -1,5 +1,6 @@
 package com.ale.starblog.admin.system.service.impl;
 
+import cn.hutool.core.util.StrUtil;
 import com.ale.starblog.admin.system.domain.entity.SystemConfig;
 import com.ale.starblog.admin.system.domain.pojo.config.SystemConfigBO;
 import com.ale.starblog.admin.system.enums.SystemConfigType;
@@ -41,7 +42,14 @@ public class SystemConfigServiceImpl extends AbstractCrudServiceImpl<SystemConfi
             if (Objects.equals(oldConfig.getValue(), entity.getValue())) {
                 return;
             }
+            if (StrUtil.isBlank(oldConfig.getValue())) {
+                entity.setValue(OssSupport.moveObject(entity.getValue()));
+                return;
+            }
             OssSupport.removeObject(oldConfig.getValue());
+            if (StrUtil.isBlank(entity.getValue())) {
+                return;
+            }
             entity.setValue(OssSupport.moveObject(entity.getValue()));
         }
     }

@@ -1,11 +1,10 @@
 package com.ale.starblog.framework.core.oss.minio;
 
 import cn.hutool.core.text.StrFormatter;
-import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import com.ale.starblog.framework.common.constants.StringConstants;
-import com.ale.starblog.framework.common.utils.MimeTypeUtils;
 import com.ale.starblog.framework.core.exception.OssException;
+import com.ale.starblog.framework.core.oss.AbstractOssService;
 import com.ale.starblog.framework.core.oss.OssService;
 import com.ale.starblog.framework.core.oss.OssServiceProvider;
 import io.minio.*;
@@ -27,7 +26,7 @@ import java.util.Collection;
  * @version 1.0.0 2025/9/28 15:09
  */
 @Slf4j
-public class MinioOssService implements OssService {
+public class MinioOssService extends AbstractOssService {
 
     /**
      * 对象不存在异常Code
@@ -132,6 +131,11 @@ public class MinioOssService implements OssService {
     }
 
     @Override
+    public String getBucket() {
+        return this.minioProperties.getBucket();
+    }
+
+    @Override
     public boolean exists(String objectKey) {
         try {
             this.minioClient.statObject(
@@ -194,41 +198,18 @@ public class MinioOssService implements OssService {
     }
 
     @Override
-    public String upload(String objectKeyPrefix, String objectName, InputStream objectContent) {
-        return this.upload(objectKeyPrefix, objectName, null, objectContent);
-    }
-
-    @Override
-    public String upload(String objectKeyPrefix, String objectName, String mimeType, InputStream objectContent) {
-        StringBuilder objectKey = new StringBuilder(IdUtil.fastSimpleUUID().toUpperCase());
-        if (StrUtil.isNotBlank(objectName)) {
-            objectKey.append(StringConstants.UNDERSCORE)
-                .append(StringConstants.UNDERSCORE)
-                .append(objectName);
-        }
-
-        MimeTypeUtils.FileInfoResult result = MimeTypeUtils.introspectFileInfo(
-            objectKey.toString(),
-            objectContent
-        );
-
-        if (StrUtil.isNotBlank(objectKeyPrefix)) {
-            objectKey = new StringBuilder(objectKeyPrefix)
-                .append(result.filename());
-        }
-        String objectKeyString = OssService.TEMPORARY_OBJECT_KEY_PREFIX + objectKey;
-
+    protected String doUpload(String objectKey, InputStream fileContent, String mimeType, InputStream objectContent) {
         try {
             this.minioClient.putObject(
-                PutObjectArgs.builder()
-                    .bucket(this.minioProperties.getBucket())
-                    .object(objectKeyString)
-                    .contentType(StrUtil.isNotBlank(mimeType) && !StrUtil.equals(mimeType, result.mimeType()) ? mimeType : result.mimeType())
-                    .stream(result.fileContent(), -1, 10485760)
-                    .build()
+                    PutObjectArgs.builder()
+                            .bucket(this.minioProperties.getBucket())
+                            .object(objectKey)
+                            .contentType(mimeType)
+                            .stream(fileContent, -1, 10485760)
+                            .build()
             );
 
-            return objectKeyString;
+            return objectKey;
         } catch (ErrorResponseException e) {
             throw new OssException("[Minio]上传对象文件出现异常：{}", e, e.errorResponse().message());
         } catch (Exception e) {

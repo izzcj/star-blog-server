@@ -1,5 +1,6 @@
 package com.ale.starblog.framework.core.oss.support;
 
+import com.ale.starblog.framework.core.oss.OssServiceProvider;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import org.springframework.stereotype.Component;
@@ -18,7 +19,7 @@ import java.util.Set;
 public class CollectionOssUploadKeyReplacer implements OssUploadKeyReplacer {
 
     @Override
-    public Object replaceKey(Field field, Object value, Collection<String> originalKeys, Collection<String> processedKeys) {
+    public Object replaceKey(Field field, Object value, Collection<String> originalKeys, Collection<String> processedKeys, OssServiceProvider ossServiceProvider) {
         if (Collection.class.isAssignableFrom(field.getType())) {
             if (Set.class.isAssignableFrom(field.getType())) {
                 return Sets.newHashSet(processedKeys);

@@ -1,6 +1,7 @@
 package com.ale.starblog.framework.core.oss.support;
 
 import cn.hutool.core.util.StrUtil;
+import com.ale.starblog.framework.core.oss.OssServiceProvider;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
@@ -19,7 +20,7 @@ import java.util.Collection;
 public class StringOssUploadKeyReplacer extends RichTextOssUploadKeySupport implements OssUploadKeyReplacer {
 
     @Override
-    public Object replaceKey(Field field, Object value, Collection<String> originalKeys, Collection<String> processedKeys) {
+    public Object replaceKey(Field field, Object value, Collection<String> originalKeys, Collection<String> processedKeys, OssServiceProvider ossServiceProvider) {
         if (String.class.isAssignableFrom(field.getType())) {
             if (this.isRichTextField(field)) {
                 var content = (String) value;
@@ -27,7 +28,7 @@ public class StringOssUploadKeyReplacer extends RichTextOssUploadKeySupport impl
                     return null;
                 }
 
-                return this.doReplace(content, processedKeys);
+                return this.doReplace(content, processedKeys, ossServiceProvider);
             }
 
             return processedKeys.stream().findFirst().orElse(null);
@@ -39,16 +40,17 @@ public class StringOssUploadKeyReplacer extends RichTextOssUploadKeySupport impl
     /**
      * 替换富文本对象上传的key
      *
-     * @param content       富文本内容
-     * @param processedKeys 处理后的key集合
+     * @param content            富文本内容
+     * @param processedKeys      处理后的key集合
+     * @param ossServiceProvider OSS实现
      * @return 替换后的富文本内容
      */
-    private Object doReplace(String content, Collection<String> processedKeys) {
+    private Object doReplace(String content, Collection<String> processedKeys, OssServiceProvider ossServiceProvider) {
         for (String url : this.parseUrls(content)) {
             if (StrUtil.isBlank(url)) {
                 continue;
             }
-            String trimDomainUrl = this.trimDomain(url);
+            String trimDomainUrl = this.trimDomain(url, ossServiceProvider);
             if (StrUtil.isBlank(trimDomainUrl)) {
                 continue;
             }

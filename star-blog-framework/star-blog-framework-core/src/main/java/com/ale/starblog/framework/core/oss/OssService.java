@@ -26,6 +26,13 @@ public interface OssService extends Supportable<OssServiceProvider> {
     String getBaseUrl();
 
     /**
+     * 获取bucket
+     *
+     * @return bucket
+     */
+    String getBucket();
+
+    /**
      * 判断对象是否存在
      *
      * @param objectKey 对象Key

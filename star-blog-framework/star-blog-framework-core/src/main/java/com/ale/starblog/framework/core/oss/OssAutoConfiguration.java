@@ -1,5 +1,7 @@
 package com.ale.starblog.framework.core.oss;
 
+import com.ale.starblog.framework.core.oss.aliyun.AliyunOssService;
+import com.ale.starblog.framework.core.oss.aliyun.AliyunOssProperties;
 import com.ale.starblog.framework.core.oss.minio.MinioOssService;
 import com.ale.starblog.framework.core.oss.minio.MinioProperties;
 import org.springframework.beans.factory.ObjectProvider;
@@ -20,7 +22,7 @@ import org.springframework.context.annotation.Import;
 @AutoConfiguration
 @ComponentScan(basePackageClasses = ComponentScanMark.class)
 @Import(OssSupport.class)
-@EnableConfigurationProperties(MinioProperties.class)
+@EnableConfigurationProperties({OssProperties.class, MinioProperties.class, AliyunOssProperties.class})
 public class OssAutoConfiguration {
 
     /**
@@ -78,5 +80,17 @@ public class OssAutoConfiguration {
     @ConditionalOnProperty(prefix = "venus.oss.minio", name = "enabled")
     public MinioOssService minioOssService(MinioProperties minioProperties) throws Exception {
         return new MinioOssService(minioProperties);
+    }
+
+    /**
+     * 阿里云OSS对象存储服务Bean
+     *
+     * @param aliyunOssProperties 配置属性
+     * @return 阿里云OSS服务Bean
+     */
+    @Bean
+    @ConditionalOnProperty(prefix = "venus.oss.aliyun", name = "enabled")
+    public AliyunOssService aliyunOssService(AliyunOssProperties aliyunOssProperties) {
+        return new AliyunOssService(aliyunOssProperties);
     }
 }

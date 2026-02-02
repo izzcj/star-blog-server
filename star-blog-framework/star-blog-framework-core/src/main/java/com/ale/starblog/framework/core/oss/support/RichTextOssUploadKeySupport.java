@@ -1,6 +1,8 @@
 package com.ale.starblog.framework.core.oss.support;
 
 import com.ale.starblog.framework.common.constants.StringConstants;
+import com.ale.starblog.framework.core.oss.OssServiceProvider;
+import com.ale.starblog.framework.core.oss.OssSupport;
 import com.ale.starblog.framework.core.oss.RichText;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,12 +27,6 @@ abstract class RichTextOssUploadKeySupport {
      * Regex
      */
     private static final Pattern FILE_URL_PATTERN = Pattern.compile("(?:\\b(?:src|href)\\s*=\\s*)?([\"']?https?://[^\"'\\\\\\s>]+[\"']?)", Pattern.DOTALL | Pattern.MULTILINE | Pattern.CASE_INSENSITIVE);
-
-    /**
-     * Minio bucket
-     */
-    @Value("${venus.oss.minio.bucket}")
-    private String bucket;
 
     /**
      * 解析URL
@@ -58,10 +54,11 @@ abstract class RichTextOssUploadKeySupport {
      * 移除域名
      *
      * @param url URL
+     * @param ossServiceProvider OSS实现
      * @return 移除域名后的URL
      */
-    protected String trimDomain(String url) {
-        return StringUtils.substringAfter(URI.create(url).getPath(), StringConstants.SLASH + this.bucket + StringConstants.SLASH);
+    protected String trimDomain(String url, OssServiceProvider ossServiceProvider) {
+        return StringUtils.substringAfter(URI.create(url).getPath(), StringConstants.SLASH + OssSupport.getBucket(ossServiceProvider) + StringConstants.SLASH);
     }
 
     /**
