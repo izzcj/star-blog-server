@@ -40,7 +40,7 @@ import java.util.stream.Collectors;
  */
 @Service
 @RequiredArgsConstructor
-public class CommentServiceImpl extends AbstractCrudServiceImpl<CommentMapper, Comment, CommentBO> implements ICommentService {
+public class CommentServiceImpl extends AbstractCrudServiceImpl<CommentMapper, Comment, CommentBO, CommentQuery> implements ICommentService {
 
     /**
      * 评论点赞服务

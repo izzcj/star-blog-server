@@ -16,7 +16,7 @@ import java.util.List;
  * @author Ale
  * @version 1.0.0 2025/11/27 16:47
  */
-public interface ICommentService extends ICrudService<Comment, CommentBO> {
+public interface ICommentService extends ICrudService<Comment, CommentBO, CommentQuery> {
 
     /**
      * 分页查询评论列表

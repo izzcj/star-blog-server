@@ -25,6 +25,24 @@ public interface ServiceHook<E extends BaseEntity> {
     }
 
     /**
+     * 查询后置处理
+     *
+     * @param entity  查询结果
+     * @param context 上下文
+     */
+    default void afterQuery(E entity, HookContext context) {
+    }
+
+    /**
+     * 查询列表后置处理
+     *
+     * @param entities 查询结果列表
+     * @param context  上下文
+     */
+    default void afterQueryList(List<E> entities, HookContext context) {
+    }
+
+    /**
      * 创建前置处理
      *
      * @param entity  实体

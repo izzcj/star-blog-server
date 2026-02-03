@@ -2,6 +2,7 @@ package com.ale.starblog.admin.system.service;
 
 import com.ale.starblog.admin.system.domain.entity.Role;
 import com.ale.starblog.admin.system.domain.pojo.role.RoleBO;
+import com.ale.starblog.admin.system.domain.pojo.role.RoleQuery;
 import com.ale.starblog.framework.core.service.ICrudService;
 
 /**
@@ -11,5 +12,5 @@ import com.ale.starblog.framework.core.service.ICrudService;
  * @version 1.0.0
  * @since 2025/3/31
  */
-public interface IRoleService extends ICrudService<Role, RoleBO> {
+public interface IRoleService extends ICrudService<Role, RoleBO, RoleQuery> {
 }

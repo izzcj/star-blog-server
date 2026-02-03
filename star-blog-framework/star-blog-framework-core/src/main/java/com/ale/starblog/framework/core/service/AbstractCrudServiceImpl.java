@@ -33,11 +33,12 @@ import java.util.stream.Collectors;
  * @param <Mapper> Mapper
  * @param <E>      实体类型
  * @param <B>      实体BO类型
+ * @param <Q>      查询条件类型
  * @author Ale
  * @version 1.0.0
  * @since 2025/3/7
  */
-public abstract class AbstractCrudServiceImpl<Mapper extends BaseMapper<E>, E extends BaseEntity, B extends BaseBO> extends AbstractMybatisPlusCrudServiceImpl<Mapper, E> implements ICrudService<E, B> {
+public abstract class AbstractCrudServiceImpl<Mapper extends BaseMapper<E>, E extends BaseEntity, B extends BaseBO, Q extends BaseQuery> extends AbstractMybatisPlusCrudServiceImpl<Mapper, E> implements ICrudService<E, B, Q> {
 
     /**
      * 实体类型
@@ -51,36 +52,74 @@ public abstract class AbstractCrudServiceImpl<Mapper extends BaseMapper<E>, E ex
     private final Class<B> boClass = CastUtils.cast(GenericTypeUtils.resolveTypeArguments(this.getClass(), AbstractCrudServiceImpl.class, 2));
 
     @Override
-    public B queryOne(BaseQuery query) {
+    public B queryOne(Q query) {
         return this.queryOne(query, HookContext.newContext());
     }
 
     @Override
-    public B queryOne(BaseQuery query, HookContext context) {
-        LambdaQueryWrapper<E> queryWrapper = this.buildQueryWrapper(query, context);
-        return BeanUtil.copyProperties(this.getOne(queryWrapper), this.boClass);
+    public B queryOne(Q query, HookContext context) {
+        LambdaQueryWrapper<E> queryWrapper = QueryConditionResolver.resolveLambda(query);
+        HookContext hookContext = Objects.requireNonNullElse(context, this.createHookContext());
+        E one;
+        try {
+            this.executeServiceHooks(queryWrapper, HookStage.BEFORE_QUERY, hookContext);
+            one = this.getOne(queryWrapper);
+            this.executeServiceHooks(one, HookStage.AFTER_QUERY, hookContext);
+            this.executeServiceHooks(one, HookStage.BEFORE_CLEAR_HOOK_CONTEXT, hookContext);
+        } finally {
+            if (context == null) {
+                hookContext.clear();
+            }
+        }
+        return BeanUtil.copyProperties(one, this.boClass);
     }
 
     @Override
-    public List<B> queryList(BaseQuery query) {
+    public List<B> queryList(Q query) {
         return this.queryList(query, HookContext.newContext());
     }
 
     @Override
-    public List<B> queryList(BaseQuery query, HookContext context) {
-        LambdaQueryWrapper<E> queryWrapper = this.buildQueryWrapper(query, context);
-        return BeanUtil.copyToList(this.baseMapper.selectList(queryWrapper), this.boClass);
+    public List<B> queryList(Q query, HookContext context) {
+        LambdaQueryWrapper<E> queryWrapper = QueryConditionResolver.resolveLambda(query);
+        HookContext hookContext = Objects.requireNonNullElse(context, this.createHookContext());
+        List<E> entityList;
+        try {
+            this.executeServiceHooks(queryWrapper, HookStage.BEFORE_QUERY, hookContext);
+            entityList = this.baseMapper.selectList(queryWrapper);
+            this.executeServiceHooks(entityList, HookStage.AFTER_QUERY, hookContext);
+            this.executeServiceHooks(entityList, HookStage.BEFORE_CLEAR_HOOK_CONTEXT, hookContext);
+        } finally {
+            if (context == null) {
+                hookContext.clear();
+            }
+        }
+        return BeanUtil.copyToList(entityList, this.boClass);
     }
 
     @Override
-    public IPage<B> queryPage(Pageable pageable, BaseQuery query) {
+    public IPage<B> queryPage(Pageable pageable, Q query) {
         return this.queryPage(pageable, query, HookContext.newContext());
     }
 
     @Override
-    public IPage<B> queryPage(Pageable pageable, BaseQuery query, HookContext context) {
-        LambdaQueryWrapper<E> queryWrapper = this.buildQueryWrapper(query, context);
-        return this.executeQueryPage(pageable, queryWrapper, this.boClass);
+    public IPage<B> queryPage(Pageable pageable, Q query, HookContext context) {
+        LambdaQueryWrapper<E> queryWrapper = QueryConditionResolver.resolveLambda(query);
+        HookContext hookContext = Objects.requireNonNullElse(context, this.createHookContext());
+        IPage<E> page;
+        try {
+            this.executeServiceHooks(queryWrapper, HookStage.BEFORE_QUERY, hookContext);
+            page = this.baseMapper.selectPage(new Page<>(pageable.getPageNumber(), pageable.getPageSize()), queryWrapper);
+            this.executeServiceHooks(page.getRecords(), HookStage.AFTER_QUERY, hookContext);
+            this.executeServiceHooks(page.getRecords(), HookStage.BEFORE_CLEAR_HOOK_CONTEXT, hookContext);
+        } finally {
+            if (context == null) {
+                hookContext.clear();
+            }
+        }
+        IPage<B> result = new Page<>(page.getCurrent(), page.getSize(), page.getTotal());
+        result.setRecords(BeanUtil.copyToList(page.getRecords(), this.boClass));
+        return result;
     }
 
     @Override
@@ -274,26 +313,5 @@ public abstract class AbstractCrudServiceImpl<Mapper extends BaseMapper<E>, E ex
                 hookContext.clear();
             }
         }
-    }
-
-    /**
-     * 构建查询条件
-     *
-     * @param query   查询参数
-     * @param context 上下文
-     * @return 查询条件
-     */
-    private LambdaQueryWrapper<E> buildQueryWrapper(BaseQuery query, HookContext context) {
-        LambdaQueryWrapper<E> queryWrapper = QueryConditionResolver.resolveLambda(query);
-        HookContext hookContext = Objects.requireNonNullElse(context, this.createHookContext());
-        try {
-            this.executeServiceHooks(queryWrapper, HookStage.BEFORE_QUERY, hookContext);
-            this.executeServiceHooks(context, HookStage.BEFORE_CLEAR_HOOK_CONTEXT, hookContext);
-        } finally {
-            if (context == null) {
-                hookContext.clear();
-            }
-        }
-        return queryWrapper;
     }
 }

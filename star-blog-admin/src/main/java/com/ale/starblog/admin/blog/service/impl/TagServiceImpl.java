@@ -2,6 +2,7 @@ package com.ale.starblog.admin.blog.service.impl;
 
 import com.ale.starblog.admin.blog.domain.entity.Tag;
 import com.ale.starblog.admin.blog.domain.pojo.tag.TagBO;
+import com.ale.starblog.admin.blog.domain.pojo.tag.TagQuery;
 import com.ale.starblog.admin.blog.mapper.TagMapper;
 import com.ale.starblog.admin.blog.service.ITagService;
 import com.ale.starblog.framework.core.service.AbstractCrudServiceImpl;
@@ -15,6 +16,5 @@ import org.springframework.stereotype.Service;
  * @since 2025/8/12
  */
 @Service
-public class TagServiceImpl extends AbstractCrudServiceImpl<TagMapper, Tag, TagBO> implements ITagService {
-
+public class TagServiceImpl extends AbstractCrudServiceImpl<TagMapper, Tag, TagBO, TagQuery> implements ITagService {
 }

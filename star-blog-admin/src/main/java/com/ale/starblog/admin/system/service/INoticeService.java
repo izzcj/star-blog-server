@@ -1,5 +1,6 @@
 package com.ale.starblog.admin.system.service;
 
+import com.ale.starblog.admin.system.domain.pojo.notice.NoticeQuery;
 import com.ale.starblog.framework.core.service.ICrudService;
 import com.ale.starblog.admin.system.domain.entity.Notice;
 import com.ale.starblog.admin.system.domain.pojo.notice.NoticeBO;
@@ -10,7 +11,7 @@ import com.ale.starblog.admin.system.domain.pojo.notice.NoticeBO;
  * @author Ale
  * @version 1.0.0 2025-12-23 15:17:56
  */
-public interface INoticeService extends ICrudService<Notice, NoticeBO> {
+public interface INoticeService extends ICrudService<Notice, NoticeBO, NoticeQuery> {
 
     /**
      * 切换通知发布状态

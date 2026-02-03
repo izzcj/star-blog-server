@@ -40,7 +40,7 @@ import java.util.List;
  * @since 2025/3/31
  */
 @Slf4j
-public abstract class BaseController<E extends BaseEntity, S extends ICrudService<E, B>, V extends BaseVO, B extends BaseBO, Q extends BaseQuery, C extends BaseCreateDTO, M extends BaseModifyDTO> {
+public abstract class BaseController<E extends BaseEntity, S extends ICrudService<E, B, Q>, V extends BaseVO, B extends BaseBO, Q extends BaseQuery, C extends BaseCreateDTO, M extends BaseModifyDTO> {
 
     /**
      * Service

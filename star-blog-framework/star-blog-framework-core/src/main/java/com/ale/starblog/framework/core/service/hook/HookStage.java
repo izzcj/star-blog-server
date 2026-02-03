@@ -18,6 +18,16 @@ public enum HookStage implements BaseEnum<String> {
     BEFORE_QUERY("beforeQuery"),
 
     /**
+     * 查询之后
+     */
+    AFTER_QUERY("afterQuery"),
+
+    /**
+     * 查询列表之后
+     */
+    AFTER_QUERY_LIST("afterQueryList"),
+
+    /**
      * 创建之前
      */
     BEFORE_CREATE("beforeCreate"),

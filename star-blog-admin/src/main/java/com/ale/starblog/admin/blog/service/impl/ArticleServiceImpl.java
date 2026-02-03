@@ -5,6 +5,7 @@ import cn.hutool.extra.spring.SpringUtil;
 import com.ale.starblog.admin.blog.domain.entity.Article;
 import com.ale.starblog.admin.blog.domain.pojo.activity.ActivityBO;
 import com.ale.starblog.admin.blog.domain.pojo.article.ArticleBO;
+import com.ale.starblog.admin.blog.domain.pojo.article.ArticleQuery;
 import com.ale.starblog.admin.blog.enums.ArticleStatus;
 import com.ale.starblog.admin.blog.listener.ActivityPublishedEvent;
 import com.ale.starblog.admin.blog.mapper.ArticleMapper;
@@ -33,7 +34,7 @@ import java.util.stream.Collectors;
  */
 @Service
 @RequiredArgsConstructor
-public class ArticleServiceImpl extends AbstractCrudServiceImpl<ArticleMapper, Article, ArticleBO> implements IArticleService {
+public class ArticleServiceImpl extends AbstractCrudServiceImpl<ArticleMapper, Article, ArticleBO, ArticleQuery> implements IArticleService {
 
     /**
      * 文章标签关联服务

@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
  */
 @Service
 @RequiredArgsConstructor
-public class MenuServiceImpl extends AbstractCrudServiceImpl<MenuMapper, Menu, MenuBO> implements IMenuService {
+public class MenuServiceImpl extends AbstractCrudServiceImpl<MenuMapper, Menu, MenuBO, MenuQuery> implements IMenuService {
 
     /**
      * 用户角色服务

@@ -2,6 +2,7 @@ package com.ale.starblog.admin.system.service;
 
 import com.ale.starblog.admin.system.domain.entity.User;
 import com.ale.starblog.admin.system.domain.pojo.user.UserBO;
+import com.ale.starblog.admin.system.domain.pojo.user.UserQuery;
 import com.ale.starblog.framework.core.service.ICrudService;
 
 /**
@@ -11,7 +12,7 @@ import com.ale.starblog.framework.core.service.ICrudService;
  * @version 1.0.0
  * @since 2025/3/13
  */
-public interface IUserService extends ICrudService<User, UserBO> {
+public interface IUserService extends ICrudService<User, UserBO, UserQuery> {
 
     /**
      * 修改用户密码

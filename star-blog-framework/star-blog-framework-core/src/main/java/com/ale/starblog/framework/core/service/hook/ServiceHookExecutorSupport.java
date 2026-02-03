@@ -73,6 +73,8 @@ public abstract class ServiceHookExecutorSupport<E extends BaseEntity, H extends
     private <T extends ServiceHook<?>> TriConsumer<T, Object, HookContext> getServiceHookInvoker(HookStage hookStage) {
         return switch (hookStage) {
             case BEFORE_QUERY -> (hook, param, context) -> hook.beforeQuery(CastUtils.cast(param), context);
+            case AFTER_QUERY -> (hook, param, context) -> hook.afterQuery(CastUtils.cast(param), context);
+            case AFTER_QUERY_LIST -> (hook, param, context) -> hook.afterQueryList(CastUtils.cast(param), context);
             case BEFORE_CREATE -> (hook, param, context) -> hook.beforeCreate(CastUtils.cast(param), context);
             case AFTER_CREATE -> (hook, param, context) -> hook.afterCreate(CastUtils.cast(param), context);
             case BEFORE_BATCH_CREATE -> (hook, param, context) -> hook.beforeBatchCreate(CastUtils.cast(param), context);

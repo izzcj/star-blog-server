@@ -4,6 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import com.ale.starblog.admin.common.constants.SystemConstants;
 import com.ale.starblog.admin.system.domain.entity.User;
 import com.ale.starblog.admin.system.domain.pojo.user.UserBO;
+import com.ale.starblog.admin.system.domain.pojo.user.UserQuery;
 import com.ale.starblog.admin.system.mapper.UserMapper;
 import com.ale.starblog.admin.system.service.IUserService;
 import com.ale.starblog.framework.common.exception.ServiceException;
@@ -22,7 +23,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl extends AbstractCrudServiceImpl<UserMapper, User, UserBO> implements IUserService {
+public class UserServiceImpl extends AbstractCrudServiceImpl<UserMapper, User, UserBO, UserQuery> implements IUserService {
 
     /**
      * 密码编码器

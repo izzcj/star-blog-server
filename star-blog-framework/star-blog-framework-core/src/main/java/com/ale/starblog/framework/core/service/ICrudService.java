@@ -21,7 +21,7 @@ import java.util.List;
  * @version 1.0.0
  * @since 2025/3/7
  */
-public interface ICrudService<E extends BaseEntity, B extends BaseBO> extends IService<E>, LocalServiceHook<E> {
+public interface ICrudService<E extends BaseEntity, B extends BaseBO, Q extends BaseQuery> extends IService<E>, LocalServiceHook<E> {
 
     /**
      * 根据查询条件查询单个实体
@@ -29,7 +29,7 @@ public interface ICrudService<E extends BaseEntity, B extends BaseBO> extends IS
      * @param query 查询条件
      * @return 实体
      */
-    B queryOne(BaseQuery query);
+    B queryOne(Q query);
 
     /**
      * 根据查询条件查询单个实体
@@ -38,7 +38,7 @@ public interface ICrudService<E extends BaseEntity, B extends BaseBO> extends IS
      * @param context 上下文
      * @return 实体
      */
-    B queryOne(BaseQuery query, HookContext context);
+    B queryOne(Q query, HookContext context);
 
     /**
      * 根据查询条件查询实体列表
@@ -46,7 +46,7 @@ public interface ICrudService<E extends BaseEntity, B extends BaseBO> extends IS
      * @param query 查询条件
      * @return 实体列表
      */
-    List<B> queryList(BaseQuery query);
+    List<B> queryList(Q query);
 
     /**
      * 根据查询条件查询实体列表
@@ -55,7 +55,7 @@ public interface ICrudService<E extends BaseEntity, B extends BaseBO> extends IS
      * @param context 上下文
      * @return 实体列表
      */
-    List<B> queryList(BaseQuery query, HookContext context);
+    List<B> queryList(Q query, HookContext context);
 
     /**
      * 根据查询条件查询分页实体
@@ -64,7 +64,7 @@ public interface ICrudService<E extends BaseEntity, B extends BaseBO> extends IS
      * @param query    查询条件
      * @return 分页实体
      */
-    IPage<B> queryPage(Pageable pageable, BaseQuery query);
+    IPage<B> queryPage(Pageable pageable, Q query);
 
     /**
      * 根据查询条件查询分页实体
@@ -74,7 +74,7 @@ public interface ICrudService<E extends BaseEntity, B extends BaseBO> extends IS
      * @param context  上下文
      * @return 分页实体
      */
-    IPage<B> queryPage(Pageable pageable, BaseQuery query, HookContext context);
+    IPage<B> queryPage(Pageable pageable, Q query, HookContext context);
 
     /**
      * 执行分页查询

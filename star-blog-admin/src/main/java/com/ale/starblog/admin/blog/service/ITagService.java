@@ -2,6 +2,7 @@ package com.ale.starblog.admin.blog.service;
 
 import com.ale.starblog.admin.blog.domain.entity.Tag;
 import com.ale.starblog.admin.blog.domain.pojo.tag.TagBO;
+import com.ale.starblog.admin.blog.domain.pojo.tag.TagQuery;
 import com.ale.starblog.framework.core.service.ICrudService;
 
 /**
@@ -11,5 +12,5 @@ import com.ale.starblog.framework.core.service.ICrudService;
  * @version 1.0.0
  * @since 2025/8/12
  */
-public interface ITagService extends ICrudService<Tag, TagBO> {
+public interface ITagService extends ICrudService<Tag, TagBO, TagQuery> {
 }

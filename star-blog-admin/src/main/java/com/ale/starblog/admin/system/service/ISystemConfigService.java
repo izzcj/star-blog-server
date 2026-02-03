@@ -2,6 +2,7 @@ package com.ale.starblog.admin.system.service;
 
 import com.ale.starblog.admin.system.domain.entity.SystemConfig;
 import com.ale.starblog.admin.system.domain.pojo.config.SystemConfigBO;
+import com.ale.starblog.admin.system.domain.pojo.config.SystemConfigQuery;
 import com.ale.starblog.framework.core.service.ICrudService;
 
 /**
@@ -10,7 +11,7 @@ import com.ale.starblog.framework.core.service.ICrudService;
  * @author Ale
  * @version 1.0.0 2025/10/31 11:31
  */
-public interface ISystemConfigService extends ICrudService<SystemConfig, SystemConfigBO> {
+public interface ISystemConfigService extends ICrudService<SystemConfig, SystemConfigBO, SystemConfigQuery> {
 
     /**
      * 获取配置值

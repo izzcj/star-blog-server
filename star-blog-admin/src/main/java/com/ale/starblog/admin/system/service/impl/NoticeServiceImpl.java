@@ -1,6 +1,7 @@
 package com.ale.starblog.admin.system.service.impl;
 
 import cn.hutool.core.util.BooleanUtil;
+import com.ale.starblog.admin.system.domain.pojo.notice.NoticeQuery;
 import com.ale.starblog.framework.common.exception.ServiceException;
 import com.ale.starblog.framework.common.utils.SecurityUtils;
 import com.ale.starblog.framework.core.im.InstantMessage;
@@ -27,7 +28,7 @@ import java.util.Objects;
  */
 @Service
 @RequiredArgsConstructor
-public class NoticeServiceImpl extends AbstractCrudServiceImpl<NoticeMapper, Notice, NoticeBO> implements INoticeService {
+public class NoticeServiceImpl extends AbstractCrudServiceImpl<NoticeMapper, Notice, NoticeBO, NoticeQuery> implements INoticeService {
 
     /**
      * 即时消息发送器
