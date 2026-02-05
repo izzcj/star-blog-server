@@ -14,10 +14,17 @@ import java.lang.annotation.*;
 public @interface OssUpload {
 
     /**
-     * OSS服务提供器
+     * 是否为富文本字段
      *
-     * @return 服务提供器
+     * @return 是否为富文本字段
      */
-    OssServiceProvider provider() default OssServiceProvider.MINIO;
+    boolean richText() default false;
+
+    /**
+     * 是否公共访问
+     *
+     * @return 是否公共访问
+     */
+    boolean publicAccess() default true;
 
 }

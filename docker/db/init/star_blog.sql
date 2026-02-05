@@ -273,7 +273,7 @@ COMMENT ON TABLE "star_blog"."sys_config" IS '系统配置';
 -- ----------------------------
 -- Records of sys_config
 -- ----------------------------
-INSERT INTO "star_blog"."sys_config" VALUES (2017145600312807426, 'f', '2026-01-30 15:59:22.527377', 1, '2026-01-30 16:13:54.739931', 1, NULL, 'system-config', '登录页背景图', 'IMAGE', 'login-bg', 'image/CE2E4E70986440D78B21389766B2B55E__login-bg.jpg', NULL, NULL, 2, 'f');
+INSERT INTO "star_blog"."sys_config" VALUES (2017145600312807426, 'f', '2026-01-30 15:59:22.527377', 1, '2026-01-30 16:13:54.739931', 1, NULL, 'system-config', '登录页背景图', 'IMAGE', 'login-bg', NULL, NULL, NULL, 2, 'f');
 INSERT INTO "star_blog"."sys_config" VALUES (1995695140959887361, 'f', '2025-12-02 11:22:54.49236', 1, '2025-12-02 11:56:36.366314', 1, NULL, 'system-config', '是否启用评论审核', 'BOOLEAN', 'enable-comment-audit', 'true', NULL, NULL, 3, 'f');
 INSERT INTO "star_blog"."sys_config" VALUES (1988154623745261569, 'f', '2025-11-11 15:59:35.085239', 1, '2025-11-27 11:28:44.851546', 1, NULL, 'home-config', '首页标题', 'TEXT', 'home-title', '十月秋雨凉', NULL, NULL, 1, 'f');
 INSERT INTO "star_blog"."sys_config" VALUES (1988132356466343937, 'f', '2025-11-11 14:31:06.168428', 1, '2025-11-19 15:32:54.91734', 1, NULL, 'home-config', '首页格言', 'JSON', 'home-motto', '[
@@ -282,9 +282,9 @@ INSERT INTO "star_blog"."sys_config" VALUES (1988132356466343937, 'f', '2025-11-
   "愿你长歌乘风去，归来仍少年",
   "晚安"
 ]', NULL, NULL, 2, 'f');
-INSERT INTO "star_blog"."sys_config" VALUES (1988182434421854209, 'f', '2025-11-11 17:50:05.669271', 1, '2025-11-27 10:18:43.053287', 1, NULL, 'home-config', '网站logo', 'IMAGE', 'logo', 'image/3C31FFB856A74581A82B88C5306BCEB6__下载.png', NULL, NULL, 3, 'f');
+INSERT INTO "star_blog"."sys_config" VALUES (1988182434421854209, 'f', '2025-11-11 17:50:05.669271', 1, '2025-11-27 10:18:43.053287', 1, NULL, 'home-config', '网站logo', 'IMAGE', 'logo', NULL, NULL, NULL, 3, 'f');
 INSERT INTO "star_blog"."sys_config" VALUES (1997904731911155714, 'f', '2025-12-08 13:43:02.021758', 1, '2025-12-31 15:01:03.589613', 1, NULL, 'home-config', '导航栏分类', 'MULTI_SELECT', 'home-article-category-navbar', '["server-develop","web-develop","daily-life","ai-programme"]', 'DICT', 'article-category', 4, 'f');
-INSERT INTO "star_blog"."sys_config" VALUES (2017149625594728450, 'f', '2026-01-30 16:15:22.227085', 1, '2026-01-30 16:15:32.629762', 1, NULL, 'system-config', '网站背景图', 'IMAGE', 'web-bg', 'image/B79E0518F4A84FDFADC8B5BD2B2F8F5F__background.png', NULL, NULL, 1, 'f');
+INSERT INTO "star_blog"."sys_config" VALUES (2017149625594728450, 'f', '2026-01-30 16:15:22.227085', 1, '2026-01-30 16:15:32.629762', 1, NULL, 'system-config', '网站背景图', 'IMAGE', 'web-bg', NULL, NULL, NULL, 1, 'f');
 
 -- ----------------------------
 -- Table structure for sys_daily_stat_info
@@ -606,10 +606,7 @@ COMMENT ON TABLE "star_blog"."sys_user" IS '用户';
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO "star_blog"."sys_user" VALUES (1905553869777395714, 'dog', '$2a$10$/ZV4LgCgch5N0ugnMyftm.1NcIlEmqEqorql5H/z909WZLwgff7tS', 'image/153CEA3511094CD9A4D97E58FCABE1BC__avatar.jpg', '大狗', 1, '15552543689', NULL, NULL, NULL, 'f', 1, 1, '2025-03-28 17:33:41', 1, '2025-12-16 16:16:35.301819', 1, NULL);
-INSERT INTO "star_blog"."sys_user" VALUES (3, 'dom', '$2a$10$OiF0PBkacFpZW8zYM93nNOjEK6L5SzftwF5weh2qfV/MIW5YT7gTC', 'https://img1.baidu.com/it/u=1403245892,3051757811&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500', '天天', 1, '14785852315', 'sh1031578962@163.com', '2023-05-16 13:12:37', NULL, 'f', 1, 2, '2023-05-10 13:15:53', 1, '2023-05-16 14:09:26', 1, '测试账号，随时会删');
-INSERT INTO "star_blog"."sys_user" VALUES (1, 'ale', '$2a$10$gnZL0kvJqhPaYoVJB30Vme8PpTr2v/lsBeY9vGf1MTHrKKjXrMoYC', 'image/CEC77A504C5F42C19740AA9CC80E1156__avatar.jpg', '不快乐的阿乐', 1, '', 'sh1031578962@163.com', '2026-01-29 17:19:09.228325', '127.0.0.1', 'f', 1, 0, '2023-03-14 11:02:02', 1, '2025-12-18 17:36:57.606164', 1, '后端开发一只，立志成为糕手');
-INSERT INTO "star_blog"."sys_user" VALUES (2, 'noob', '$2a$10$RjxJlSkMzaQSuwNE0Z98rOqoQDBu3/Yf6LHJpbWRXORCZ3ugxsdce', 'https://img1.baidu.com/it/u=1403245892,3051757811&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500', '缄默', 1, '14785852315', '1031578962@qq.com', '2023-05-16 11:26:30', NULL, 'f', 1, 3, '2023-03-16 17:58:01', 1, '2025-06-03 17:16:34', 1, NULL);
+INSERT INTO "star_blog"."sys_user" VALUES (1, 'ale', '$2a$10$gnZL0kvJqhPaYoVJB30Vme8PpTr2v/lsBeY9vGf1MTHrKKjXrMoYC', NULL, '不快乐的阿乐', 1, '', 'sh1031578962@163.com', '2026-01-29 17:19:09.228325', '127.0.0.1', 'f', 1, 0, '2023-03-14 11:02:02', 1, '2025-12-18 17:36:57.606164', 1, '后端开发一只，立志成为糕手');
 
 -- ----------------------------
 -- Table structure for sys_user_role
@@ -639,6 +636,37 @@ INSERT INTO "star_blog"."sys_user_role" VALUES (1, 1, 1, 'f', '2025-05-29 10:26:
 INSERT INTO "star_blog"."sys_user_role" VALUES (1929829549822128129, 2, 2, 'f', '2025-06-03 17:16:34', '2025-06-03 17:16:34');
 INSERT INTO "star_blog"."sys_user_role" VALUES (1928383512028839938, 1905553869777395714, 2, 't', '2025-05-30 17:30:32', '2025-11-19 17:08:11.682101');
 INSERT INTO "star_blog"."sys_user_role" VALUES (1991071073476685825, 1, 2, 'f', '2025-11-19 17:08:30.887647', '2025-11-19 17:08:30.887647');
+
+-- ----------------------------
+-- Table structure for oss_mate
+-- ----------------------------
+DROP TABLE IF EXISTS "star_blog"."oss_mate";
+CREATE TABLE "star_blog"."oss_mate" (
+  "id" varchar(128) COLLATE "pg_catalog"."default" NOT NULL,
+  "create_time" timestamp(6),
+  "object_key" varchar(255) COLLATE "pg_catalog"."default" NOT NULL,
+  "provider" varchar(64) COLLATE "pg_catalog"."default" NOT NULL,
+  "url" text COLLATE "pg_catalog"."default",
+  "size" int8,
+  "mime_type" varchar(64) COLLATE "pg_catalog"."default",
+  "last_visit_time" timestamp(6),
+  "reference_count" int2
+)
+;
+COMMENT ON COLUMN "star_blog"."oss_mate"."id" IS 'ID';
+COMMENT ON COLUMN "star_blog"."oss_mate"."create_time" IS '创建时间';
+COMMENT ON COLUMN "star_blog"."oss_mate"."object_key" IS '对象key';
+COMMENT ON COLUMN "star_blog"."oss_mate"."provider" IS 'oss服务提供器';
+COMMENT ON COLUMN "star_blog"."oss_mate"."url" IS '访问url';
+COMMENT ON COLUMN "star_blog"."oss_mate"."size" IS '文件大小';
+COMMENT ON COLUMN "star_blog"."oss_mate"."mime_type" IS '文件类型';
+COMMENT ON COLUMN "star_blog"."oss_mate"."last_visit_time" IS '最后访问时间';
+COMMENT ON COLUMN "star_blog"."oss_mate"."reference_count" IS '引用计数';
+COMMENT ON TABLE "star_blog"."oss_mate" IS 'oss元信息';
+
+-- ----------------------------
+-- Records of oss_mate
+-- ----------------------------
 
 -- ----------------------------
 -- Primary Key structure for table blog_activity
@@ -763,3 +791,8 @@ ALTER TABLE "star_blog"."sys_role_menu" ADD CONSTRAINT "sys_role_menu_pkey" PRIM
 -- Primary Key structure for table sys_user
 -- ----------------------------
 ALTER TABLE "star_blog"."sys_user" ADD CONSTRAINT "sys_user_pkey" PRIMARY KEY ("id");
+
+-- ----------------------------
+-- Primary Key structure for table oss_mate
+-- ----------------------------
+ALTER TABLE "star_blog"."oss_mate" ADD CONSTRAINT "file_mate_pkey" PRIMARY KEY ("id");

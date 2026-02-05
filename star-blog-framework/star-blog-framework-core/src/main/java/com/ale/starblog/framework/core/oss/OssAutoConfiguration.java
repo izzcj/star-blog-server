@@ -26,47 +26,50 @@ import org.springframework.context.annotation.Import;
 public class OssAutoConfiguration {
 
     /**
-     * OSS对象存储服务获取基URL端点处理器Bean
-     *
-     * @param ossServices OSS服务实现
-     * @return 端点处理器Bean
-     */
-    @Bean
-    public OssServiceBaseUrlEndpoint ossServiceBaseUrlEndpoint(ObjectProvider<OssService> ossServices) {
-        return new OssServiceBaseUrlEndpoint(ossServices);
-    }
-
-    /**
      * OSS对象存储服务临时对象文件移除端点处理器Bean
      *
-     * @param ossServices OSS服务实现
+     * @param ossServices    OSS服务实现
+     * @param ossMateService OSS元信息服务
      * @return 端点处理器Bean
      */
     @Bean
-    public OssServiceTempObjectRemoveEndpoint ossServiceTempObjectRemovalEndpoint(ObjectProvider<OssService> ossServices) {
-        return new OssServiceTempObjectRemoveEndpoint(ossServices);
+    public OssServiceTempObjectRemoveEndpoint ossServiceTempObjectRemovalEndpoint(ObjectProvider<OssService> ossServices, OssMateService ossMateService) {
+        return new OssServiceTempObjectRemoveEndpoint(ossServices, ossMateService);
     }
 
     /**
      * OSS对象存储服务上传端点处理器Bean
      *
-     * @param ossServices OSS服务实现
+     * @param ossServices    OSS服务实现
+     * @param ossMateService OSS元信息服务
      * @return 端点处理器Bean
      */
     @Bean
-    public OssServiceUploadEndpoint ossServiceUploadEndpoint(ObjectProvider<OssService> ossServices) {
-        return new OssServiceUploadEndpoint(ossServices);
+    public OssServiceUploadEndpoint ossServiceUploadEndpoint(ObjectProvider<OssService> ossServices, OssMateService ossMateService) {
+        return new OssServiceUploadEndpoint(ossServices, ossMateService);
     }
 
     /**
      * OSS对象存储服务下载端点处理器Bean
      *
-     * @param ossServices OSS服务实现
+     * @param ossServices    OSS服务实现
+     * @param ossMateService OSS元信息服务
      * @return 端点处理器Bean
      */
     @Bean
-    public OssServiceDownloadEndpoint ossServiceDownloadEndpoint(ObjectProvider<OssService> ossServices) {
-        return new OssServiceDownloadEndpoint(ossServices);
+    public OssServiceDownloadEndpoint ossServiceDownloadEndpoint(ObjectProvider<OssService> ossServices, OssMateService ossMateService) {
+        return new OssServiceDownloadEndpoint(ossServices, ossMateService);
+    }
+
+    /**
+     * OSS对象存储服务获取访问URL端点处理器Bean
+     *
+     * @param ossMateService OSS元信息服务
+     * @return 端点处理器Bean
+     */
+    @Bean
+    public OssServiceVisitUrlEndpoint ossServiceVisitUrlEndpoint(OssMateService ossMateService) {
+        return new OssServiceVisitUrlEndpoint(ossMateService);
     }
 
     /**

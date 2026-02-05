@@ -43,7 +43,7 @@ public class UserController extends BaseController<User, IUserService, UserVO, U
      * @return 结果
      */
     @GetMapping("/role/{id}")
-    public JsonResult<List<Long>> fetchRoleIdsByUserId(@PathVariable(name = "id") Long id) {
+    public JsonResult<List<Long>> fetchRoleIdsByUserId(@PathVariable Long id) {
         if (id == null) {
             return JsonResult.fail("id不能为空");
         }
@@ -63,7 +63,7 @@ public class UserController extends BaseController<User, IUserService, UserVO, U
      * @return 用户分页数据
      */
     @GetMapping("/authorized/{roleId}/page")
-    public JsonPageResult<UserVO> fetchAuthorizedUser(Pageable pageable, UserQuery query, @PathVariable("roleId") Long roleId) {
+    public JsonPageResult<UserVO> fetchAuthorizedUser(Pageable pageable, UserQuery query, @PathVariable Long roleId) {
         IPage<UserBO> allocatedUserPage = this.userRoleService.fetchAuthorizedUserPage(pageable, query, roleId);
         return JsonPageResult.of(
             pageable.getPageNumber(),
@@ -82,7 +82,7 @@ public class UserController extends BaseController<User, IUserService, UserVO, U
      * @return 用户分页数据
      */
     @GetMapping("/unauthorized/{roleId}/page")
-    public JsonPageResult<UserVO> fetchUnauthorizedUser(Pageable pageable, UserQuery query, @PathVariable("roleId") Long roleId) {
+    public JsonPageResult<UserVO> fetchUnauthorizedUser(Pageable pageable, UserQuery query, @PathVariable Long roleId) {
         IPage<UserBO> unallocatedUserPage = this.userRoleService.fetchUnauthorizedUserPage(pageable, query, roleId);
         return JsonPageResult.of(
             pageable.getPageNumber(),

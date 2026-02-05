@@ -27,7 +27,7 @@ public class NoticeController extends BaseController<Notice, INoticeService, Not
      * @return voi
      */
     @PutMapping("/{id}/toggle-published")
-    public JsonResult<Void> togglePublished(@PathVariable(name = "id") Long id) {
+    public JsonResult<Void> togglePublished(@PathVariable Long id) {
         this.service.togglePublished(id);
         return JsonResult.success();
     }

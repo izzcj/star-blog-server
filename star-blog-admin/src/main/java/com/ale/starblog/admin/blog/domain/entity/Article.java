@@ -5,7 +5,6 @@ import com.ale.starblog.admin.common.annotations.StatInfo;
 import com.ale.starblog.admin.system.constants.StatInfoConstants;
 import com.ale.starblog.framework.common.domain.entity.BaseAuditEntity;
 import com.ale.starblog.framework.core.oss.OssUpload;
-import com.ale.starblog.framework.core.oss.RichText;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -44,8 +43,7 @@ public class Article extends BaseAuditEntity {
     /**
      * 内容
      */
-    @RichText
-    @OssUpload
+    @OssUpload(richText = true)
     private String content;
 
     /**

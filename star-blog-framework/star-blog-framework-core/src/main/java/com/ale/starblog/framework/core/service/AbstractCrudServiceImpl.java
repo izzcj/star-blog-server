@@ -52,6 +52,23 @@ public abstract class AbstractCrudServiceImpl<Mapper extends BaseMapper<E>, E ex
     private final Class<B> boClass = CastUtils.cast(GenericTypeUtils.resolveTypeArguments(this.getClass(), AbstractCrudServiceImpl.class, 2));
 
     @Override
+    public B queryById(Long id) {
+        HookContext hookContext = HookContext.newContext();
+        E entity;
+        try {
+            entity = this.getById(id);
+            if (entity == null) {
+                throw new ServiceException("查询实体失败！实体[{}]不存在！", id);
+            }
+            this.executeServiceHooks(entity, HookStage.AFTER_QUERY, hookContext);
+            this.executeServiceHooks(entity, HookStage.BEFORE_CLEAR_HOOK_CONTEXT, hookContext);
+        } finally {
+            hookContext.clear();
+        }
+        return BeanUtil.copyProperties(entity, this.boClass);
+    }
+
+    @Override
     public B queryOne(Q query) {
         return this.queryOne(query, HookContext.newContext());
     }
@@ -87,7 +104,7 @@ public abstract class AbstractCrudServiceImpl<Mapper extends BaseMapper<E>, E ex
         try {
             this.executeServiceHooks(queryWrapper, HookStage.BEFORE_QUERY, hookContext);
             entityList = this.baseMapper.selectList(queryWrapper);
-            this.executeServiceHooks(entityList, HookStage.AFTER_QUERY, hookContext);
+            this.executeServiceHooks(entityList, HookStage.AFTER_QUERY_LIST, hookContext);
             this.executeServiceHooks(entityList, HookStage.BEFORE_CLEAR_HOOK_CONTEXT, hookContext);
         } finally {
             if (context == null) {
@@ -110,7 +127,7 @@ public abstract class AbstractCrudServiceImpl<Mapper extends BaseMapper<E>, E ex
         try {
             this.executeServiceHooks(queryWrapper, HookStage.BEFORE_QUERY, hookContext);
             page = this.baseMapper.selectPage(new Page<>(pageable.getPageNumber(), pageable.getPageSize()), queryWrapper);
-            this.executeServiceHooks(page.getRecords(), HookStage.AFTER_QUERY, hookContext);
+            this.executeServiceHooks(page.getRecords(), HookStage.AFTER_QUERY_LIST, hookContext);
             this.executeServiceHooks(page.getRecords(), HookStage.BEFORE_CLEAR_HOOK_CONTEXT, hookContext);
         } finally {
             if (context == null) {

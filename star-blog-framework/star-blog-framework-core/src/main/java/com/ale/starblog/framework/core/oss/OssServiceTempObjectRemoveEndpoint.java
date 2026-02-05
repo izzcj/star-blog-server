@@ -4,12 +4,11 @@ import cn.hutool.core.util.StrUtil;
 import com.ale.starblog.framework.common.domain.JsonResult;
 import com.ale.starblog.framework.common.domain.Result;
 import com.ale.starblog.framework.common.support.RequestMethodMatcher;
+import com.ale.starblog.framework.common.support.RequestUriMatcher;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.http.HttpMethod;
-
-import java.util.Map;
 
 /**
  * OSS服务临时对象移除处理端点
@@ -17,15 +16,15 @@ import java.util.Map;
  * @author Ale
  * @version 1.0.0 2025/9/28 14:12
  */
-public class OssServiceTempObjectRemoveEndpoint extends OssPathMatchEndpoint {
+public class OssServiceTempObjectRemoveEndpoint extends AbstractOssEndpoint {
 
     /**
-     * 获取OSS对象服务实现的移除临时上传对象的路径模式
+     * 获取OSS对象服务实现的移除临时上传对象的URL路径
      */
-    private static final String OSS_TEMP_OBJECT_REMOVAL_PATH_PATTERN = "/oss/temp/{ossProvider}";
+    private static final String OSS_TEMP_OBJECT_REMOVAL_PATH = "/oss";
 
-    public OssServiceTempObjectRemoveEndpoint(ObjectProvider<OssService> ossServices) {
-        super(ossServices);
+    public OssServiceTempObjectRemoveEndpoint(ObjectProvider<OssService> ossServices, OssMateService ossMateService) {
+        super(ossServices, ossMateService);
     }
 
     @Override
@@ -34,20 +33,27 @@ public class OssServiceTempObjectRemoveEndpoint extends OssPathMatchEndpoint {
     }
 
     @Override
-    protected String providePathPattern() {
-        return OSS_TEMP_OBJECT_REMOVAL_PATH_PATTERN;
+    public RequestUriMatcher getRequestUriMatcher() {
+        return uri -> StrUtil.equals(OSS_TEMP_OBJECT_REMOVAL_PATH, uri);
     }
 
     @Override
-    protected Result<?> handle(HttpServletRequest request, HttpServletResponse response, OssService ossService, Map<String, String> variables) {
-        String objectKey = request.getParameter("objectKey");
-        if (StrUtil.isBlank(objectKey)) {
-            return JsonResult.fail("要移除临时对象文件的Key不能为空");
+    public Result<?> handleRequest(HttpServletRequest request, HttpServletResponse response) {
+        String fileId = request.getParameter("fileId");
+        if (StrUtil.isBlank(fileId)) {
+            return JsonResult.fail("要下载的文件的ID不能为空");
         }
 
-        if (StrUtil.startWith(objectKey, OssService.TEMPORARY_OBJECT_KEY_PREFIX)) {
-            ossService.remove(objectKey);
+        OssMate ossMate = super.ossMateService.load(fileId);
+        if (ossMate == null) {
+            return JsonResult.fail("要移除的文件[{}]不存在！", fileId);
         }
-        return JsonResult.success("临时上传文件移除成功");
+
+        if (ossMate.getReferenceCount() == 0) {
+            super.findOssService(ossMate.getProvider()).remove(ossMate.getObjectKey());
+            super.ossMateService.remove(fileId);
+            return JsonResult.success("临时文件移除成功");
+        }
+        return JsonResult.success();
     }
 }

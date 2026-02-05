@@ -7,6 +7,7 @@ import com.ale.starblog.framework.common.constants.StringConstants;
 import com.ale.starblog.framework.common.domain.JsonResult;
 import com.ale.starblog.framework.common.domain.Result;
 import com.ale.starblog.framework.common.support.RequestMethodMatcher;
+import com.ale.starblog.framework.common.support.RequestUriMatcher;
 import com.ale.starblog.framework.common.utils.ServletUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -16,24 +17,23 @@ import org.springframework.http.HttpMethod;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Map;
 
 /**
- * OSS对象下载服务端点
+ * OSS对象服务下载端点
  *
  * @author Ale
  * @version 1.0.0 2025/9/28 14:12
  */
 @Slf4j
-public final class OssServiceDownloadEndpoint extends OssPathMatchEndpoint {
+public final class OssServiceDownloadEndpoint extends AbstractOssEndpoint {
 
     /**
-     * OSS对象存储下载路径模式
+     * OSS对象存储下载URL路径
      */
-    private static final String OSS_DOWNLOAD_PATH_PATTERN = "/oss/download/{ossProvider}";
+    private static final String OSS_DOWNLOAD_PATH = "/oss/download";
 
-    public OssServiceDownloadEndpoint(ObjectProvider<OssService> ossServices) {
-        super(ossServices);
+    public OssServiceDownloadEndpoint(ObjectProvider<OssService> ossServices, OssMateService ossMateService) {
+        super(ossServices, ossMateService);
     }
 
     @Override
@@ -42,29 +42,36 @@ public final class OssServiceDownloadEndpoint extends OssPathMatchEndpoint {
     }
 
     @Override
-    protected String providePathPattern() {
-        return OSS_DOWNLOAD_PATH_PATTERN;
+    public RequestUriMatcher getRequestUriMatcher() {
+        return uri -> StrUtil.equals(OSS_DOWNLOAD_PATH, uri);
     }
 
     @Override
-    protected Result<?> handle(HttpServletRequest request, HttpServletResponse response, OssService ossService, Map<String, String> variables) throws Exception {
-        String objectKey = request.getParameter("objectKey");
-        if (StrUtil.isBlank(objectKey)) {
-            return JsonResult.fail("要下载的对象文件的Key不能为空");
+    public Result<?> handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        String fileId = request.getParameter("fileId");
+        if (StrUtil.isBlank(fileId)) {
+            return JsonResult.fail("要下载的文件的ID不能为空");
         }
 
-        boolean multiDownload = objectKey.indexOf(StringConstants.COMMA) > 0;
+        boolean multiDownload = fileId.indexOf(StringConstants.COMMA) > 0;
         if (multiDownload) {
-            String[] keys = objectKey.split(StringConstants.COMMA);
-            for (String key : keys) {
+            String[] fileIds = fileId.split(StringConstants.COMMA);
+            for (String key : fileIds) {
                 if (StrUtil.isBlank(key)) {
                     return JsonResult.fail("要下载的对象文件的Key存在空值");
                 }
             }
-
-            return this.doMultiDownload(ossService, keys, response);
+            return this.doMultiDownload(fileIds, response);
         } else {
-            return this.doSingleDownload(ossService, objectKey, response);
+            OssMate ossMate = super.ossMateService.load(fileId);
+            if (ossMate == null) {
+                return JsonResult.fail("要下载的文件[{}]不存在！", fileId);
+            }
+            return this.doSingleDownload(
+                    super.findOssService(ossMate.getProvider()),
+                    ossMate.getObjectKey(),
+                    response
+            );
         }
     }
 
@@ -94,21 +101,24 @@ public final class OssServiceDownloadEndpoint extends OssPathMatchEndpoint {
     /**
      * 多文件下载
      *
-     * @param ossService OssService
-     * @param keys       文件Key数组
-     * @param response   响应对象
+     * @param fileIds  文件ID数组
+     * @param response 响应对象
      * @return 结果对象
      * @throws IOException IO异常
      */
-    private JsonResult<?> doMultiDownload(OssService ossService, String[] keys, HttpServletResponse response) throws IOException {
-        InputStream[] inputStreams = new InputStream[keys.length];
-        String[] names = new String[keys.length];
+    private JsonResult<?> doMultiDownload(String[] fileIds, HttpServletResponse response) throws IOException {
+        InputStream[] inputStreams = new InputStream[fileIds.length];
+        String[] names = new String[fileIds.length];
         int index = 0;
 
         try {
-            for (String key : keys) {
-                inputStreams[index] = ossService.download(key);
-                names[index++] = FileNameUtil.getName(key);
+            for (String fileId : fileIds) {
+                OssMate ossMate = super.ossMateService.load(fileId);
+                if (ossMate == null) {
+                    return JsonResult.fail("要下载的文件[{}]不存在！", fileId);
+                }
+                inputStreams[index] = super.findOssService(ossMate.getProvider()).download(fileId);
+                names[index++] = FileNameUtil.getName(fileId);
             }
             ServletUtils.responseFile(
                 response,

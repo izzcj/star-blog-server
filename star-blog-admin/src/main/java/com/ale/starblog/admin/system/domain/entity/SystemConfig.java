@@ -3,6 +3,8 @@ package com.ale.starblog.admin.system.domain.entity;
 import com.ale.starblog.admin.system.enums.SystemConfigDataSourceType;
 import com.ale.starblog.admin.system.enums.SystemConfigType;
 import com.ale.starblog.framework.common.domain.entity.BaseAuditEntity;
+import com.baomidou.mybatisplus.annotation.FieldStrategy;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -50,6 +52,7 @@ public class SystemConfig extends BaseAuditEntity {
     /**
      * 值
      */
+    @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private String value;
 
     /**

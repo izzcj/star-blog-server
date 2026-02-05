@@ -88,15 +88,9 @@ public abstract class BaseController<E extends BaseEntity, S extends ICrudServic
      * @return 结果
      */
     @GetMapping("/{id}")
-    public JsonResult<V> fetchById(@PathVariable(name = "id") Long id) {
-        if (id == null) {
-            return JsonResult.fail("id不能为空");
-        }
-        E entity = this.service.getById(id);
-        if (entity == null) {
-            return JsonResult.fail("查询对象失败失败，对象不存在！ID：" + id);
-        }
-        V result = BeanUtil.copyProperties(entity, this.voClass);
+    public JsonResult<V> fetchById(@PathVariable Long id) {
+        B entityBO = this.service.queryById(id);
+        V result = BeanUtil.copyProperties(entityBO, this.voClass);
         this.translation(result);
         return JsonResult.success(result);
     }
@@ -229,7 +223,7 @@ public abstract class BaseController<E extends BaseEntity, S extends ICrudServic
      * @return 结果
      */
     @DeleteMapping("/{id}")
-    public JsonResult<Void> delete(@PathVariable(name = "id") Long id) {
+    public JsonResult<Void> delete(@PathVariable Long id) {
         if (id == null) {
             return JsonResult.fail("id不能为空");
         }
@@ -244,7 +238,7 @@ public abstract class BaseController<E extends BaseEntity, S extends ICrudServic
      * @return 结果
      */
     @DeleteMapping("/{ids}")
-    public JsonResult<Void> batchDelete(@PathVariable(name = "ids") List<Long> ids) {
+    public JsonResult<Void> batchDelete(@PathVariable List<Long> ids) {
         if (ids == null || ids.isEmpty()) {
             return JsonResult.fail("id不能为空");
         }

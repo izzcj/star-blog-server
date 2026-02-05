@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 
 import com.ale.starblog.framework.common.domain.entity.BaseAuditEntity;
 import com.ale.starblog.framework.core.oss.OssUpload;
-import com.ale.starblog.framework.core.oss.RichText;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -39,8 +38,7 @@ public class Notice extends BaseAuditEntity {
     /**
      * 内容
      */
-    @OssUpload
-    @RichText
+    @OssUpload(richText = true)
     private String content;
 
     /**

@@ -55,7 +55,7 @@ public class RoleController extends BaseController<Role, IRoleService, RoleVO, R
      * @return 菜单id
      */
     @GetMapping("/{id}/menu")
-    public JsonResult<Set<Long>> fetchRoleMenuPermissions(@PathVariable(name = "id") Long id) {
+    public JsonResult<Set<Long>> fetchRoleMenuPermissions(@PathVariable Long id) {
         return JsonResult.success(
             this.roleMenuService.fetchMenuIdsByRoleIds(Collections.singleton(id))
         );
@@ -69,7 +69,7 @@ public class RoleController extends BaseController<Role, IRoleService, RoleVO, R
      * @return 结果
      */
     @PostMapping("/{id}/menu")
-    public JsonResult<Void> saveRoleMenuPermissions(@PathVariable(name = "id") Long id, @RequestBody List<Long> menuIds) {
+    public JsonResult<Void> saveRoleMenuPermissions(@PathVariable Long id, @RequestBody List<Long> menuIds) {
         this.roleMenuService.saveRoleMenu(id, menuIds);
         return JsonResult.success();
     }

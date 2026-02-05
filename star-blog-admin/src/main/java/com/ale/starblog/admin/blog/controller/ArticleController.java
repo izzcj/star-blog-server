@@ -59,8 +59,8 @@ public class ArticleController extends BaseController<Article, IArticleService, 
      * @return 文章信息
      */
     @GetMapping("/detail/{id}")
-    public JsonResult<ArticleDetailsVO> fetchDetail(@PathVariable(name = "id") Long id) {
-        Article article = Optional.ofNullable(this.service.getById(id))
+    public JsonResult<ArticleDetailsVO> fetchDetail(@PathVariable Long id) {
+        ArticleBO article = Optional.ofNullable(this.service.queryById(id))
             .orElseThrow(() -> new ServiceException("文章不存在"));
         ArticleDetailsVO result = BeanUtil.copyProperties(article, ArticleDetailsVO.class);
         GenericTranslationSupport.translate(result);
@@ -122,7 +122,7 @@ public class ArticleController extends BaseController<Article, IArticleService, 
      * @return Void
      */
     @PutMapping("/{id}/view-count")
-    public JsonResult<Void> incrementViewCount(@PathVariable(name = "id") Long id) {
+    public JsonResult<Void> incrementViewCount(@PathVariable Long id) {
         this.service.incrementViewCount(id);
         return JsonResult.success();
     }
@@ -134,7 +134,7 @@ public class ArticleController extends BaseController<Article, IArticleService, 
      * @return Void
      */
     @PutMapping("/{id}/publish")
-    public JsonResult<Void> publish(@PathVariable(name = "id") Long id) {
+    public JsonResult<Void> publish(@PathVariable Long id) {
         this.service.publish(id);
         return JsonResult.success();
     }
@@ -146,7 +146,7 @@ public class ArticleController extends BaseController<Article, IArticleService, 
      * @return Void
      */
     @PutMapping("/{id}/toggle-top")
-    public JsonResult<Void> toggleTop(@PathVariable(name = "id") Long id) {
+    public JsonResult<Void> toggleTop(@PathVariable Long id) {
         this.service.toggleTop(id);
         return JsonResult.success();
     }
@@ -158,7 +158,7 @@ public class ArticleController extends BaseController<Article, IArticleService, 
      * @return Void
      */
     @PutMapping("/{id}/toggle-recommend")
-    public JsonResult<Void> toggleRecommend(@PathVariable(name = "id") Long id) {
+    public JsonResult<Void> toggleRecommend(@PathVariable Long id) {
         this.service.toggleRecommend(id);
         return JsonResult.success();
     }

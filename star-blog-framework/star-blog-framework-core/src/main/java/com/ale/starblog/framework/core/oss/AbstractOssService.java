@@ -39,7 +39,7 @@ public abstract class AbstractOssService implements OssService {
                     .append(fileInfo.filename());
         }
         return doUpload(
-                OssService.TEMPORARY_OBJECT_KEY_PREFIX + objectKey,
+                objectKey.toString(),
                 fileInfo.fileContent(),
                 StrUtil.isNotBlank(mimeType) && !StrUtil.equals(mimeType, fileInfo.mimeType()) ? mimeType : fileInfo.mimeType(),
                 objectContent

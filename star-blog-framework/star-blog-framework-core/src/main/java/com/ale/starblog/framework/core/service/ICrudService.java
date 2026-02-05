@@ -17,11 +17,20 @@ import java.util.List;
  *
  * @param <E> 实体类型
  * @param <B> 实体BO类型
+ * @param <Q> 查询条件类型
  * @author Ale
  * @version 1.0.0
  * @since 2025/3/7
  */
 public interface ICrudService<E extends BaseEntity, B extends BaseBO, Q extends BaseQuery> extends IService<E>, LocalServiceHook<E> {
+
+    /**
+     * 根据ID查询单个实体
+     *
+     * @param id ID
+     * @return 实体
+     */
+    B queryById(Long id);
 
     /**
      * 根据查询条件查询单个实体

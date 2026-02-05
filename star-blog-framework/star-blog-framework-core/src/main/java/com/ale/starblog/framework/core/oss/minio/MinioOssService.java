@@ -111,14 +111,14 @@ public class MinioOssService extends AbstractOssService {
             StringBuilder uri = new StringBuilder();
             if (StrUtil.isNotBlank(this.minioProperties.getDomain())) {
                 uri.append("https://")
-                   .append(this.minioProperties.getDomain())
-                   .append(StringConstants.SLASH)
-                   .append("minio");
+                    .append(this.minioProperties.getDomain())
+                    .append(StringConstants.SLASH)
+                    .append("minio");
             } else {
                 uri.append("http://")
-                   .append(this.minioProperties.getEndpoint())
-                   .append(StringConstants.COLON)
-                   .append(this.minioProperties.getPort());
+                    .append(this.minioProperties.getEndpoint())
+                    .append(StringConstants.COLON)
+                    .append(this.minioProperties.getPort());
             }
             uri.append(StringConstants.SLASH)
                 .append(this.minioProperties.getBucket())
