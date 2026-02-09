@@ -224,6 +224,35 @@ public class GenericTranslationSupport {
     }
 
     /**
+     * 构建翻译补丁数据
+     *
+     * @param value     翻译值
+     * @param patchType 补丁类型
+     * @param <T> 翻译值类型
+     * @return 翻译补丁数据
+     */
+    public static <T> PatchData<T> buildPatchData(T value, TranslationPatchType patchType) {
+        Set<T> add = Collections.emptySet();
+        Set<T> update = Collections.emptySet();
+        Set<T> delete = Collections.emptySet();
+
+        switch (patchType) {
+            case TranslationPatchType.ADD:
+                add = Collections.singleton(value);
+                break;
+            case TranslationPatchType.CHANGE:
+                update = Collections.singleton(value);
+                break;
+            case TranslationPatchType.REMOVE:
+                delete = Collections.singleton(value);
+                break;
+            default:
+                throw new IllegalArgumentException("未知的补丁类型: " + patchType);
+        }
+        return PatchData.of(add, update, delete);
+    }
+
+    /**
      * 发布翻译映射值更新事件
      *
      * @param type 数据类型

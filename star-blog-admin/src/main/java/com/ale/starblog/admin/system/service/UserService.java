@@ -1,14 +1,20 @@
 package com.ale.starblog.admin.system.service;
 
+import cn.hutool.core.lang.Pair;
 import cn.hutool.core.util.StrUtil;
 import com.ale.starblog.admin.common.constants.SystemConstants;
+import com.ale.starblog.admin.common.constants.TranslationConstants;
 import com.ale.starblog.admin.system.domain.entity.User;
 import com.ale.starblog.admin.system.domain.pojo.user.UserBO;
 import com.ale.starblog.admin.system.domain.pojo.user.UserQuery;
 import com.ale.starblog.admin.system.mapper.UserMapper;
+import com.ale.starblog.framework.common.enumeration.SwitchStatus;
 import com.ale.starblog.framework.common.exception.ServiceException;
+import com.ale.starblog.framework.common.support.PatchData;
 import com.ale.starblog.framework.core.service.AbstractCrudService;
 import com.ale.starblog.framework.core.service.hook.HookContext;
+import com.ale.starblog.framework.core.translation.GenericTranslationSupport;
+import com.ale.starblog.framework.core.translation.TranslationPatchType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -31,11 +37,27 @@ public class UserService extends AbstractCrudService<UserMapper, User, UserBO, U
 
     @Override
     public void beforeCreate(User entity, HookContext context) {
+        entity.setStatus(SwitchStatus.ENABLE);
         if (StrUtil.isBlank(entity.getPassword())) {
             entity.setPassword(this.passwordEncoder.encode(SystemConstants.DEFAULT_PASSWORD));
         } else {
             entity.setPassword(this.passwordEncoder.encode(entity.getPassword()));
         }
+    }
+
+    @Override
+    public void afterCreate(User entity, HookContext context) {
+        this.publishUserTranslationPatch(entity, TranslationPatchType.ADD);
+    }
+
+    @Override
+    public void afterModify(User entity, HookContext context) {
+        this.publishUserTranslationPatch(entity, TranslationPatchType.CHANGE);
+    }
+
+    @Override
+    public void afterDelete(User entity, HookContext context) {
+        this.publishUserTranslationPatch(entity, TranslationPatchType.REMOVE);
     }
 
     /**
@@ -67,5 +89,35 @@ public class UserService extends AbstractCrudService<UserMapper, User, UserBO, U
             .orElseThrow(() -> new ServiceException("重置密码失败！用户[{}]不存在！", id));
         user.setPassword(this.passwordEncoder.encode(SystemConstants.DEFAULT_PASSWORD));
         this.updateById(user);
+    }
+
+    /**
+     * 发布用户翻译补丁事件
+     *
+     * @param entity    用户实体
+     * @param patchType 补丁类型
+     */
+    private void publishUserTranslationPatch(User entity, TranslationPatchType patchType) {
+        String userId = entity.getId().toString();
+
+        PatchData<Pair<String, String>> nicknamePatch = GenericTranslationSupport.buildPatchData(
+            Pair.of(userId, entity.getNickname()),
+            patchType
+        );
+
+        PatchData<Pair<String, String>> avatarPatch = GenericTranslationSupport.buildPatchData(
+            Pair.of(userId, entity.getAvatar()),
+            patchType
+        );
+
+        GenericTranslationSupport.publishUpdateEvent(
+            TranslationConstants.TRANSLATION_USER_NICKNAME,
+            nicknamePatch
+        );
+
+        GenericTranslationSupport.publishUpdateEvent(
+            TranslationConstants.TRANSLATION_USER_AVATAR,
+            avatarPatch
+        );
     }
 }

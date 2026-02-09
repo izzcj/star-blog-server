@@ -237,8 +237,8 @@ public abstract class BaseController<E extends BaseEntity, S extends ICrudServic
      * @param ids ID列表
      * @return 结果
      */
-    @DeleteMapping("/{ids}")
-    public JsonResult<Void> batchDelete(@PathVariable List<Long> ids) {
+    @DeleteMapping("/batch")
+    public JsonResult<Void> batchDelete(@RequestBody List<Long> ids) {
         if (ids == null || ids.isEmpty()) {
             return JsonResult.fail("id不能为空");
         }

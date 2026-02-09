@@ -26,6 +26,11 @@ public class ModifyDictDataDTO extends BaseModifyDTO {
     private String dictLabel;
 
     /**
+     * 字典值
+     */
+    private String dictValue;
+
+    /**
      * 字典key
      */
     private String dictKey;

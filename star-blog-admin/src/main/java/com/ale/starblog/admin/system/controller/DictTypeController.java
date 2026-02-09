@@ -22,7 +22,7 @@ public class DictTypeController extends BaseController<DictType, DictTypeService
      *
      * @return Void
      */
-    @PostMapping("/refresh-cache")
+    @PutMapping("/refresh-cache")
     public JsonResult<Void> refreshCache() {
         this.service.refreshCache();
         return JsonResult.success();
