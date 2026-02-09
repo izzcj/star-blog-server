@@ -6,8 +6,8 @@ import com.ale.starblog.admin.system.domain.entity.User;
 import com.ale.starblog.admin.system.domain.pojo.user.AuthUserRoleDTO;
 import com.ale.starblog.admin.system.domain.pojo.role.RoleBO;
 import com.ale.starblog.admin.system.domain.pojo.user.*;
-import com.ale.starblog.admin.system.service.IUserRoleService;
-import com.ale.starblog.admin.system.service.IUserService;
+import com.ale.starblog.admin.system.service.UserRoleService;
+import com.ale.starblog.admin.system.service.UserService;
 import com.ale.starblog.framework.common.domain.JsonPageResult;
 import com.ale.starblog.framework.common.domain.JsonResult;
 import com.ale.starblog.framework.core.controller.BaseController;
@@ -29,12 +29,12 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/system/user")
-public class UserController extends BaseController<User, IUserService, UserVO, UserBO, UserQuery, CreateUserDTO, ModifyUserDTO> {
+public class UserController extends BaseController<User, UserService, UserVO, UserBO, UserQuery, CreateUserDTO, ModifyUserDTO> {
 
     /**
      * 用户角色服务
      */
-    private final IUserRoleService userRoleService;
+    private final UserRoleService userRoleService;
 
     /**
      * 获取用户所属角色id集合

@@ -1,6 +1,7 @@
 package com.ale.starblog.framework.core.service;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.BooleanUtil;
 import com.ale.starblog.framework.common.domain.entity.BaseEntity;
 import com.ale.starblog.framework.common.exception.ServiceException;
 import com.ale.starblog.framework.common.utils.CastUtils;
@@ -20,15 +21,13 @@ import com.google.common.collect.Sets;
 import lombok.Getter;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
- * 抽象CRUD服务实现类
+ * 抽象CRUD服务
  *
  * @param <Mapper> Mapper
  * @param <E>      实体类型
@@ -38,18 +37,18 @@ import java.util.stream.Collectors;
  * @version 1.0.0
  * @since 2025/3/7
  */
-public abstract class AbstractCrudServiceImpl<Mapper extends BaseMapper<E>, E extends BaseEntity, B extends BaseBO, Q extends BaseQuery> extends AbstractMybatisPlusCrudServiceImpl<Mapper, E> implements ICrudService<E, B, Q> {
+public abstract class AbstractCrudService<Mapper extends BaseMapper<E>, E extends BaseEntity, B extends BaseBO, Q extends BaseQuery> extends AbstractMybatisPlusCrudServiceImpl<Mapper, E> implements ICrudService<E, B, Q> {
 
     /**
      * 实体类型
      */
     @Getter
-    private final Class<E> entityClass = CastUtils.cast(GenericTypeUtils.resolveTypeArguments(this.getClass(), AbstractCrudServiceImpl.class, 1));
+    private final Class<E> entityClass = CastUtils.cast(GenericTypeUtils.resolveTypeArguments(this.getClass(), AbstractCrudService.class, 1));
 
     /**
      * BO类型
      */
-    private final Class<B> boClass = CastUtils.cast(GenericTypeUtils.resolveTypeArguments(this.getClass(), AbstractCrudServiceImpl.class, 2));
+    private final Class<B> boClass = CastUtils.cast(GenericTypeUtils.resolveTypeArguments(this.getClass(), AbstractCrudService.class, 2));
 
     @Override
     public B queryById(Long id) {
@@ -80,6 +79,9 @@ public abstract class AbstractCrudServiceImpl<Mapper extends BaseMapper<E>, E ex
         E one;
         try {
             this.executeServiceHooks(queryWrapper, HookStage.BEFORE_QUERY, hookContext);
+            if (BooleanUtil.isTrue(hookContext.isTermination())) {
+                return null;
+            }
             one = this.getOne(queryWrapper);
             this.executeServiceHooks(one, HookStage.AFTER_QUERY, hookContext);
             this.executeServiceHooks(one, HookStage.BEFORE_CLEAR_HOOK_CONTEXT, hookContext);
@@ -103,6 +105,9 @@ public abstract class AbstractCrudServiceImpl<Mapper extends BaseMapper<E>, E ex
         List<E> entityList;
         try {
             this.executeServiceHooks(queryWrapper, HookStage.BEFORE_QUERY, hookContext);
+            if (BooleanUtil.isTrue(hookContext.isTermination())) {
+                return Collections.emptyList();
+            }
             entityList = this.baseMapper.selectList(queryWrapper);
             this.executeServiceHooks(entityList, HookStage.AFTER_QUERY_LIST, hookContext);
             this.executeServiceHooks(entityList, HookStage.BEFORE_CLEAR_HOOK_CONTEXT, hookContext);
@@ -126,6 +131,9 @@ public abstract class AbstractCrudServiceImpl<Mapper extends BaseMapper<E>, E ex
         IPage<E> page;
         try {
             this.executeServiceHooks(queryWrapper, HookStage.BEFORE_QUERY, hookContext);
+            if (BooleanUtil.isTrue(hookContext.isTermination())) {
+                return new Page<>(pageable.getPageNumber(), pageable.getPageSize());
+            }
             page = this.baseMapper.selectPage(new Page<>(pageable.getPageNumber(), pageable.getPageSize()), queryWrapper);
             this.executeServiceHooks(page.getRecords(), HookStage.AFTER_QUERY_LIST, hookContext);
             this.executeServiceHooks(page.getRecords(), HookStage.BEFORE_CLEAR_HOOK_CONTEXT, hookContext);
@@ -162,6 +170,9 @@ public abstract class AbstractCrudServiceImpl<Mapper extends BaseMapper<E>, E ex
         try {
             this.executeServiceHooks(entity, HookStage.BEFORE_CREATE, hookContext);
             this.executeServiceHooks(entity, HookStage.BEFORE_SAVE, hookContext);
+            if (BooleanUtil.isTrue(hookContext.isTermination())) {
+                return;
+            }
             this.baseMapper.insert(entity);
             this.executeServiceHooks(entity, HookStage.AFTER_CREATE, hookContext);
             this.executeServiceHooks(entity, HookStage.AFTER_SAVE, hookContext);
@@ -188,6 +199,9 @@ public abstract class AbstractCrudServiceImpl<Mapper extends BaseMapper<E>, E ex
         try {
             this.executeServiceHooks(entityList, HookStage.BEFORE_BATCH_CREATE, hookContext);
             this.executeServiceHooks(entityList, HookStage.BEFORE_BATCH_SAVE, hookContext);
+            if (BooleanUtil.isTrue(hookContext.isTermination())) {
+                return;
+            }
             this.baseMapper.insert(entityList);
             this.executeServiceHooks(entityList, HookStage.AFTER_BATCH_CREATE, hookContext);
             this.executeServiceHooks(entityList, HookStage.AFTER_BATCH_SAVE, hookContext);
@@ -221,6 +235,9 @@ public abstract class AbstractCrudServiceImpl<Mapper extends BaseMapper<E>, E ex
         try {
             this.executeServiceHooks(entity, HookStage.BEFORE_MODIFY, hookContext);
             this.executeServiceHooks(entity, HookStage.BEFORE_SAVE, hookContext);
+            if (BooleanUtil.isTrue(hookContext.isTermination())) {
+                return;
+            }
             this.baseMapper.updateById(entity);
             this.executeServiceHooks(entity, HookStage.AFTER_MODIFY, hookContext);
             this.executeServiceHooks(entity, HookStage.AFTER_SAVE, hookContext);
@@ -264,6 +281,9 @@ public abstract class AbstractCrudServiceImpl<Mapper extends BaseMapper<E>, E ex
         try {
             this.executeServiceHooks(entityList, HookStage.BEFORE_BATCH_MODIFY, hookContext);
             this.executeServiceHooks(entityList, HookStage.BEFORE_BATCH_SAVE, hookContext);
+            if (BooleanUtil.isTrue(hookContext.isTermination())) {
+                return;
+            }
             this.baseMapper.updateById(entityList);
             this.executeServiceHooks(entityList, HookStage.AFTER_BATCH_MODIFY, hookContext);
             this.executeServiceHooks(entityList, HookStage.AFTER_BATCH_SAVE, hookContext);
@@ -291,6 +311,9 @@ public abstract class AbstractCrudServiceImpl<Mapper extends BaseMapper<E>, E ex
         }
         try {
             this.executeServiceHooks(entity, HookStage.BEFORE_DELETE, hookContext);
+            if (BooleanUtil.isTrue(hookContext.isTermination())) {
+                return;
+            }
             this.baseMapper.deleteById(id);
             this.executeServiceHooks(entity, HookStage.AFTER_DELETE, hookContext);
             this.executeServiceHooks(entity, HookStage.BEFORE_CLEAR_HOOK_CONTEXT, hookContext);
@@ -322,6 +345,9 @@ public abstract class AbstractCrudServiceImpl<Mapper extends BaseMapper<E>, E ex
         }
         try {
             this.executeServiceHooks(entityList, HookStage.BEFORE_BATCH_DELETE, hookContext);
+            if (BooleanUtil.isTrue(hookContext.isTermination())) {
+                return;
+            }
             this.baseMapper.deleteByIds(ids);
             this.executeServiceHooks(entityList, HookStage.AFTER_BATCH_DELETE, hookContext);
             this.executeServiceHooks(entityList, HookStage.BEFORE_CLEAR_HOOK_CONTEXT, hookContext);

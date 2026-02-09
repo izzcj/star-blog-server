@@ -4,7 +4,7 @@ import com.ale.starblog.admin.common.cache.HotspotDataLoader;
 import com.ale.starblog.admin.system.constants.StatInfoConstants;
 import com.ale.starblog.admin.system.domain.entity.DailyStatInfo;
 import com.ale.starblog.admin.system.domain.pojo.stat_info.daily.DailyStatInfoBO;
-import com.ale.starblog.admin.system.service.IDailyStatInfoService;
+import com.ale.starblog.admin.system.service.DailyStatInfoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -23,7 +23,7 @@ public class DailyStatInfoHotspotDataLoader implements HotspotDataLoader<DailySt
     /**
      * 每日统计信息服务
      */
-    private final IDailyStatInfoService dailyStatInfoService;
+    private final DailyStatInfoService dailyStatInfoService;
 
     @Override
     public DailyStatInfoBO load() {

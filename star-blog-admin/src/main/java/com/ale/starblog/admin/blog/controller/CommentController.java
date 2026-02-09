@@ -3,7 +3,7 @@ package com.ale.starblog.admin.blog.controller;
 import cn.hutool.core.bean.BeanUtil;
 import com.ale.starblog.admin.blog.domain.entity.Comment;
 import com.ale.starblog.admin.blog.domain.pojo.comment.*;
-import com.ale.starblog.admin.blog.service.ICommentService;
+import com.ale.starblog.admin.blog.service.CommentService;
 import com.ale.starblog.framework.common.domain.JsonPageResult;
 import com.ale.starblog.framework.common.domain.JsonResult;
 import com.ale.starblog.framework.common.utils.SecurityUtils;
@@ -26,7 +26,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/blog/comment")
-public class CommentController extends BaseController<Comment, ICommentService, CommentVO, CommentBO, CommentQuery, CreateCommentDTO, ModifyCommentDTO> {
+public class CommentController extends BaseController<Comment, CommentService, CommentVO, CommentBO, CommentQuery, CreateCommentDTO, ModifyCommentDTO> {
 
     @Override
     public JsonPageResult<CommentVO> fetchPage(Pageable pageable, CommentQuery query) {

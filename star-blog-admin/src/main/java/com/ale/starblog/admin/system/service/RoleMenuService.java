@@ -1,12 +1,12 @@
-package com.ale.starblog.admin.system.service.impl;
+package com.ale.starblog.admin.system.service;
 
 import cn.hutool.core.collection.CollectionUtil;
 import com.ale.starblog.admin.system.domain.entity.RoleMenu;
 import com.ale.starblog.admin.system.mapper.RoleMenuMapper;
-import com.ale.starblog.admin.system.service.IRoleMenuService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.Collection;
@@ -23,9 +23,14 @@ import java.util.stream.Collectors;
  * @since 2025/4/8
  */
 @Service
-public class RoleMenuServiceImpl extends ServiceImpl<RoleMenuMapper, RoleMenu> implements IRoleMenuService {
+public class RoleMenuService extends ServiceImpl<RoleMenuMapper, RoleMenu> {
 
-    @Override
+    /**
+     * 根据角色ID集合获取菜单ID集合
+     *
+     * @param roleIds 角色ID集合
+     * @return 菜单ID集合
+     */
     public Set<Long> fetchMenuIdsByRoleIds(Collection<Long> roleIds) {
         if (CollectionUtil.isEmpty(roleIds)) {
             return Collections.emptySet();
@@ -41,7 +46,13 @@ public class RoleMenuServiceImpl extends ServiceImpl<RoleMenuMapper, RoleMenu> i
             .collect(Collectors.toSet());
     }
 
-    @Override
+    /**
+     * 保存角色菜单
+     *
+     * @param roleId  角色ID
+     * @param menuIds 菜单ID列表
+     */
+    @Transactional(rollbackFor = Exception.class)
     public void saveRoleMenu(Long roleId, List<Long> menuIds) {
         // 删除旧角色菜单
         this.remove(
@@ -59,6 +70,6 @@ public class RoleMenuServiceImpl extends ServiceImpl<RoleMenuMapper, RoleMenu> i
                     .build()
             )
             .collect(Collectors.toList());
-        this.resolveProxy().saveBatch(newRoleMenu);
+        this.saveBatch(newRoleMenu);
     }
 }

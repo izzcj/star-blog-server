@@ -1,4 +1,4 @@
-package com.ale.starblog.admin.system.service.impl;
+package com.ale.starblog.admin.system.service;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
@@ -11,9 +11,6 @@ import com.ale.starblog.admin.system.domain.pojo.user.UserBO;
 import com.ale.starblog.admin.system.domain.pojo.user.UserQuery;
 import com.ale.starblog.admin.system.enums.RoleType;
 import com.ale.starblog.admin.system.mapper.UserRoleMapper;
-import com.ale.starblog.admin.system.service.IRoleService;
-import com.ale.starblog.admin.system.service.IUserRoleService;
-import com.ale.starblog.admin.system.service.IUserService;
 import com.ale.starblog.framework.core.query.QueryConditionResolver;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -37,19 +34,24 @@ import java.util.stream.Collectors;
  */
 @Service
 @RequiredArgsConstructor
-public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> implements IUserRoleService {
+public class UserRoleService extends ServiceImpl<UserRoleMapper, UserRole> {
 
     /**
      * 用户服务
      */
-    private final IUserService userService;
+    private final UserService userService;
 
     /**
      * 角色服务
      */
-    private final IRoleService roleService;
+    private final RoleService roleService;
 
-    @Override
+    /**
+     * 获取用户所属角色集合
+     *
+     * @param userId 用户id
+     * @return 角色id集合
+     */
     public List<RoleBO> queryRoleByUserId(Long userId) {
         if (userId == null) {
             return Collections.emptyList();
@@ -71,7 +73,14 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
             .toList();
     }
 
-    @Override
+    /**
+     * 分页查询已授权角色的用户
+     *
+     * @param pageable 分页参数
+     * @param query    查询参数
+     * @param roleId   角色ID
+     * @return 用户分页数据
+     */
     public IPage<UserBO> fetchAuthorizedUserPage(Pageable pageable, UserQuery query, Long roleId) {
         List<Long> userIds = this.lambdaQuery()
             .eq(UserRole::getRoleId, roleId)
@@ -86,7 +95,14 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
         return this.userService.queryPage(pageable, query);
     }
 
-    @Override
+    /**
+     * 分页查询未授权角色的用户
+     *
+     * @param pageable 分页参数
+     * @param query    查询参数
+     * @param roleId   角色ID
+     * @return 用户分页数据
+     */
     public IPage<UserBO> fetchUnauthorizedUserPage(Pageable pageable, UserQuery query, Long roleId) {
         List<Long> userIds = this.lambdaQuery()
             .eq(UserRole::getRoleId, roleId)
@@ -102,8 +118,13 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
         return this.userService.executeQueryPage(pageable, queryWrapper, UserBO.class);
     }
 
+    /**
+     * 改变授权用户
+     *
+     * @param authUserRoleDTO 授权用户角色信息
+     * @param isCancel        是否是取消授权
+     */
     @Transactional(rollbackFor = Exception.class)
-    @Override
     public void changeAuthUser(AuthUserRoleDTO authUserRoleDTO, boolean isCancel) {
         // 取消授权
         if (isCancel) {
@@ -134,7 +155,13 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
         this.saveBatch(newUserRole);
     }
 
-    @Override
+    /**
+     * 授权用户
+     *
+     * @param userId  用户ID
+     * @param roleIds 角色ID列表
+     */
+    @Transactional(rollbackFor = Exception.class)
     public void authUser(Long userId, List<Long> roleIds) {
         if (userId == null || CollectionUtil.isEmpty(roleIds)) {
             return;
@@ -152,10 +179,15 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
                     .build()
             )
             .collect(Collectors.toList());
-        this.resolveProxy().saveBatch(newUserRole);
+        this.saveBatch(newUserRole);
     }
 
-    @Override
+    /**
+     * 判断用户是否是超级管理员
+     *
+     * @param userId 用户id
+     * @return true-是超级管理员 false-不是
+     */
     public boolean judgeUserIsAdmin(Long userId) {
         if (userId == null) {
             return false;

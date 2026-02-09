@@ -74,4 +74,9 @@ public class ArticleQuery extends BaseQuery {
      */
     @Query(type = QueryType.SORT)
     private String sortAsc;
+
+    /**
+     * 标签ID
+     */
+    private Long tagId;
 }

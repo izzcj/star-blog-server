@@ -3,7 +3,7 @@ package com.ale.starblog.admin.system.controller;
 import cn.hutool.core.bean.BeanUtil;
 import com.ale.starblog.admin.system.domain.entity.Menu;
 import com.ale.starblog.admin.system.domain.pojo.menu.*;
-import com.ale.starblog.admin.system.service.IMenuService;
+import com.ale.starblog.admin.system.service.MenuService;
 import com.ale.starblog.framework.common.domain.JsonResult;
 import com.ale.starblog.framework.common.utils.SecurityUtils;
 import com.ale.starblog.framework.core.controller.BaseController;
@@ -20,7 +20,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/system/menu")
-public class MenuController extends BaseController<Menu, IMenuService, MenuVO, MenuBO, MenuQuery, CreateMenuDTO, ModifyMenuDTO> {
+public class MenuController extends BaseController<Menu, MenuService, MenuVO, MenuBO, MenuQuery, CreateMenuDTO, ModifyMenuDTO> {
 
     /**
      * 获取菜单树

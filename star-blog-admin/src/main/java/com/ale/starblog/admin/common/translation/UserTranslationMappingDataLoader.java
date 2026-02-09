@@ -3,7 +3,7 @@ package com.ale.starblog.admin.common.translation;
 import cn.hutool.core.lang.Pair;
 import com.ale.starblog.admin.common.constants.TranslationConstants;
 import com.ale.starblog.admin.system.domain.entity.User;
-import com.ale.starblog.admin.system.service.IUserService;
+import com.ale.starblog.admin.system.service.UserService;
 import com.ale.starblog.framework.common.enumeration.SwitchStatus;
 import com.ale.starblog.framework.core.translation.GenericTranslationMappingData;
 import com.ale.starblog.framework.core.translation.GenericTranslationMappingDataLoader;
@@ -30,7 +30,7 @@ public class UserTranslationMappingDataLoader implements GenericTranslationMappi
     /**
      * 用户服务
      */
-    private final IUserService userService;
+    private final UserService userService;
 
     @Override
     public boolean supports(String s) {

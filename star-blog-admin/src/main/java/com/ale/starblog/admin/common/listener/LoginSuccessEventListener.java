@@ -6,7 +6,7 @@ import com.ale.starblog.admin.common.login.AuthUser;
 import com.ale.starblog.admin.system.constants.StatInfoConstants;
 import com.ale.starblog.admin.system.domain.entity.User;
 import com.ale.starblog.admin.system.listener.DailyStatInfoChangeEvent;
-import com.ale.starblog.admin.system.service.IUserService;
+import com.ale.starblog.admin.system.service.UserService;
 import com.ale.starblog.framework.common.utils.CastUtils;
 import com.ale.starblog.framework.common.utils.ServletUtils;
 import com.ale.starblog.framework.security.event.VenusLoginSuccessEvent;
@@ -32,7 +32,7 @@ public class LoginSuccessEventListener implements ApplicationListener<VenusLogin
     /**
      * 用户服务
      */
-    private final IUserService userService;
+    private final UserService userService;
 
     @Override
     public void onApplicationEvent(@NonNull VenusLoginSuccessEvent event) {

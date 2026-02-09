@@ -4,7 +4,7 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.ale.starblog.admin.common.constants.TranslationConstants;
 import com.ale.starblog.admin.system.domain.entity.DictData;
-import com.ale.starblog.admin.system.service.IDictDataService;
+import com.ale.starblog.admin.system.service.DictDataService;
 import com.ale.starblog.framework.common.utils.CastUtils;
 import com.ale.starblog.framework.core.translation.GenericTranslationMappingData;
 import com.ale.starblog.framework.core.translation.GenericTranslationMappingDataLoader;
@@ -30,7 +30,7 @@ public class DictTranslationMappingDataLoader implements GenericTranslationMappi
     /**
      * 字典数据服务
      */
-    private final IDictDataService dictDataService;
+    private final DictDataService dictDataService;
 
     @Override
     public boolean supports(String s) {

@@ -1,7 +1,7 @@
 package com.ale.starblog.admin.blog.listener;
 
 import com.ale.starblog.admin.blog.domain.pojo.activity.ActivityBO;
-import com.ale.starblog.admin.blog.service.IActivityService;
+import com.ale.starblog.admin.blog.service.ActivityService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -21,7 +21,7 @@ public class ActivityPublishedEventListener {
     /**
      * 动态服务
      */
-    private final IActivityService activityService;
+    private final ActivityService activityService;
 
     /**
      * 动态发布事件处理

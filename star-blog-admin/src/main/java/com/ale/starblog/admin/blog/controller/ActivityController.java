@@ -4,8 +4,8 @@ import cn.hutool.core.bean.BeanUtil;
 import com.ale.starblog.admin.blog.domain.entity.Activity;
 import com.ale.starblog.admin.blog.domain.pojo.activity.ActivityQuery;
 import com.ale.starblog.admin.blog.domain.pojo.activity.ActivityVO;
-import com.ale.starblog.admin.blog.service.IActivityService;
-import com.ale.starblog.admin.blog.service.IArticleService;
+import com.ale.starblog.admin.blog.service.ActivityService;
+import com.ale.starblog.admin.blog.service.ArticleService;
 import com.ale.starblog.framework.common.domain.JsonPageResult;
 import com.ale.starblog.framework.core.query.QueryConditionResolver;
 import com.ale.starblog.framework.core.translation.GenericTranslationSupport;
@@ -34,12 +34,12 @@ public class ActivityController {
     /**
      * 动态服务
      */
-    private final IActivityService activityService;
+    private final ActivityService activityService;
 
     /**
      * 文章服务
      */
-    private final IArticleService articleService;
+    private final ArticleService articleService;
 
     /**
      * 分页查询动态

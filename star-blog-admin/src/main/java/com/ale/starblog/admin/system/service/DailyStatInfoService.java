@@ -1,8 +1,7 @@
-package com.ale.starblog.admin.system.service.impl;
+package com.ale.starblog.admin.system.service;
 
 import com.ale.starblog.admin.system.domain.entity.DailyStatInfo;
 import com.ale.starblog.admin.system.mapper.DailyStatInfoMapper;
-import com.ale.starblog.admin.system.service.IDailyStatInfoService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
@@ -13,5 +12,5 @@ import org.springframework.stereotype.Service;
  * @version 1.0.0 2025/12/10 9:33
  */
 @Service
-public class DailyStatInfoServiceImpl extends ServiceImpl<DailyStatInfoMapper, DailyStatInfo> implements IDailyStatInfoService {
+public class DailyStatInfoService extends ServiceImpl<DailyStatInfoMapper, DailyStatInfo> {
 }

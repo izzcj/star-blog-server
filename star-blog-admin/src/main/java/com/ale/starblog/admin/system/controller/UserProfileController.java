@@ -6,8 +6,8 @@ import com.ale.starblog.admin.common.utils.AuthenticationUtils;
 import com.ale.starblog.admin.system.domain.entity.User;
 import com.ale.starblog.admin.system.domain.pojo.role.RoleBO;
 import com.ale.starblog.admin.system.domain.pojo.user.*;
-import com.ale.starblog.admin.system.service.IUserRoleService;
-import com.ale.starblog.admin.system.service.IUserService;
+import com.ale.starblog.admin.system.service.UserRoleService;
+import com.ale.starblog.admin.system.service.UserService;
 import com.ale.starblog.framework.common.domain.JsonResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -30,12 +30,12 @@ public class UserProfileController {
     /**
      * 用户服务
      */
-    private final IUserService userService;
+    private final UserService userService;
 
     /**
      * 用户角色服务
      */
-    private final IUserRoleService userRoleService;
+    private final UserRoleService userRoleService;
 
     /**
      * 获取个人信息

@@ -1,32 +1,34 @@
-package com.ale.starblog.admin.blog.service.impl;
+package com.ale.starblog.admin.blog.service;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import com.ale.starblog.admin.blog.domain.entity.Article;
+import com.ale.starblog.admin.blog.domain.entity.ArticleTag;
 import com.ale.starblog.admin.blog.domain.pojo.activity.ActivityBO;
 import com.ale.starblog.admin.blog.domain.pojo.article.ArticleBO;
 import com.ale.starblog.admin.blog.domain.pojo.article.ArticleQuery;
 import com.ale.starblog.admin.blog.enums.ArticleStatus;
 import com.ale.starblog.admin.blog.listener.ActivityPublishedEvent;
 import com.ale.starblog.admin.blog.mapper.ArticleMapper;
-import com.ale.starblog.admin.blog.service.IArticleService;
-import com.ale.starblog.admin.blog.service.IArticleTagService;
 import com.ale.starblog.framework.common.exception.ServiceException;
 import com.ale.starblog.framework.common.utils.CastUtils;
 import com.ale.starblog.framework.core.constants.HookConstants;
-import com.ale.starblog.framework.core.service.AbstractCrudServiceImpl;
+import com.ale.starblog.framework.core.service.AbstractCrudService;
 import com.ale.starblog.framework.core.service.hook.HookContext;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * 文章服务实现类
+ * 文章服务
  *
  * @author Ale
  * @version 1.0.0
@@ -34,12 +36,30 @@ import java.util.stream.Collectors;
  */
 @Service
 @RequiredArgsConstructor
-public class ArticleServiceImpl extends AbstractCrudServiceImpl<ArticleMapper, Article, ArticleBO, ArticleQuery> implements IArticleService {
+public class ArticleService extends AbstractCrudService<ArticleMapper, Article, ArticleBO, ArticleQuery> {
 
     /**
      * 文章标签关联服务
      */
-    private final IArticleTagService articleTagService;
+    private final ArticleTagService articleTagService;
+
+    @Override
+    public void beforeQuery(LambdaQueryWrapper<Article> queryWrapper, HookContext context) {
+        ArticleQuery articleQuery = context.get(HookConstants.QUERY_KEY);
+        if (articleQuery.getTagId() != null) {
+            Set<Long> articleIds = this.articleTagService.lambdaQuery()
+                .eq(ArticleTag::getTagId, articleQuery.getTagId())
+                .list()
+                .stream()
+                .map(ArticleTag::getArticleId)
+                .collect(Collectors.toSet());
+            if (articleIds.isEmpty()) {
+                context.setTermination(true);
+                return;
+            }
+            queryWrapper.in(Article::getId, articleIds);
+        }
+    }
 
     @Override
     public void beforeCreate(Article entity, HookContext context) {
@@ -64,7 +84,12 @@ public class ArticleServiceImpl extends AbstractCrudServiceImpl<ArticleMapper, A
         this.articleTagService.updateArticleTags(entity.getId(), articleBO.getTagIds());
     }
 
-    @Override
+    /**
+     * 增加文章浏览量
+     * 访问量比较大时可以使用Redis进行缓存
+     *
+     * @param id 文章ID
+     */
     public void incrementViewCount(Long id) {
         Article article = this.lambdaQuery()
             .select(Article::getId, Article::getViewCount)
@@ -78,7 +103,12 @@ public class ArticleServiceImpl extends AbstractCrudServiceImpl<ArticleMapper, A
         }
     }
 
-    @Override
+    /**
+     * 获取文章标题映射
+     *
+     * @param ids 文章ID集合
+     * @return 文章标题映射
+     */
     public Map<Long, String> fetchTitleMapping(Collection<Long> ids) {
         if (CollectionUtil.isEmpty(ids)) {
             return Collections.emptyMap();
@@ -91,7 +121,12 @@ public class ArticleServiceImpl extends AbstractCrudServiceImpl<ArticleMapper, A
             .collect(Collectors.toMap(Article::getId, Article::getTitle));
     }
 
-    @Override
+    /**
+     * 获取文章分类数量映射
+     *
+     * @param categories 文章分类集合
+     * @return 文章分类数量映射
+     */
     public Map<String, Long> fetchCategoryCountMapping(Collection<String> categories) {
         if (CollectionUtil.isEmpty(categories)) {
             return Collections.emptyMap();
@@ -104,10 +139,15 @@ public class ArticleServiceImpl extends AbstractCrudServiceImpl<ArticleMapper, A
             .collect(Collectors.groupingBy(Article::getCategory, Collectors.counting()));
     }
 
-    @Override
+    /**
+     * 发布文章
+     *
+     * @param id 文章ID
+     */
+    @Transactional(rollbackFor = Exception.class)
     public void publish(Long id) {
         Article article = this.lambdaQuery()
-            .select(Article::getId, Article::getStatus)
+            .select(Article::getId, Article::getStatus, Article::getCreateBy, Article::getCreateTime)
             .eq(Article::getId, id)
             .oneOpt()
             .orElseThrow(() -> new ServiceException("发布失败！文章[{}]不存在！", id));
@@ -123,7 +163,11 @@ public class ArticleServiceImpl extends AbstractCrudServiceImpl<ArticleMapper, A
         SpringUtil.publishEvent(new ActivityPublishedEvent(this, ActivityBO.convertFromArticle(article)));
     }
 
-    @Override
+    /**
+     * 切换置顶状态
+     *
+     * @param id 文章ID
+     */
     public void toggleTop(Long id) {
         Article article = this.lambdaQuery()
             .select(Article::getId, Article::getTop)
@@ -136,7 +180,11 @@ public class ArticleServiceImpl extends AbstractCrudServiceImpl<ArticleMapper, A
             .update();
     }
 
-    @Override
+    /**
+     * 切换推荐状态
+     *
+     * @param id 文章ID
+     */
     public void toggleRecommend(Long id) {
         Article article = this.lambdaQuery()
             .select(Article::getId, Article::getRecommended)

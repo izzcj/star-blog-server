@@ -2,7 +2,7 @@ package com.ale.starblog.admin.system.controller;
 
 import com.ale.starblog.admin.system.domain.entity.DictData;
 import com.ale.starblog.admin.system.domain.pojo.dict.data.*;
-import com.ale.starblog.admin.system.service.IDictDataService;
+import com.ale.starblog.admin.system.service.DictDataService;
 import com.ale.starblog.framework.common.domain.JsonResult;
 import com.ale.starblog.framework.common.support.Option;
 import com.ale.starblog.framework.core.convert.OptionConvertible;
@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
  */
 @RestController
 @RequestMapping("/system/dict-data")
-public class DictDataController extends BaseController<DictData, IDictDataService, DictDataVO, DictDataBO, DictDataQuery, CreateDictDataDTO, ModifyDictDataDTO> {
+public class DictDataController extends BaseController<DictData, DictDataService, DictDataVO, DictDataBO, DictDataQuery, CreateDictDataDTO, ModifyDictDataDTO> {
 
     /**
      * 获取字典数据选项

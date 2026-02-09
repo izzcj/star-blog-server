@@ -1,4 +1,4 @@
-package com.ale.starblog.admin.system.service.impl;
+package com.ale.starblog.admin.system.service;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
@@ -6,11 +6,8 @@ import com.ale.starblog.admin.system.domain.entity.Menu;
 import com.ale.starblog.admin.system.domain.pojo.menu.*;
 import com.ale.starblog.admin.system.domain.pojo.role.RoleBO;
 import com.ale.starblog.admin.system.mapper.MenuMapper;
-import com.ale.starblog.admin.system.service.IMenuService;
-import com.ale.starblog.admin.system.service.IRoleMenuService;
-import com.ale.starblog.admin.system.service.IUserRoleService;
 import com.ale.starblog.framework.common.utils.TreeUtils;
-import com.ale.starblog.framework.core.service.AbstractCrudServiceImpl;
+import com.ale.starblog.framework.core.service.AbstractCrudService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -27,19 +24,24 @@ import java.util.stream.Collectors;
  */
 @Service
 @RequiredArgsConstructor
-public class MenuServiceImpl extends AbstractCrudServiceImpl<MenuMapper, Menu, MenuBO, MenuQuery> implements IMenuService {
+public class MenuService extends AbstractCrudService<MenuMapper, Menu, MenuBO, MenuQuery> {
 
     /**
      * 用户角色服务
      */
-    private final IUserRoleService userRoleService;
+    private final UserRoleService userRoleService;
 
     /**
      * 角色菜单服务
      */
-    private final IRoleMenuService roleMenuService;
+    private final RoleMenuService roleMenuService;
 
-    @Override
+    /**
+     * 根据用户ID查询菜单树信息
+     *
+     * @param userId 用户ID
+     * @return 菜单列表
+     */
     public List<MenuBO> queryMenuTreeByUserId(Long userId) {
         List<Menu> menuList;
         // 未登录只获取公共菜单

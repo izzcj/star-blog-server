@@ -3,8 +3,8 @@ package com.ale.starblog.admin.common.login;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;
 import com.ale.starblog.admin.system.domain.entity.User;
-import com.ale.starblog.admin.system.service.IUserRoleService;
-import com.ale.starblog.admin.system.service.IUserService;
+import com.ale.starblog.admin.system.service.UserRoleService;
+import com.ale.starblog.admin.system.service.UserService;
 import com.ale.starblog.framework.common.security.AuthenticatedUser;
 import com.ale.starblog.framework.security.authentication.LoginProcessor;
 import com.ale.starblog.framework.security.enums.LoginType;
@@ -33,12 +33,12 @@ public class AccountPasswordLoginProcessor implements LoginProcessor {
     /**
      * 用户服务
      */
-    private final IUserService userService;
+    private final UserService userService;
 
     /**
      * 用户角色服务
      */
-    private final IUserRoleService userRoleService;
+    private final UserRoleService userRoleService;
 
     /**
      * 密码编码器

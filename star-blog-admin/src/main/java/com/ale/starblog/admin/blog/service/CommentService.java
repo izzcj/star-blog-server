@@ -1,4 +1,4 @@
-package com.ale.starblog.admin.blog.service.impl;
+package com.ale.starblog.admin.blog.service;
 
 import cn.hutool.core.util.BooleanUtil;
 import cn.hutool.core.util.StrUtil;
@@ -11,14 +11,12 @@ import com.ale.starblog.admin.blog.domain.pojo.comment.CommentQuery;
 import com.ale.starblog.admin.blog.enums.CommentStatus;
 import com.ale.starblog.admin.blog.listener.ActivityPublishedEvent;
 import com.ale.starblog.admin.blog.mapper.CommentMapper;
-import com.ale.starblog.admin.blog.service.ICommentLikeService;
-import com.ale.starblog.admin.blog.service.ICommentService;
 import com.ale.starblog.admin.system.constants.SystemConfigConstants;
-import com.ale.starblog.admin.system.service.ISystemConfigService;
+import com.ale.starblog.admin.system.service.SystemConfigService;
 import com.ale.starblog.framework.common.exception.ServiceException;
 import com.ale.starblog.framework.common.utils.SecurityUtils;
 import com.ale.starblog.framework.core.query.QueryConditionResolver;
-import com.ale.starblog.framework.core.service.AbstractCrudServiceImpl;
+import com.ale.starblog.framework.core.service.AbstractCrudService;
 import com.ale.starblog.framework.core.service.hook.HookContext;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -33,24 +31,24 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * 评论服务实现类
+ * 评论服务
  *
  * @author Ale
  * @version 1.0.0 2025/11/27 16:50
  */
 @Service
 @RequiredArgsConstructor
-public class CommentServiceImpl extends AbstractCrudServiceImpl<CommentMapper, Comment, CommentBO, CommentQuery> implements ICommentService {
+public class CommentService extends AbstractCrudService<CommentMapper, Comment, CommentBO, CommentQuery> {
 
     /**
      * 评论点赞服务
      */
-    private final ICommentLikeService commentLikeService;
+    private final CommentLikeService commentLikeService;
 
     /**
      * 系统配置服务
      */
-    private final ISystemConfigService systemConfigService;
+    private final SystemConfigService systemConfigService;
 
     @Override
     public void beforeCreate(Comment entity, HookContext context) {
@@ -98,7 +96,13 @@ public class CommentServiceImpl extends AbstractCrudServiceImpl<CommentMapper, C
         );
     }
 
-    @Override
+    /**
+     * 分页查询评论列表
+     *
+     * @param pageable 分页参数
+     * @param query    查询条件
+     * @return 评论分页数据
+     */
     public IPage<CommentBO> fetchPage(Pageable pageable, CommentQuery query) {
         LambdaQueryWrapper<Comment> queryWrapper = QueryConditionResolver.resolveLambda(query);
 
@@ -139,7 +143,12 @@ public class CommentServiceImpl extends AbstractCrudServiceImpl<CommentMapper, C
         return result;
     }
 
-    @Override
+    /**
+     * 点赞评论
+     *
+     * @param commentId 评论ID
+     * @param userId    用户ID
+     */
     @Transactional(rollbackFor = Exception.class)
     public void likeComment(Long commentId, Long userId) {
         // 1. 检查评论是否存在
@@ -171,7 +180,12 @@ public class CommentServiceImpl extends AbstractCrudServiceImpl<CommentMapper, C
             .update();
     }
 
-    @Override
+    /**
+     * 取消点赞
+     *
+     * @param commentId 评论ID
+     * @param userId    用户ID
+     */
     @Transactional(rollbackFor = Exception.class)
     public void unlikeComment(Long commentId, Long userId) {
         // 1. 检查评论是否存在
@@ -200,7 +214,13 @@ public class CommentServiceImpl extends AbstractCrudServiceImpl<CommentMapper, C
             .update();
     }
 
-    @Override
+    /**
+     * 批量审核评论
+     *
+     * @param ids          评论ID列表
+     * @param status       审核状态
+     * @param rejectReason 驳回原因
+     */
     public void batchAuditComments(List<Long> ids, CommentStatus status, String rejectReason) {
         if (status != CommentStatus.PASS && status != CommentStatus.REJECT) {
             throw new ServiceException("审核状态只能是通过或拒绝");

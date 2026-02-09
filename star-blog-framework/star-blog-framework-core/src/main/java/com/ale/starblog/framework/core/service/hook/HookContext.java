@@ -5,6 +5,7 @@ import com.ale.starblog.framework.common.utils.CastUtils;
 import com.google.common.collect.Maps;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.Map;
 import java.util.function.Function;
@@ -25,6 +26,12 @@ public class HookContext implements DataRepository {
      * 数据存储Map
      */
     private final Map<String, Object> dataMap = Maps.newHashMapWithExpectedSize(32);
+
+    /**
+     * 是否终止执行
+     */
+    @Setter
+    private boolean termination;
 
     @Override
     public <T> T set(String key, T value) {

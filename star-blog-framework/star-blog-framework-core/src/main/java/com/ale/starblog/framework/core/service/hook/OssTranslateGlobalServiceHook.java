@@ -47,7 +47,7 @@ public class OssTranslateGlobalServiceHook extends OssUploadFieldResolveSupport 
      * @param entities 实体集合
      */
     private void processEntities(List<BaseEntity> entities) {
-        // 1找出需要处理的字段（只做一次反射）
+        // 找出需要处理的字段（只做一次反射）
         List<ReflectionField> ossFields = this.resolvePublicOssFields(entities.getFirst());
         if (ossFields.isEmpty()) {
             return;
@@ -106,8 +106,8 @@ public class OssTranslateGlobalServiceHook extends OssUploadFieldResolveSupport 
             }
             // 单值
             case String id -> {
-                field.setValue(entity, urlMap.getOrDefault(id, id)); // 找不到就保留原值
-                return; // 找不到就保留原值
+                field.setValue(entity, urlMap.getOrDefault(id, id));
+                return;
             }
             // 集合
             case Collection<?> collection -> {

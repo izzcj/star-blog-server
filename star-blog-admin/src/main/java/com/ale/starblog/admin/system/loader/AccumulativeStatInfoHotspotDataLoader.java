@@ -1,12 +1,12 @@
 package com.ale.starblog.admin.system.loader;
 
-import com.ale.starblog.admin.blog.service.IArticleService;
-import com.ale.starblog.admin.blog.service.ICommentService;
+import com.ale.starblog.admin.blog.service.ArticleService;
+import com.ale.starblog.admin.blog.service.CommentService;
 import com.ale.starblog.admin.common.cache.HotspotDataLoader;
 import com.ale.starblog.admin.system.constants.StatInfoConstants;
 import com.ale.starblog.admin.system.domain.entity.DailyStatInfo;
 import com.ale.starblog.admin.system.domain.pojo.stat_info.accumulative.AccumulativeStatInfoVO;
-import com.ale.starblog.admin.system.service.IDailyStatInfoService;
+import com.ale.starblog.admin.system.service.DailyStatInfoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -25,17 +25,17 @@ public class AccumulativeStatInfoHotspotDataLoader implements HotspotDataLoader<
     /**
      * 每日统计信息服务
      */
-    private final IDailyStatInfoService dailyStatInfoService;
+    private final DailyStatInfoService dailyStatInfoService;
 
     /**
      * 文章服务
      */
-    private final IArticleService articleService;
+    private final ArticleService articleService;
 
     /**
      * 评论服务
      */
-    private final ICommentService commentService;
+    private final CommentService commentService;
 
     @Override
     public AccumulativeStatInfoVO load() {

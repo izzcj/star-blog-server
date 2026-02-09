@@ -2,7 +2,7 @@ package com.ale.starblog.admin.system.controller;
 
 import com.ale.starblog.admin.system.domain.entity.DictType;
 import com.ale.starblog.admin.system.domain.pojo.dict.type.*;
-import com.ale.starblog.admin.system.service.IDictTypeService;
+import com.ale.starblog.admin.system.service.DictTypeService;
 import com.ale.starblog.framework.common.domain.JsonResult;
 import com.ale.starblog.framework.core.controller.BaseController;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/system/dict-type")
-public class DictTypeController extends BaseController<DictType, IDictTypeService, DictTypeVO, DictTypeBO, DictTypeQuery, CreateDictTypeDTO, ModifyDictTypeDTO> {
+public class DictTypeController extends BaseController<DictType, DictTypeService, DictTypeVO, DictTypeBO, DictTypeQuery, CreateDictTypeDTO, ModifyDictTypeDTO> {
 
     /**
      * 刷新字典缓存

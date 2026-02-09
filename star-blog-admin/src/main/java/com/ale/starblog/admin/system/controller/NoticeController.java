@@ -2,7 +2,7 @@ package com.ale.starblog.admin.system.controller;
 
 import com.ale.starblog.admin.system.domain.entity.Notice;
 import com.ale.starblog.admin.system.domain.pojo.notice.*;
-import com.ale.starblog.admin.system.service.INoticeService;
+import com.ale.starblog.admin.system.service.NoticeService;
 import com.ale.starblog.framework.common.domain.JsonResult;
 import com.ale.starblog.framework.core.controller.BaseController;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping(value = "/system/notice")
-public class NoticeController extends BaseController<Notice, INoticeService, NoticeVO, NoticeBO, NoticeQuery, CreateNoticeDTO, ModifyNoticeDTO> {
+public class NoticeController extends BaseController<Notice, NoticeService, NoticeVO, NoticeBO, NoticeQuery, CreateNoticeDTO, ModifyNoticeDTO> {
 
     /**
      * 切换发布状态

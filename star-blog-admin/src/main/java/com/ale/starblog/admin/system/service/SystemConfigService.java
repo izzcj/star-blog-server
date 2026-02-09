@@ -1,4 +1,4 @@
-package com.ale.starblog.admin.system.service.impl;
+package com.ale.starblog.admin.system.service;
 
 import cn.hutool.core.util.StrUtil;
 import com.ale.starblog.admin.system.domain.entity.SystemConfig;
@@ -6,14 +6,13 @@ import com.ale.starblog.admin.system.domain.pojo.config.SystemConfigBO;
 import com.ale.starblog.admin.system.domain.pojo.config.SystemConfigQuery;
 import com.ale.starblog.admin.system.enums.SystemConfigType;
 import com.ale.starblog.admin.system.mapper.SystemConfigMapper;
-import com.ale.starblog.admin.system.service.ISystemConfigService;
 import com.ale.starblog.framework.common.exception.ServiceException;
 import com.ale.starblog.framework.common.utils.CastUtils;
 import com.ale.starblog.framework.common.utils.JsonUtils;
 import com.ale.starblog.framework.core.constants.HookConstants;
 import com.ale.starblog.framework.core.oss.OssMate;
 import com.ale.starblog.framework.core.oss.OssMateService;
-import com.ale.starblog.framework.core.service.AbstractCrudServiceImpl;
+import com.ale.starblog.framework.core.service.AbstractCrudService;
 import com.ale.starblog.framework.core.service.hook.HookContext;
 import com.alibaba.fastjson2.JSONObject;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +29,7 @@ import java.util.Objects;
  */
 @Service
 @RequiredArgsConstructor
-public class SystemConfigServiceImpl extends AbstractCrudServiceImpl<SystemConfigMapper, SystemConfig, SystemConfigBO, SystemConfigQuery> implements ISystemConfigService {
+public class SystemConfigService extends AbstractCrudService<SystemConfigMapper, SystemConfig, SystemConfigBO, SystemConfigQuery> {
 
     /**
      * Oss元信息服务
@@ -87,7 +86,25 @@ public class SystemConfigServiceImpl extends AbstractCrudServiceImpl<SystemConfi
         }
     }
 
-    @Override
+    /**
+     * 获取配置值
+     *
+     * @param key       配置键
+     * @param <T>       值类型
+     * @return 配置值
+     */
+    public <T> T fetchValueByKey(String key) {
+        return fetchValueByKey(key, true);
+    }
+
+    /**
+     * 获取配置值
+     *
+     * @param key       配置键
+     * @param parseJson 是否解析json
+     * @param <T>       值类型
+     * @return 配置值
+     */
     public <T> T fetchValueByKey(String key, boolean parseJson) {
         SystemConfig systemConfig = this.lambdaQuery()
             .eq(SystemConfig::getKey, key)

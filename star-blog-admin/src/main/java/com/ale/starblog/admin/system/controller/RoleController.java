@@ -2,8 +2,8 @@ package com.ale.starblog.admin.system.controller;
 
 import com.ale.starblog.admin.system.domain.entity.Role;
 import com.ale.starblog.admin.system.domain.pojo.role.*;
-import com.ale.starblog.admin.system.service.IRoleMenuService;
-import com.ale.starblog.admin.system.service.IRoleService;
+import com.ale.starblog.admin.system.service.RoleMenuService;
+import com.ale.starblog.admin.system.service.RoleService;
 import com.ale.starblog.framework.common.domain.JsonResult;
 import com.ale.starblog.framework.common.support.Option;
 import com.ale.starblog.framework.core.controller.BaseController;
@@ -25,12 +25,12 @@ import java.util.Set;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/system/role")
-public class RoleController extends BaseController<Role, IRoleService, RoleVO, RoleBO, RoleQuery, CreateRoleDTO, ModifyRoleDTO> {
+public class RoleController extends BaseController<Role, RoleService, RoleVO, RoleBO, RoleQuery, CreateRoleDTO, ModifyRoleDTO> {
 
     /**
      * 角色菜单服务
      */
-    private final IRoleMenuService roleMenuService;
+    private final RoleMenuService roleMenuService;
 
     /**
      * 获取角色选项

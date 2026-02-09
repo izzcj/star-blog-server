@@ -1,17 +1,12 @@
 package com.ale.starblog.admin.blog.controller;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.collection.CollectionUtil;
 import com.ale.starblog.admin.blog.domain.entity.Article;
 import com.ale.starblog.admin.blog.domain.pojo.article.*;
 import com.ale.starblog.admin.blog.domain.pojo.tag.ArticleTagVO;
-import com.ale.starblog.admin.blog.service.IArticleService;
-import com.ale.starblog.admin.blog.service.IArticleTagService;
-import com.ale.starblog.admin.system.constants.DictTypeConstants;
-import com.ale.starblog.admin.system.constants.SystemConfigConstants;
-import com.ale.starblog.admin.system.domain.entity.DictData;
-import com.ale.starblog.admin.system.service.IDictDataService;
-import com.ale.starblog.admin.system.service.ISystemConfigService;
+import com.ale.starblog.admin.blog.service.ArticleCategoryNavbarService;
+import com.ale.starblog.admin.blog.service.ArticleService;
+import com.ale.starblog.admin.blog.service.ArticleTagService;
 import com.ale.starblog.framework.common.domain.JsonResult;
 import com.ale.starblog.framework.common.exception.ServiceException;
 import com.ale.starblog.framework.core.controller.BaseController;
@@ -19,9 +14,7 @@ import com.ale.starblog.framework.core.translation.GenericTranslationSupport;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -35,22 +28,17 @@ import java.util.stream.Collectors;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/blog/article")
-public class ArticleController extends BaseController<Article, IArticleService, ArticleVO, ArticleBO, ArticleQuery, CreateArticleDTO, ModifyArticleDTO> {
+public class ArticleController extends BaseController<Article, ArticleService, ArticleVO, ArticleBO, ArticleQuery, CreateArticleDTO, ModifyArticleDTO> {
 
     /**
      * 文章标签关联服务
      */
-    private final IArticleTagService articleTagService;
+    private final ArticleTagService articleTagService;
 
     /**
-     * 系统配置服务
+     * 文章分类导航服务
      */
-    private final ISystemConfigService systemConfigService;
-
-    /**
-     * 字典数据服务
-     */
-    private final IDictDataService dictDataService;
+    private final ArticleCategoryNavbarService articleCategoryNavbarService;
 
     /**
      * 获取文章详情
@@ -86,33 +74,7 @@ public class ArticleController extends BaseController<Article, IArticleService, 
      */
     @GetMapping("/category-navbar")
     public JsonResult<List<ArticleCategoryNavbarVO>> fetchCategoryNavbar() {
-        List<String> homeArticleCategoryNavbarConfig = this.systemConfigService.fetchValueByKey(SystemConfigConstants.HOME_ARTICLE_CATEGORY_NAVBAR);
-        if (CollectionUtil.isEmpty(homeArticleCategoryNavbarConfig)) {
-            throw new ServiceException("系统未配置文章分类导航栏！");
-        }
-        List<DictData> articleCategories = this.dictDataService.lambdaQuery()
-            .eq(DictData::getDictKey, DictTypeConstants.DICT_TYPE_ARTICLE_CATEGORY)
-            .in(DictData::getDictValue, homeArticleCategoryNavbarConfig)
-            .orderByAsc(DictData::getSort)
-            .list();
-        if (CollectionUtil.isEmpty(articleCategories)) {
-            throw new ServiceException("文章类型不存在！");
-        }
-        Map<String, Long> categoryCountMapping = this.service.fetchCategoryCountMapping(homeArticleCategoryNavbarConfig);
-        return JsonResult.success(
-            articleCategories
-                .stream()
-                .sorted(Comparator.comparingInt(DictData::getSort))
-                .map(articleCategory ->
-                    ArticleCategoryNavbarVO.builder()
-                        .categoryLabel(articleCategory.getDictLabel())
-                        .categoryValue(articleCategory.getDictValue())
-                        .articleCount(categoryCountMapping.getOrDefault(articleCategory.getDictValue(), 0L).intValue())
-                        .cssClass(articleCategory.getCssClass())
-                        .build()
-                )
-                .collect(Collectors.toList())
-        );
+        return JsonResult.success(this.articleCategoryNavbarService.fetchCategoryNavbar());
     }
 
     /**
