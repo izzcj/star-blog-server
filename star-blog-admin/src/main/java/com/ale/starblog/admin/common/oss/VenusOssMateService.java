@@ -61,6 +61,9 @@ public class VenusOssMateService implements OssMateService {
 
     @Override
     public List<OssMate> loadByUrls(Collection<String> urls) {
+        if (CollectionUtil.isEmpty(urls)) {
+            return Collections.emptyList();
+        }
         return this.ossMateMapper.selectList(
                 Wrappers.<OssMate>lambdaQuery().in(OssMate::getUrl, urls)
         );
@@ -83,6 +86,9 @@ public class VenusOssMateService implements OssMateService {
 
     @Override
     public void batchRemove(Collection<String> ids) {
+        if (CollectionUtil.isEmpty(ids)) {
+            return;
+        }
         this.ossMateMapper.deleteByIds(ids);
     }
 }

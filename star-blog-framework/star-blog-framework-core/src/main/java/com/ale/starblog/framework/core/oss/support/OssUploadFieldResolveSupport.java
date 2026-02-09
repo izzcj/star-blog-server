@@ -1,5 +1,6 @@
 package com.ale.starblog.framework.core.oss.support;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.ale.starblog.framework.common.constants.StringConstants;
 import com.ale.starblog.framework.common.domain.entity.BaseEntity;
 import com.ale.starblog.framework.common.support.ReflectionField;
@@ -66,7 +67,11 @@ public abstract class OssUploadFieldResolveSupport {
             return CastUtils.cast(fieldValue);
         }
         if (ossUpload.richText()) {
-            List<OssMate> ossMates = this.ossMateService.loadByUrls(this.parseUrls(CastUtils.cast(fieldValue)));
+            Set<String> urls = this.parseUrls(CastUtils.cast(fieldValue));
+            if (CollectionUtil.isEmpty(urls)) {
+                return Collections.emptySet();
+            }
+            List<OssMate> ossMates = this.ossMateService.loadByUrls(urls);
             return ossMates.stream()
                 .map(OssMate::getId)
                 .collect(Collectors.toSet());
