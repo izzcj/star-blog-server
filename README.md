@@ -6,7 +6,7 @@
 
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.9-brightgreen.svg)](https://spring.io/projects/spring-boot)
 [![Java](https://img.shields.io/badge/Java-21-orange.svg)](https://openjdk.java.net/)
-[![License](https://img.shields.io/badge/license-Proprietary-blue.svg)]()
+![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)
 
 </div>
 
