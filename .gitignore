@@ -34,7 +34,7 @@ build/
 
 ### Docker ###
 /docker/nginx/ssl
-/docker/nginx/html
+/docker/nginx/html/admin/dist
 /docker/.env
 
 ### Claude Code ###
