@@ -38,7 +38,7 @@ public class SystemConfigService extends AbstractCrudService<SystemConfigMapper,
 
     @Override
     public void beforeCreate(SystemConfig entity, HookContext context) {
-        if (SystemConfigType.IMAGE.match(entity.getType())) {
+        if (SystemConfigType.IMAGE.match(entity.getType()) && StrUtil.isNotBlank(entity.getValue())) {
             OssMate ossMate = this.ossMateService.load(entity.getValue());
             if (ossMate == null) {
                 throw new ServiceException("上传图片[{}]的元信息不存在！", entity.getValue());
@@ -50,7 +50,7 @@ public class SystemConfigService extends AbstractCrudService<SystemConfigMapper,
 
     @Override
     public void beforeModify(SystemConfig entity, HookContext context) {
-        if (SystemConfigType.IMAGE.match(entity.getType())) {
+        if (SystemConfigType.IMAGE.match(entity.getType()) && StrUtil.isNotBlank(entity.getValue())) {
             SystemConfig oldConfig = context.get(HookConstants.OLD_ENTITY_KEY);
             if (Objects.equals(oldConfig.getValue(), entity.getValue())) {
                 return;
@@ -76,7 +76,7 @@ public class SystemConfigService extends AbstractCrudService<SystemConfigMapper,
 
     @Override
     public void afterDelete(SystemConfig entity, HookContext context) {
-        if (SystemConfigType.IMAGE.match(entity.getType())) {
+        if (SystemConfigType.IMAGE.match(entity.getType()) && StrUtil.isNotBlank(entity.getValue())) {
             OssMate ossMate = this.ossMateService.load(entity.getValue());
             if (ossMate == null) {
                 throw new ServiceException("图片[{}]的元信息不存在！", entity.getValue());

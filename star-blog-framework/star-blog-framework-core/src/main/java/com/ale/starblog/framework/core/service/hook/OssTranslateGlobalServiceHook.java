@@ -30,6 +30,9 @@ public class OssTranslateGlobalServiceHook extends OssUploadFieldResolveSupport 
 
     @Override
     public void afterQuery(BaseEntity entity, HookContext context) {
+        if (entity == null) {
+            return;
+        }
         this.processEntities(CollectionUtil.newArrayList(entity));
     }
 
@@ -47,6 +50,9 @@ public class OssTranslateGlobalServiceHook extends OssUploadFieldResolveSupport 
      * @param entities 实体集合
      */
     private void processEntities(List<BaseEntity> entities) {
+        if (CollectionUtil.isEmpty(entities)) {
+            return;
+        }
         // 找出需要处理的字段（只做一次反射）
         List<ReflectionField> ossFields = this.resolvePublicOssFields(entities.getFirst());
         if (ossFields.isEmpty()) {
@@ -83,9 +89,9 @@ public class OssTranslateGlobalServiceHook extends OssUploadFieldResolveSupport 
      * @return 公共Oss上传字段列表
      */
     private List<ReflectionField> resolvePublicOssFields(BaseEntity entity) {
-        return resolveOssUploadFields(entity).stream()
-            .filter(f -> {
-                OssUpload anno = f.field().getAnnotation(OssUpload.class);
+        return super.resolveOssUploadFields(entity).stream()
+            .filter(reflectionField -> {
+                OssUpload anno = reflectionField.field().getAnnotation(OssUpload.class);
                 return !anno.richText() && anno.publicAccess();
             })
             .toList();
