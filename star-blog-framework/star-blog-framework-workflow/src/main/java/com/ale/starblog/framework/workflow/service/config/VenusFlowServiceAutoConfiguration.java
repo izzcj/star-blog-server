@@ -1,22 +1,20 @@
 package com.ale.starblog.framework.workflow.service.config;
 
 import com.ale.starblog.framework.workflow.dao.*;
-import com.ale.starblog.framework.workflow.dao.mybatis.config.VenusFlowMybatisPlusAutoConfiguration;
 import com.ale.starblog.framework.workflow.service.*;
 import com.ale.starblog.framework.workflow.service.impl.*;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Import;
 
 /**
- * Venus流程引擎MybatisPlus自动配置类
+ * Venus流程引擎服务自动配置类
  *
  * @author Ale
  * @version 1.0.0 2025/6/26 17:27
  */
 @AutoConfiguration
-@Import(VenusFlowMybatisPlusAutoConfiguration.class)
 public class VenusFlowServiceAutoConfiguration {
 
     /**
@@ -26,6 +24,7 @@ public class VenusFlowServiceAutoConfiguration {
      * @return 流程定义服务bean
      */
     @Bean
+    @ConditionalOnBean(FlowDefinitionDao.class)
     @ConditionalOnMissingBean
     public DefinitionService definitionService(FlowDefinitionDao definitionDao) {
         return new DefaultDefinitionService(definitionDao);
@@ -40,6 +39,7 @@ public class VenusFlowServiceAutoConfiguration {
      * @return 流程实例服务bean
      */
     @Bean
+    @ConditionalOnBean({FlowDefinitionDao.class, FlowInstanceDao.class, FlowHistoryInstanceDao.class})
     @ConditionalOnMissingBean
     public InstanceService instanceService(FlowDefinitionDao definitionDao, FlowInstanceDao instanceDao, FlowHistoryInstanceDao historyInstanceDao) {
         return new DefaultInstanceService(definitionDao, instanceDao, historyInstanceDao);
@@ -55,6 +55,7 @@ public class VenusFlowServiceAutoConfiguration {
      * @return 流程任务服务bean
      */
     @Bean
+    @ConditionalOnBean({FlowTaskDao.class, FlowTaskActorDao.class, FlowHistoryTaskDao.class, FlowHistoryTaskActorDao.class})
     @ConditionalOnMissingBean
     public TaskService taskService(FlowTaskDao taskDao, FlowTaskActorDao taskActorDao, FlowHistoryTaskDao historyTaskDao, FlowHistoryTaskActorDao historyTaskActorDao) {
         return new DefaultTaskService(taskDao, taskActorDao, historyTaskDao, historyTaskActorDao);
@@ -67,6 +68,7 @@ public class VenusFlowServiceAutoConfiguration {
      * @return 流程执行服务bean
      */
     @Bean
+    @ConditionalOnBean(FlowExecutionDao.class)
     @ConditionalOnMissingBean
     public ExecutionService executionService(FlowExecutionDao executionDao) {
         return new DefaultExecutionService(executionDao);
@@ -86,6 +88,16 @@ public class VenusFlowServiceAutoConfiguration {
      * @return 流程查询服务bean
      */
     @Bean
+    @ConditionalOnBean({
+        FlowDefinitionDao.class,
+        FlowInstanceDao.class,
+        FlowHistoryInstanceDao.class,
+        FlowExecutionDao.class,
+        FlowTaskDao.class,
+        FlowTaskActorDao.class,
+        FlowHistoryTaskDao.class,
+        FlowHistoryTaskActorDao.class
+    })
     @ConditionalOnMissingBean
     public QueryService queryService(FlowDefinitionDao definitionDao,
                                      FlowInstanceDao instanceDao,
