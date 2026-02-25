@@ -43,11 +43,12 @@ public class GenericTranslationAutoConfiguration {
     /**
      * 通用翻译处理类初始化器Bean
      *
+     * @param genericTranslatorObjectProvider 通用翻译器对象提供器
      * @return Bean
      */
     @Bean
-    public static GenericTranslationSupportInitializer genericTranslationSupportInitializer() {
-        return new GenericTranslationSupportInitializer();
+    public GenericTranslationSupportInitializer genericTranslationSupportInitializer(ObjectProvider<GenericTranslator> genericTranslatorObjectProvider) {
+        return new GenericTranslationSupportInitializer(genericTranslatorObjectProvider);
     }
 
 }

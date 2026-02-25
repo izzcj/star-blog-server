@@ -106,12 +106,14 @@ public class VenusFlowAutoConfiguration {
     /**
      * 流程实例模型支持类初始化器
      *
+     * @param instanceModelParser 示例模型解析器
+     * @param flowEngineCache     流程引擎缓存
      * @return 流程实例模型支持类初始化器Bean
      */
     @Bean
-    @ConditionalOnBean(InstanceModelParser.class)
-    public static InstanceModelSupportInitializer instanceModelSupportInitializer() {
-        return new InstanceModelSupportInitializer();
+    @ConditionalOnBean({InstanceModelParser.class, FlowEngineCache.class})
+    public InstanceModelSupportInitializer instanceModelSupportInitializer(InstanceModelParser instanceModelParser, FlowEngineCache flowEngineCache) {
+        return new InstanceModelSupportInitializer(instanceModelParser, flowEngineCache);
     }
 
     /**
@@ -152,23 +154,26 @@ public class VenusFlowAutoConfiguration {
     /**
      * 条件执行器支持类初始化器
      *
+     * @param conditionParser   条件解析器
+     * @param conditionExecutor 条件执行器
      * @return 条件执行器支持类初始化器Bean
      */
     @Bean
-    @ConditionalOnBean({ConditionExecutor.class, ConditionParser.class})
-    public static ConditionExecutorSupportInitializer conditionExecutorSupportInitializer() {
-        return new ConditionExecutorSupportInitializer();
+    @ConditionalOnBean({ConditionParser.class, ConditionExecutor.class})
+    public ConditionExecutorSupportInitializer conditionExecutorSupportInitializer(ConditionParser conditionParser, ConditionExecutor conditionExecutor) {
+        return new ConditionExecutorSupportInitializer(conditionParser, conditionExecutor);
     }
 
     /**
      * 任务受理人支持类初始化器
      *
+     * @param taskAssigneeParser 任务受理人解析器
      * @return 任务分配支持类初始化器Bean
      */
     @Bean
     @ConditionalOnBean(TaskAssigneeParser.class)
-    public static TaskAssigneeSupportInitializer taskAssigneeSupportInitializer() {
-        return new TaskAssigneeSupportInitializer();
+    public TaskAssigneeSupportInitializer taskAssigneeSupportInitializer(TaskAssigneeParser taskAssigneeParser) {
+        return new TaskAssigneeSupportInitializer(taskAssigneeParser);
     }
 
     /**

@@ -27,7 +27,7 @@ public class CacheableHotspotDataManager implements SmartLifecycle {
     private final ObjectProvider<HotspotDataLoader<?>> cacheDataInitializers;
 
     /**
-     * 翻译映射数据缓存上下文
+     * Redis共享数据上下文
      */
     private final RedisSharedDataContext hotspotDataCache;
 

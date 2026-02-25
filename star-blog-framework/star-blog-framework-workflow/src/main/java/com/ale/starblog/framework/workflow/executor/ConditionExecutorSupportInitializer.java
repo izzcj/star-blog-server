@@ -1,9 +1,7 @@
 package com.ale.starblog.framework.workflow.executor;
 
 import com.ale.starblog.framework.workflow.parser.ConditionParser;
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.config.BeanPostProcessor;
-import org.springframework.lang.NonNull;
+import org.springframework.beans.factory.SmartInitializingSingleton;
 
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
@@ -14,29 +12,34 @@ import java.lang.invoke.MethodType;
  * @author Ale
  * @version 1.0.0 2025/6/27 9:06
  */
-public class ConditionExecutorSupportInitializer implements BeanPostProcessor {
+public class ConditionExecutorSupportInitializer implements SmartInitializingSingleton {
 
-    @NonNull
+    /**
+     * 条件解析器
+     */
+    private final ConditionParser conditionParser;
+
+    /**
+     * 条件执行器
+     */
+    private final ConditionExecutor conditionExecutor;
+
+    public ConditionExecutorSupportInitializer(ConditionParser conditionParser, ConditionExecutor conditionExecutor) {
+        this.conditionParser = conditionParser;
+        this.conditionExecutor = conditionExecutor;
+    }
+
     @Override
-    public Object postProcessAfterInitialization(@NonNull Object bean, @NonNull String beanName) throws BeansException {
-        if (bean instanceof ConditionExecutor) {
-            try {
-                MethodHandles.privateLookupIn(ConditionExecutor.class, MethodHandles.lookup())
-                    .findStatic(ConditionExecutorSupport.class, "setConditionExecutor", MethodType.methodType(void.class, ConditionExecutor.class))
-                    .invoke(bean);
-            } catch (Throwable e) {
-                throw new RuntimeException("初始化条件执行器支持类失败！");
-            }
+    public void afterSingletonsInstantiated() {
+        try {
+            MethodHandles.privateLookupIn(ConditionExecutor.class, MethodHandles.lookup())
+                .findStatic(ConditionExecutorSupport.class, "setConditionExecutor", MethodType.methodType(void.class, ConditionExecutor.class))
+                .invoke(this.conditionExecutor);
+            MethodHandles.privateLookupIn(ConditionExecutorSupport.class, MethodHandles.lookup())
+                .findStatic(ConditionExecutorSupport.class, "setConditionParser", MethodType.methodType(void.class, ConditionParser.class))
+                .invoke(this.conditionParser);
+        } catch (Throwable e) {
+            throw new RuntimeException("初始化条件执行器支持类失败！");
         }
-        if (bean instanceof ConditionParser) {
-            try {
-                MethodHandles.privateLookupIn(ConditionExecutorSupport.class, MethodHandles.lookup())
-                    .findStatic(ConditionExecutorSupport.class, "setConditionParser", MethodType.methodType(void.class, ConditionParser.class))
-                    .invoke(bean);
-            } catch (Throwable e) {
-                throw new RuntimeException("初始化条件执行器支持类失败！");
-            }
-        }
-        return bean;
     }
 }

@@ -8,7 +8,6 @@ import com.ale.starblog.framework.workflow.support.FlowContext;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-
 /**
  * 流程实例模型支持
  *

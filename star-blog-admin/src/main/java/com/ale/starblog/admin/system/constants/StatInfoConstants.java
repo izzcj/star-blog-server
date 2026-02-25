@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
  * @version 1.0.0 2025/12/10 10:05
  */
 @NoArgsConstructor
-public class StatInfoConstants {
+public final class StatInfoConstants {
 
     /**
      * 每日统计信息缓存键
