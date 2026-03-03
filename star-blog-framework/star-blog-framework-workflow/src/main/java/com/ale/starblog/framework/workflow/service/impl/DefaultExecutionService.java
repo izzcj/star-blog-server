@@ -200,13 +200,13 @@ public class DefaultExecutionService implements ExecutionService {
             if (CollectionUtil.isEmpty(taskAssigneesList)) {
                 return null;
             }
-            Object nextAssignee = taskAssigneesList.get(0);
+            Object nextAssignee = taskAssigneesList.getFirst();
             if (nextAssignee instanceof TaskAssignee taskAssignee) {
                 result = taskAssignee;
             } else if (nextAssignee instanceof Map<?, ?> taskAssigneeMap) {
                 result = BeanUtil.fillBeanWithMap(taskAssigneeMap, TaskAssignee.builder().build(), true);
             }
-            taskAssigneesList.remove(0);
+            taskAssigneesList.removeFirst();
             execution.addVariable(FlowVariableConstants.TASK_ASSIGNEES, taskAssigneesList);
             this.executionDao.updateById(execution);
         }

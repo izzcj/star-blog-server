@@ -7,6 +7,8 @@ import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.lang.NonNull;
 
+import java.util.Objects;
+
 /**
  * Service代理初始化器
  *
@@ -28,7 +30,7 @@ public class ServiceProxyInitializer implements BeanPostProcessor {
     @Override
     public Object postProcessAfterInitialization(@NonNull Object bean, @NonNull String beanName) throws BeansException {
         if (bean instanceof ICrudService) {
-            return this.proxyFactoryObjectProvider.getIfAvailable().createProxy(bean, new ServiceProxyMethodInvoker());
+            return Objects.requireNonNull(this.proxyFactoryObjectProvider.getIfAvailable()).createProxy(bean, new ServiceProxyMethodInvoker());
         }
         return bean;
     }

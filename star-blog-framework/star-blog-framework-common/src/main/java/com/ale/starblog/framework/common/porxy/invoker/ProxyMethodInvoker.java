@@ -19,9 +19,8 @@ public interface ProxyMethodInvoker<T> {
      * @param target 原始对象
      * @param method 方法
      * @param args   参数
-     * @return 是否继续执行
      */
-    boolean before(Object proxy, T target, Method method, Object[] args);
+    void before(Object proxy, T target, Method method, Object[] args);
 
     /**
      * 代理方法后回调
@@ -33,9 +32,8 @@ public interface ProxyMethodInvoker<T> {
      * @param method      方法
      * @param args        参数
      * @param returnValue 返回值
-     * @return 是否继续执行
      */
-    boolean after(Object proxy, T target, Method method, Object[] args, Object returnValue);
+    void after(Object proxy, T target, Method method, Object[] args, Object returnValue);
 
     /**
      * 代理方法异常回调
@@ -45,8 +43,7 @@ public interface ProxyMethodInvoker<T> {
      * @param method    方法
      * @param args      参数
      * @param throwable 异常
-     * @return 是否继续执行
      */
-    boolean afterException(Object proxy, T target, Method method, Object[] args, Throwable throwable);
+    void afterException(Object proxy, T target, Method method, Object[] args, Throwable throwable);
 
 }

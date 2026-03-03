@@ -24,15 +24,22 @@ public class JDKProxy<T> extends AbstractProxy<T> implements InvocationHandler {
             throw new UnsupportedOperationException(StrUtil.format("被代理类[{}]为Cglib代理类，无法使用Jdk代理", originalObject.getClass()));
         }
         Class<?> originalObjectClass = this.originalObject.getClass();
+        Class<?>[] interfaces = originalObjectClass.getInterfaces();
+        if (interfaces.length == 0) {
+            throw new IllegalArgumentException("JDK代理必须实现接口");
+        }
         return Proxy.newProxyInstance(
             originalObjectClass.getClassLoader(),
-            originalObjectClass.getInterfaces(),
+            interfaces,
             this
         );
     }
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+        if (method.getDeclaringClass() == Object.class) {
+            return method.invoke(this.originalObject, args);
+        }
         return this.methodInvoke(method, args);
     }
 }

@@ -20,17 +20,14 @@ import java.lang.reflect.Method;
 public class ServiceProxyMethodInvoker implements ProxyMethodInvoker<ICrudService> {
 
     @Override
-    public boolean before(Object proxy, ICrudService target, Method method, Object[] args) {
-        return true;
+    public void before(Object proxy, ICrudService target, Method method, Object[] args) {
     }
 
     @Override
-    public boolean after(Object proxy, ICrudService target, Method method, Object[] args, Object returnValue) {
-        return true;
+    public void after(Object proxy, ICrudService target, Method method, Object[] args, Object returnValue) {
     }
 
     @Override
-    public boolean afterException(Object proxy, ICrudService target, Method method, Object[] args, Throwable throwable) {
-        return true;
+    public void afterException(Object proxy, ICrudService target, Method method, Object[] args, Throwable throwable) {
     }
 }

@@ -6,6 +6,8 @@ import com.ale.starblog.framework.workflow.model.Condition;
 import java.util.Objects;
 
 /**
+ * Spring el表达式构建器
+ *
  * @author Ale
  * @version 1.0.0 2025/6/20 11:07
  */

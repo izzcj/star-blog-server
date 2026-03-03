@@ -43,28 +43,29 @@ public abstract class AbstractProxy<T> implements VenusProxy<T> {
     /**
      * 代理方法回调
      *
-     * @param method 方法
-     * @param args   参数
+     * @param method     方法
+     * @param args       参数
      * @return 方法返回值
      * @throws Throwable 方法执行异常
      */
     protected Object methodInvoke(Method method, Object[] args) throws Throwable {
-        if (this.proxyMethodInvoker != null) {
-            Object result = null;
-            if (this.proxyMethodInvoker.before(this, this.originalObject, method, args)) {
-                try {
-                    result = method.invoke(this.originalObject, args);
-                } catch (InvocationTargetException e) {
-                    if (this.proxyMethodInvoker.afterException(this, this.originalObject, method, args, e.getTargetException())) {
-                        throw e.getTargetException();
-                    }
-                }
-                if (this.proxyMethodInvoker.after(this, this.originalObject, method, args, result)) {
-                    return result;
-                }
-                return null;
-            }
+        if (this.proxyMethodInvoker == null) {
+            return method.invoke(this.originalObject, args);
         }
-        return method.invoke(this.originalObject, args);
+
+        Object result;
+
+        try {
+            this.proxyMethodInvoker.before(this, this.originalObject, method, args);
+
+            result = method.invoke(this.originalObject, args);
+
+            this.proxyMethodInvoker.after(this, this.originalObject, method, args, result);
+
+            return result;
+        } catch (InvocationTargetException e) {
+            this.proxyMethodInvoker.afterException(this, this.originalObject, method, args, e.getTargetException());
+            throw e.getTargetException();
+        }
     }
 }
